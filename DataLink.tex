@@ -76,7 +76,8 @@ dataset identifier) to find details about the data files that can be
 downloaded, alternate representations of the data that are available, and
 services that can act upon the data (usually without having to download
 the entire dataset). The expected usage is for DAL (Data Access Layer)
-data discovery services (e.g.\ a TAP service [6] with the ObsCore [7] data
+data discovery services (e.g.\ a TAP service \citep{2010ivoa.spec.0327D}
+with the ObsCore \citep{2017ivoa.spec.0509L} data
 model or one of the simple DAL services) to provide an identifier that
 can be used to query the associated DataLink capability. The DataLink
 capability will respond with a list of links that can be used to access
@@ -87,7 +88,7 @@ and a semantic vocabulary so clients can decide which links to use.
 The {\em service descriptor resource\/}
 uses the metadata features of VOTable to
 embed service metadata along with tabular data, such as would be obtained
-by querying a simple DAL data discovery service or a TAP [6] service. This
+by querying a simple DAL data discovery service or a TAP service. This
 service metadata tells the client how to invoke a service and, for those
 registered in an IVOA registry, how to lookup additional information
 about the service. The service provider can use this mechanism to tell
@@ -120,17 +121,23 @@ resources provided by other services.
 Although not shown in Figure \ref{fig:archdiag},
 any implementation of an access protocol could
 make use of DataLink to expose resources. DataLink services conform to
-the Data Access layer Interface (DALI [1]) specification, including the
-Virtual Observatory Support Interfaces (VOSI [2]) resources. DataLink
-services use VOTable [5] as the default output format for both successful
+the Data Access layer Interface specification
+(DALI, \citet{2013ivoa.spec.1129D}),
+including the
+Virtual Observatory Support Interfaces resources
+(VOSI, \citet{2011ivoa.spec.0531G}).
+DataLink services use VOTable \citep{2013ivoa.spec.0920O}
+as the default output format for both successful
 output and to return error documents.
 
 DataLink specifies a standardID for itself, as defined in VODataService
-[8], to be used in a StandardsRegExt [9] record. It also specifies how to
+\citep{2010ivoa.spec.1202P},
+to be used in a StandardsRegExt record \citep{2012ivoa.spec.0508H}.
+It also specifies how to
 include standardID values in the response to describe links to services.
 
 DataLink includes a description of how data discovery services can include
-the link to the associated DataLink service in VOTable [5]. VOTable is
+the link to the associated DataLink service in VOTable. VOTable is
 also the default output format for the DataLink web service capability.
 
 
@@ -192,7 +199,7 @@ alternate download format for a data file with different content-type
 Data providers often implement services that can access a dataset
 or its files using standard service interfaces or provide alternate
 representations of the dataset. For example, the links for a dataset
-discovered via a TAP [6] service could be to an SSA service, allowing
+discovered via a TAP service could be to an SSA service, allowing
 the caller to get an SSA query response that describes the same dataset
 with metadata specific to the SSA service.
 
@@ -200,7 +207,7 @@ Providers should be able to link to current and future data
 access services that perform filtering and transformations as these
 services are defined and implemented (without requiring a new DataLink
 specification). For IVOA standard services, the DataLink response would
-use the standardID [8] as the service type to tell the client which
+use the VODataService standardID as the service type to tell the client which
 standard (and version) the linked service complies to. The client can
 select services they understand and use the link to invoke the service
 (with additional service parameters added by the client).
@@ -254,8 +261,9 @@ DataLink). This service link would be described with both a service type
 \section{Resources}
 
 The DataLink web service capability is implemented as an HTTP REST
-[11] web service capability that conforms to the DALI-sync resource
-[1] description. The \blinks\ resource is described fully below
+\citep{std:RFC3986} web service capability
+that conforms to the DALI-sync resource
+description. The \blinks\ resource is described fully below
 (see \ref{sec:linksResource}).
 The values for the identifiers are typically found using a data
 discovery service (e.g.\ TAP with ObsCore). Data discovery services that
@@ -288,7 +296,7 @@ resource of that service would also describe the \blinks\ capability.
 \label{sec:linksResource}
 
 The \blinks\ resource is a synchronous web service resource that conforms
-to the DALI-sync description [1]. The implementer is free to name for this
+to the DALI-sync description. The implementer is free to name for this
 resource however they like as long as the \blinks\ resource is a sibling
 of the VOSI resources; this restriction allows a client to construct
 the URL to VOSI resources from any \blinks\ URL and thus discover other
@@ -325,7 +333,7 @@ with the ID and an error message (see below).
 If the client submits more ID values than a service is prepared to
 process, the service should process ID values up to the limit and
 {\bf must} include an overflow indicator in the output
-as described in DALI [1].
+as described in DALI.
 The service {\bf must not} truncate the output within the set of rows
 (links) for a single ID value if the request exceeds such an input limit.
 
@@ -340,11 +348,11 @@ for related services and a service descriptor describing itself
 \subsubsection{RESPONSEFORMAT}
 \label{sec:responseformat}
 
-The RESPONSEFORMAT parameter is described in DALI [1];
+The RESPONSEFORMAT parameter is described in DALI;
 support for RESPONSEFORMAT is mandatory.
 
 The only output format required by this specification is VOTable with
-TABLEDATA serialization [5]; services must support this format. Clients
+TABLEDATA serialization; services must support this format. Clients
 that want to get the standard (VOTable) output format should simply
 ignore this parameter.
 
@@ -358,18 +366,19 @@ off MIME type parameters and understand the following:
 All of these result in the standard output format.
 
 Service implementers may support additional output formats but must follow
-the DALI [1] specification if they chose any formats described there.
+the DALI specification if they chose any formats described there.
 
 
 \subsection{Availability: VOSI-availability}
 
-A DataLink web service must have a VOSI-availability resource [1,2].
+A DataLink web service must have a VOSI-availability resource,
+as defined by DALI and VOSI.
 
 
 \subsection{Capabilities: VOSI-capabilities}
 
 A standalone DataLink web service must have a
-VOSI-capabilities resource [1,2].
+VOSI-capabilities resource as defined by DALI and VOSI.
 The standardID for the \blinks\ resource is
 \begin{verbatim}
    ivo://ivoa.net/std/DataLink#links-1.0
@@ -417,14 +426,15 @@ describe all the capabilities of that service, including \blinks.
 \section{\blinks\ Response}
 
 All responses from the \blinks\ resource follow the rules for DALI-sync
-[see 1] resources, except that the \blinks\ response allows for error
+resources, except that the \blinks\ response allows for error
 messages for individual input identifier values.
 
 
 \subsection{DataLink MIME Type}
 \label{sec:mime}
 
-In some data discovery responses (e.g.\ ObsCore [7]), there are columns
+In some data discovery responses (e.g.\ ObsCore, \citet{2017ivoa.spec.0509L}),
+there are columns
 with a URL (access\_url in ObsCore) and a content type (access\_format in
 ObsCore). If the implementation uses a DataLink service to implement this
 data access, it should include a complete (including the ID parameter)
@@ -564,7 +574,7 @@ value in cases where only an error\_message is supplied should be the
 most appropriate for the link the service was trying to generate.
 
 The value is always interpreted as a URI; if it is a relative URI,
-it is resolved [11] against the base URI of the
+it is resolved \citep{std:RFC3986} against the base URI of the
 core DataLink vocabulary:
 \begin{verbatim}
    http://www.ivoa.net/rdf/datalink/core
@@ -610,7 +620,7 @@ This field may be null (blank) if the value is unknown.
 \subsubsection{content\_length}
 
 The content\_length column tells the client the size of the download
-if they use the link, in bytes. For VOTable [5], the FIELD must be
+if they use the link, in bytes. For VOTable, the FIELD must be
 \attval{datatype}{long} with \attval{unit}{byte}.
 The value may be null (blank)
 if unknown and will typically be null for links to services.
@@ -638,10 +648,10 @@ of header value. This specification cannot and does not outlaw content
 types with additional parameters
 (e.g.\ ``application/x-votable+xml; content=datalink;charset=iso-8859-1'')
 or with extra spaces or quotes
-(as allowed for MIME types ([4]).
+(as allowed for MIME types, \citet{misc:mime-tsv}).
 
 If the incoming request includes a DALI RESPONSEFORMAT parameter,
-content-type follows the DALI rules [1].
+content-type follows the DALI rules.
 
 
 \subsubsection{VOTable output}
@@ -651,7 +661,7 @@ The table of links {\bf must} be returned in a RESOURCE with
 unless another serialization is specifically requested
 (see \ref{sec:responseformat})
 and supported by the implementation.
-The name attribute for FIELD elements in the VOTable [5]
+The name attribute for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
 
@@ -665,7 +675,7 @@ output in other formats.
 
 \subsection{Errors}
 
-The error handling specified for DALI-sync [see 1] resources applies
+The error handling specified for DALI-sync resources applies
 to service failure (where no links can be generated) and to the usage
 error where no ID parameter is specified. Services should return the
 document format requested by the client (see \ref{sec:responseformat}).
@@ -1025,7 +1035,8 @@ ID parameter and value from that row.
 
 The FLUXCALIB parameter allows the client to specify one of two values:
 UNCALIBRATED or RELATIVE (listed as OPTIONS along with a description of
-the meaning). The UCD [10] value of phot.calib conveys the basic meaning
+the meaning). The UCD \citep{2005ivoa.spec.0819D} value
+of phot.calib conveys the basic meaning
 of this parameter it is related to photometric or flux calibration).
 
 The LAMBDA\_MIN and LAMBDA\_MAX parameters allow the user to specify a
@@ -1047,8 +1058,9 @@ used to call the service.
 \label{sec:selfDescribing}
 
 A service may include a service descriptor that describes itself with
-it's normal output. This usage is comparable to prototype work on S3 (see
-[12]) and when combined with calling a service with no input parameters
+it's normal output. This usage is comparable to prototype work on S3
+(see \citet{note:s3})
+and when combined with calling a service with no input parameters
 (e.g as allowed in \ref{sec:resourceId})
 will make it easy for clients to obtain a
 description of both standard and custom features.
@@ -1247,7 +1259,7 @@ direct potential implementations don't run into case issues.
 
 % NOTE: IVOA recommendations must be cited from docrepo rather than ivoabib
 % (REC entries there are for legacy documents only)
-\bibliography{ivoatex/ivoabib,ivoatex/docrepo}
+\bibliography{ivoatex/ivoabib,ivoatex/docrepo,localrefs}
 
 
 \end{document}
