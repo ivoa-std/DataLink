@@ -19,7 +19,9 @@
 
 % \previousversion[????URL????]{????Concise Document Label????}
 \previousversion{This is the first public release}
-       
+
+\newcommand{\blinks}{\{links\}}
+
 
 \begin{document}
 
@@ -73,7 +75,7 @@ dataset identifier) to find details about the data files that can be
 downloaded, alternate representations of the data that are available, and
 services that can act upon the data (usually without having to download
 the entire dataset). The expected usage is for DAL (Data Access Layer)
-data discovery services (e.g. a TAP service [6] with the ObsCore [7] data
+data discovery services (e.g.\ a TAP service [6] with the ObsCore [7] data
 model or one of the simple DAL services) to provide an identifier that
 can be used to query the associated DataLink capability. The DataLink
 capability will respond with a list of links that can be used to access
@@ -160,15 +162,15 @@ or reprocess it with different parameters or software.
 
 For some datasets (large ones) it is useful to be able to access
 preview data (either precomputed or generated on-the-fly) and use it
-to determine if the entire dataset should be downloaded (e.g. in an
+to determine if the entire dataset should be downloaded (e.g.\ in an
 interactive session). A DataLink service can provide links to previews
 as a URL with a specific relationship to the dataset and include other
-metadata like content-type (e.g. image/png) and content-length to assist
+metadata like content-type (e.g.\ image/png) and content-length to assist
 the client in selecting a preview; multiple previews with different sizes
 (content-length) could be returned in the list of links. Plots derived
 from the dataset could also be linked as previews. Some previews may be
 of the some content-type as the complete dataset, but reduced content
-in some fashion (e.g.  a representative image or spectrum derived from
+in some fashion (e.g.\ a representative image or spectrum derived from
 a large data cube).
 
 Links to alternate representations may be to pre-generated resources
@@ -178,7 +180,7 @@ parameterised service (see 1.2.5 below).
 Other alternate representations that are not previews could also
 be included in the list of links. For example, one could provide an
 alternate download format for a data file with different content-type
-(e.g. FITS and HDF).
+(e.g.\ FITS and HDF).
 
 
 \subsubsection{Standard Services}
@@ -238,7 +240,7 @@ In some cases, a dataset may contain many files (as in 1.2.1 above)
 and the provider may wish to make some files directly accessible and
 other (less important) files only accessible via additional calls. Such
 organisation of links could be accomplished by including a link to
-another DataLink service in the initial DataLink response (e.g. recursive
+another DataLink service in the initial DataLink response (e.g.\ recursive
 DataLink). This service link would be described with both a service type
 (as in 1.2.4 ) and content type.
 
@@ -247,9 +249,9 @@ DataLink). This service link would be described with both a service type
 
 The DataLink web service capability is implemented as an HTTP REST
 [11] web service capability that conforms to the DALI-sync resource
-[1] description. The {links} resource is described fully below (see
+[1] description. The \blinks\ resource is described fully below (see
 2.1). The values for the identifiers are typically found using a data
-discovery service (e.g. TAP with ObsCore). Data discovery services that
+discovery service (e.g.\ TAP with ObsCore). Data discovery services that
 work with an associated DataLink service should include a resource in
 the discovery response to describe the DataLink service. The mechanism
 for doing this is described below (see 4).
@@ -261,27 +263,27 @@ table below.
 \sptablerule
 {\bf resource type} & {\bf resource name} & {\bf required} \\
 \sptablerule
-{links}             & service specific    & yes            \\
+\blinks             & service specific    & yes            \\
 VOSI-availability   & /availability       & yes            \\
 VOSI-capabilities   & /capabilities       & yes            \\
 \sptablerule
 \end{tabular}
 \end{center}
 
-A standalone DataLink service must have at least one {links} resource;
-it could have multiple {links} resources (e.g. to support alternate
-authentication schemes). Alternatively, the {links} resource may be
+A standalone DataLink service must have at least one \blinks\ resource;
+it could have multiple \blinks\ resources (e.g.\ to support alternate
+authentication schemes). Alternatively, the \blinks\ resource may be
 embedded in another web service, in which case the VOSI-capabilities
-resource of that service would also describe the {links} capability.
+resource of that service would also describe the \blinks\ capability.
 
 
-\subsection{{links} resource}
+\subsection{\blinks\ resource}
 
-The {links} resource is a synchronous web service resource that conforms
+The \blinks\ resource is a synchronous web service resource that conforms
 to the DALI-sync description [1]. The implementer is free to name for this
-resource however they like as long as the {links} resource is a sibling
+resource however they like as long as the \blinks\ resource is a sibling
 of the VOSI resources; this restriction allows a client to construct
-the URL to VOSI resources from any {links} URL and thus discover other
+the URL to VOSI resources from any \blinks\ URL and thus discover other
 capabilities or check the availablity f there is a failure. For example,
 a DataLink service could have:
 
@@ -318,7 +320,7 @@ The service {\bf must not} truncate the output within the set of rows
 (links) for a single ID value if the request exceeds such an input limit.
 
 If the client submits no ID values, the service must respond with a
-normal response (e.g. an empty results table for VOTable output). The
+normal response (e.g.\ an empty results table for VOTable output). The
 service may include service descriptors (see 4 ) for related services
 and a service descriptor describing itself (see 4.6 ).
 
@@ -333,7 +335,7 @@ TABLEDATA serialization [5]; services must support this format. Clients
 that want to get the standard (VOTable) output format should simply
 ignore this parameter.
 
-To comply with this standard, a {links} resource only needs to strip
+To comply with this standard, a \blinks\ resource only needs to strip
 off MIME type parameters and understand the following:
 \begin{itemize}
   \item no RESPONSEFORMAT
@@ -355,7 +357,7 @@ A DataLink web service must have a VOSI-availability resource [1,2].
 
 A standalone DataLink web service must have a
 VOSI-capabilities resource [1,2].
-The standardID for the {links} resource is
+The standardID for the \blinks\ resource is
 \begin{verbatim}
    ivo://ivoa.net/std/DataLink#links-1.0
 \end{verbatim}
@@ -390,25 +392,25 @@ and does not require a registry extension schema:
 </vosi:capabilities>
 \end{verbatim}
 
-Multiple capability elements for the {links} resource may be included;
-this is typically used if they differ in protocol (http vs. https)
+Multiple capability elements for the \blinks\ resource may be included;
+this is typically used if they differ in protocol (http vs.\ https)
 and/or authentication requirements.
 
-The {links} capability may also be included as a resource in another
+The \blinks\ capability may also be included as a resource in another
 service, in which case the VOSI-Capabilities for that service would
-describe all the capabilities of that service, including {links}.
+describe all the capabilities of that service, including \blinks.
 
 
-\section{{links} Response}
+\section{\blinks\ Response}
 
-All responses from the {links} resource follow the rules for DALI-sync
-[see 1] resources, except that the {links} response allows for error
+All responses from the \blinks\ resource follow the rules for DALI-sync
+[see 1] resources, except that the \blinks\ response allows for error
 messages for individual input identifier values.
 
 
 \subsection{DataLink MIME Type}
 
-In some data discovery responses (e.g. ObsCore [7]), there are columns
+In some data discovery responses (e.g.\ ObsCore [7]), there are columns
 with a URL (access\_url in ObsCore) and a content type (access\_format in
 ObsCore). If the implementation uses a DataLink service to implement this
 data access, it should include a complete (including the ID parameter)
@@ -417,7 +419,7 @@ DataLink URL and a parameterised VOTable MIME type:
    application/x-votable+xml;content=datalink
 \end{verbatim}
 to denote that the response from that URL is a DataLink response. This
-is also the MIME type for the {links} response (see 3.3 ) unless the
+is also the MIME type for the \blinks\ response (see 3.3 ) unless the
 caller has explicitly requested a specific value via the RESPONSEFORMAT
 parameter (see 2.1.2 ).
 Services may include other MIME type parameters in the response.
@@ -425,7 +427,7 @@ Services may include other MIME type parameters in the response.
 
 \subsection{List of Links}
 
-The list of links that is returned by the {links} resource can be
+The list of links that is returned by the \blinks\ resource can be
 represented as a table with the following columns:
 \begin{table}[h]
 \begin{center}
@@ -474,8 +476,8 @@ If an error occurs while processing an ID value, there should be at least
 one row for that ID value and an error\_message. For example, if an input
 ID value is not recognised or found, one row with an error\_message
 to that effect is sufficient.
-If some links can be created (e.g. download links)
-but others cannot due to some temporary failure (e.g. service outage),
+If some links can be created (e.g.\ download links)
+but others cannot due to some temporary failure (e.g.\ service outage),
 then one could have one or more rows with the same ID and different
 error\_message(s).
 
@@ -494,7 +496,7 @@ The ID column contains the input identifier value.
 The access\_url column contains a URL to download a single resource.
 The URL in this column must be usable as-is with no additional
 parameters or client handling; it can be a link to a dynamic
-resource (e.g. preview generation).
+resource (e.g.\ preview generation).
 
 
 \subsubsection{service\_def}
@@ -553,7 +555,7 @@ core DataLink vocabulary:
 
 The value used in the semantics column is normally the URI of the
 vocabulary, followed by a fragment (\#), followed by a predicate from
-the specified vocabulary.  For example, if the {links} table contains a
+the specified vocabulary.  For example, if the \blinks\ table contains a
 link to a preview of a dataset, the ID column will contain the dataset
 identifier, the access\_url column will contain the URL to the preview,
 and the semantics column could contain this predicate:
@@ -611,7 +613,7 @@ with the canonical form given in 3.1 strongly recommended. Contrary to
 all other uses of the string given in 3.1, clients wishing to evaluate
 the content type of the response must, however, perform a full parse
 of header value. This specification cannot and does not outlaw content
-types with additional parameters (e.g.  "application/x-votable+xml;
+types with additional parameters (e.g.\ "application/x-votable+xml;
 content=datalink;charset=iso-8859-1") or with extra spaces or quotes
 (as allowed for MIME types ([4]).
 
@@ -657,7 +659,7 @@ following table, in order of specificity:
 {\bf Error} & {\bf Meaning} \\
 \sptablerule
 NotFoundFault  & Unknown ID value    \\
-UsageFault     & Invalid input (e.g. invalid ID value) \\
+UsageFault     & Invalid input (e.g.\ invalid ID value) \\
 TransientFault & Service is not currently able to function \\
 FatalFault     & Service cannot perform requested action \\
 DefaultFault   & Default failure (not covered above) \\
@@ -683,7 +685,7 @@ from the error string with a colon (:) character, for example:
 The DataLink service interface is designed to add functionality to data
 discovery services by providing the connection between the discovered
 datasets and the download of data files and access to services that act
-on the data. When the {links} capability returns links to services, the
+on the data. When the \blinks\ capability returns links to services, the
 response document also needs to describe the services so that clients can
 figure out how to invoke them. This is done by including an additional
 metadata resource in the response document to describe each type of
@@ -691,7 +693,7 @@ service that can be used.
 
 The same mechanism can also be used in any VOTable document, such
 as a data discovery response from a TAP query or one of the simple
-DAL query protocols, to enable clients to find and use the {links}
+DAL query protocols, to enable clients to find and use the \blinks\
 capability itself.
 
 Here we describe how to construct a resource that describes a service
@@ -760,9 +762,9 @@ additional service parameters, the type of value that must be specified,
 the meaning (UCD) of the value they apply to, etc.
 
 
-\subsection{Example: Service Descriptor for the {links} Capability}
+\subsection{Example: Service Descriptor for the \blinks\ Capability}
 
-The {links} capability can be used with a result table when one of the
+The \blinks\ capability can be used with a result table when one of the
 columns contains identifier values that can be used with the ID parameter
 (see 2.1.1). In order for the service resource to refer to this FIELD,
 the FIELD element describing this column of the table
@@ -780,9 +782,9 @@ where the ID value {\em primaryID\/} is arbitrary.
 This FIELD would typically
 be found within the RESOURCE of type="results". The same VOTable
 document would have a second RESOURCE with type="meta" to describe
-the associated DataLink {links} capability.
+the associated DataLink \blinks\ capability.
 
-The {links} capability described in section 2.1 is described
+The \blinks\ capability described in section 2.1 is described
 by following resource:
 \begin{verbatim}
    <RESOURCE type="meta" utype="adhoc:service">
@@ -813,7 +815,7 @@ Although this version of DataLink only has one parameter (ID), using a
 GROUP and providing the service parameter name allows this recipe to be
 used with any service and (with the GROUP) with multi-parameter services.
 
-In the above example, the {links} capability is not registered in an
+In the above example, the \blinks\ capability is not registered in an
 IVOA registry so there is no resourceIdentifier PARAM included in the
 descriptor.
 
@@ -995,7 +997,7 @@ values from which a subset could be extracted.
 
 The FORMAT parameter allows the client to select from a list of output
 formats for the extracted spectrum. Here, the name of the PARAM is
-suitable to display (e.g. in a user interface) while the value would be
+suitable to display (e.g.\ in a user interface) while the value would be
 used to call the service.
 
 
@@ -1007,7 +1009,7 @@ it's normal output. This usage is comparable to prototype work on S3 (see
 (e.g as allowed in 2.1.1 ) will make it easy for clients to obtain a
 description of both standard and custom features.
 
-The output of a {links} capability with no input ID would include the
+The output of a \blinks\ capability with no input ID would include the
 self-describing service descriptor and an empty results table:
 \begin{verbatim}
    <RESOURCE type="meta" utype="adhoc:service" name="this">
@@ -1051,7 +1053,7 @@ descriptors and (ii) the caller could not infer which descriptor was
 the self-describing one from the standardID (because it is optional
 and not present for custom services and because they might just have a
 URL). Even trying to match the URL that was used with the accessURL in
-the descriptors is likely to be unreliable (e.g. if providers use HTTP
+the descriptors is likely to be unreliable (e.g.\ if providers use HTTP
 redirects to make old URLs work when service deployment changes).
 
 
@@ -1062,9 +1064,9 @@ This is the initial version of this document.
 
 \subsection{PR-DataLink-1.0-20150413}
 
-Restricted the {links} resource path so that it must be a sibling of
+Restricted the \blinks\ resource path so that it must be a sibling of
 the VOSI resources in order to allow discovery of VOSI resources from
-a {links} URL.
+a \blinks\ URL.
 
 Changed ID parameter to allow caller to invoke service with no ID values
 and get an empty result table; this is actually easier to implement
@@ -1115,13 +1117,13 @@ Added custom service example.
 Removed standard authentication and authorization error messages since
 these are difficult to implement consistently in different web service
 platforms. Changed the error message strings to use the word Fault
-(following GWS-WG usage, e.g. VOSpace-2.0) since Error has specific
+(following GWS-WG usage, e.g.\ VOSpace-2.0) since Error has specific
 meaning in some platforms.
 
 
 \subsection{WD-DataLink-20140505}
 
-Changed the standardID for the {links} resource to include version as
+Changed the standardID for the \blinks\ resource to include version as
 will be described in the StandardsRegExt record.
 
 Changed service descriptor resource to use
@@ -1156,10 +1158,10 @@ accessURL in the service descriptor, with VOSpace example.
 \subsection{WD-DataLink-20140212}
 
 Clarified that one can implement a standalone DataLink service or include
-{links} resources in other services.
+\blinks\ resources in other services.
 
-Re-ordered sections 2--5 so all the sections describing the {links}
-capability are together.
+Re-ordered sections 2--5 so all the sections describing the
+\blinks\ capability are together.
 
 Changed from GROUP with PARAM and FIELDref siblings to PARAM with ref
 attribute when defining a parameter-column-with-values in section 4.1.
@@ -1167,7 +1169,7 @@ attribute when defining a parameter-column-with-values in section 4.1.
 Clarified the introduction so it is clear we intend to support linking
 of any services via RESOURCE(s) in any responses.
 
-Changed the output of {links} resource to clearly differentiate between
+Changed the output of \blinks\ resource to clearly differentiate between
 links with usable accessURL and links where the accessURL is a service
 that requires more parameters. Changed the naming style for fields in
 the list of links to use lower case with underscore separator so that
