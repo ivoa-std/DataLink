@@ -1,29 +1,48 @@
 \documentclass[11pt,a4paper]{ivoa}
 \input tthdefs
 
-\title{???? Full title ????}
+\title{IVOA DataLink}
 
 % see ivoatexDoc for what group names to use here
-\ivoagroup{???? group ????}
+\ivoagroup{DAL}
 
-\author[????URL????]{????Alfred Usher Thor????}
-\author{????Fred Offline????}
-
-\editor{????Alfred Usher Thor????}
+\author[http://www.ivoa.net/twiki/bin/view/IVOA/PatrickDowler]
+       {Patrick Dowler}
+\author[http://www.ivoa.net/twiki/bin/view/IVOA/FrancoisBonnarel]
+       {Fran\c{c}ois Bonnarel}
+\author[http://www.ivoa.net/twiki/bin/view/IVOA/LaurentMichel]
+       {Laurent Michel}
+\author[http://www.ivoa.net/twiki/bin/view/IVOA/MarkusDemleitner]
+       {Markus Demleitner}
+\editor[http://www.ivoa.net/twiki/bin/view/IVOA/PatrickDowler]
+       {Patrick Dowler}
 
 % \previousversion[????URL????]{????Concise Document Label????}
 \previousversion{This is the first public release}
        
 
 \begin{document}
+
 \begin{abstract}
-???? Abstract ????
+This document describes the linking of data discovery metadata
+to access to the data itself, further detailed metadata, related
+resources, and to services that perform operations on the data. The web
+service capability supports a drill-down into the details of a specific
+dataset and provides a set of links to the dataset file(s) and related
+resources. This specification also includes a VOTable-specific method
+of providing descriptions of one or more services and their input(s),
+usually using parameter values from elsewhere in the VOTable document.
+Providers are able to describe services that are relevant to the records
+(usually datasets with identifiers) by including service descriptors in
+a result document.
 \end{abstract}
 
 
 \section*{Acknowledgments}
 
-???? Or remove the section header ????
+The authors would like to thank all the participants in DAL-WG discussions
+for their ideas, critical reviews, and contributions to this document.
+
 
 \section*{Conformance-related definitions}
 
