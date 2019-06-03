@@ -21,6 +21,7 @@
 \previousversion{This is the first public release}
 
 \newcommand{\blinks}{\{links\}}
+\newcommand{\attval}[2]{#1={\allowbreak}{"}#2{"}}
 
 
 \begin{document}
@@ -595,7 +596,8 @@ This field may be null (blank) if the value is unknown.
 
 The content\_length column tells the client the size of the download
 if they use the link, in bytes. For VOTable [5], the FIELD must be
-datatype="long" with unit="byte". The value may be null (blank)
+\attval{datatype}{long} with \attval{unit}{byte}.
+The value may be null (blank)
 if unknown and will typically be null for links to services.
 
 
@@ -614,8 +616,8 @@ with the canonical form given in 3.1 strongly recommended. Contrary to
 all other uses of the string given in 3.1, clients wishing to evaluate
 the content type of the response must, however, perform a full parse
 of header value. This specification cannot and does not outlaw content
-types with additional parameters (e.g.\ "application/x-votable+xml;
-content=datalink;charset=iso-8859-1") or with extra spaces or quotes
+types with additional parameters (e.g.\ {"application/x-votable+xml;
+content=datalink;charset=iso-8859-1"}) or with extra spaces or quotes
 (as allowed for MIME types ([4]).
 
 If the incoming request includes a DALI RESPONSEFORMAT parameter,
@@ -625,7 +627,7 @@ content-type follows the DALI rules [1].
 \subsubsection{VOTable output}
 
 The table of links {\bf must} be returned in a RESOURCE with
-type="results". The table {\bf must} be in TABLEDATA serialization
+\attval{type}{results}. The table {\bf must} be in TABLEDATA serialization
 unless another serialization is specifically requested (see 2.1.2)
 and supported by the implementation.
 The name attribute for FIELD elements in the VOTable [5]
@@ -705,12 +707,13 @@ used wherever a VOTable document is created.
 \subsection{Service Resources}
 
 In a data discovery response, one RESOURCE element (usually the first)
-will have an attribute type="results" and tabular data; this resource
+will have an attribute \attval{type}{results} and tabular data; this resource
 contains the query result.
 
 To describe an associated service, the VOTable would also
-contain one or more resources with attribute type="meta" and
-utype="adhoc:service". A resource of this type have no tabular data,
+contain one or more resources with attribute \attval{type}{meta} and
+\attval{utype}{adhoc:service}.
+A resource of this type have no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
 A service resource contains PARAM elements to describe the service and
@@ -734,7 +737,7 @@ resourceIdentifier  & IVOA registry identifier       &  no   \\
 \end{table}
 
 For services that implement an IVOA standard, the standardID is specified
-as the value attribute of the PARAM with name="standardID".
+as the value attribute of the PARAM with \attval{name}{standardID}.
 For free or custom services, this PARAM is not included.
 
 For registered services, the resourceIdentifier PARAM allows the client
@@ -754,7 +757,7 @@ may be used. Since the accessURL may contain parameters; clients must
 parse the URL to decide how to append additional parameters when
 invoking the service.
 
-A GROUP with name="inputParams" contains PARAM elements describing
+A GROUP with \attval{name}{inputParams} contains PARAM elements describing
 how to invoke the service. For services where the parameter values
 come from columns in the results resource, we use the ref attribute of
 the PARAM to indicate the FIELD (column) with the values. Other PARAM
@@ -781,8 +784,8 @@ would use the following:
 \end{verbatim}
 where the ID value {\em primaryID\/} is arbitrary.
 This FIELD would typically
-be found within the RESOURCE of type="results". The same VOTable
-document would have a second RESOURCE with type="meta" to describe
+be found within the RESOURCE of \attval{type}{results}. The same VOTable
+document would have a second RESOURCE with \attval{type}{meta} to describe
 the associated DataLink \blinks\ capability.
 
 The \blinks\ capability described in section 2.1 is described
@@ -801,12 +804,12 @@ by following resource:
 \end{verbatim}
 
 Clients that want to find services to operate on the results would look
-for resources with type="meta" and utype="adhoc:service". They
-would find a DataLink service specifically via the PARAM with
-name="standardID". To call the service, the GROUP contains a PARAM
+for resources with \attval{type}{meta} and \attval{utype}{adhoc:service}.
+They would find a DataLink service specifically via the PARAM with
+\attval{name}{standardID}. To call the service, the GROUP contains a PARAM
 with the service parameter name and a ref attribute whose value is the
-XML ID attribute on a FIELD. In the example above, the ref="primaryID"
-refers to the FIELD with ID="primaryID" in the same document (usually
+XML ID attribute on a FIELD. In the example above, the \attval{ref}{primaryID}
+refers to the FIELD with \attval{ID}{primaryID} in the same document (usually
 the result table). The URL to call the service would be:
 \begin{verbatim}
    http://example.com/datalink/mylinks?ID=<obs_publisher_did value>
@@ -865,7 +868,7 @@ custom parameter, including the possible values:
      </VALUES>
    </PARAM>
 \end{verbatim}
-This PARAM would be added to the GROUP name="input" of the service
+This PARAM would be added to the GROUP \attval{name}{input} of the service
 description.
 
 
@@ -1000,8 +1003,8 @@ of this parameter it is related to photometric or flux calibration).
 The LAMBDA\_MIN and LAMBDA\_MAX parameters allow the user to specify a
 spectral interval to extract from the spectrum. The PARAM(s) specify that
 the values are wavelengths:
-ucd=\allowbreak "par.min;em.wl" and
-ucd=\allowbreak "par.max;em.wl"
+\attval{ucd}{par.min;em.wl} and
+\attval{ucd}{par.max;em.wl}
 say they are minimum (par.min) and maximum (par.max) wavelength (em.wl)
 values. The VALUES child elements convey a range of valid wavelength
 values from which a subset could be extracted.
@@ -1108,7 +1111,7 @@ inconsistency of access\_url in the table being different from accessURL
 in a service descriptor referenced by use of service\_def and reduces
 service use by clients to a single supported approach.
 
-Added specific datatype="long" to the content\_length field in the
+Added specific \attval{datatype}{long} to the content\_length field in the
 links table.
 
 Moved VOSpace-2.0 service descriptor to be a separate example and made
@@ -1138,7 +1141,7 @@ Changed the standardID for the \blinks\ resource to include version as
 will be described in the StandardsRegExt record.
 
 Changed service descriptor resource to use
-type=\allowbreak "meta" utype=\allowbreak "adhoc:service"
+\attval{type}{meta} \attval{utype}{adhoc:service}
 so VOTable documents pass schema validation and this resource type can
 still be easily found.
 
