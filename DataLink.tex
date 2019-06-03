@@ -1080,116 +1080,131 @@ This is the initial version of this document.
 
 \subsection{PR-DataLink-1.0-20150413}
 
+\begin{itemize}
+\item
 Restricted the \blinks\ resource path so that it must be a sibling of
 the VOSI resources in order to allow discovery of VOSI resources from
 a \blinks\ URL.
-
+\item
 Changed ID parameter to allow caller to invoke service with no ID values
 and get an empty result table; this is actually easier to implement
 than a special error case. Added reference to previous work on S3 and
 an example section where an empty links response has a self-describing
 service descriptor and an empty result.
-
+\item
 Fixed URL to DALI document in the references section.
-
+\item
 Fixed namespace prefix in example capabilities document to use recommended
 value.
+\end{itemize}
 
 
 \subsection{PR-DataLink-1.0-20140930}
 
+\begin{itemize}
+\item
 Re-organised introduction to introduce the links capability and
 distinguish it from the service descriptor more clearly. Explicitly
 noted that service descriptors do not describe the output of a service.
-
+\item
 Fixed various small typos mentioned on the RFC page.
-
+\item
 Clarified the use of the DataLink vocabulary in the semantics column of
 the links table.
-
+\item
 Changed the links table output constraints to allow only one of:
 access\_url, service\_def, or error\_message. This removes the possible
 inconsistency of access\_url in the table being different from accessURL
 in a service descriptor referenced by use of service\_def and reduces
 service use by clients to a single supported approach.
-
+\item
 Added specific \attval{datatype}{long} to the content\_length field in the
 links table.
-
+\item
 Moved VOSpace-2.0 service descriptor to be a separate example and made
 it explicit that all the necessary details to invoke such a RESTful
 service is not supported in this version of the specification; clients
 must recognise the standardID to use RESTful web services.
+\end{itemize}
 
 
 \subsection{PR-DataLink-20140530}
 
+\begin{itemize}
+\item
 Changed document status to proposed recommendation.
-
+\item
 Removed REQUEST parameter
-
+\item
 Added custom service example.
-
+\item
 Removed standard authentication and authorization error messages since
 these are difficult to implement consistently in different web service
 platforms. Changed the error message strings to use the word Fault
 (following GWS-WG usage, e.g.\ VOSpace-2.0) since Error has specific
 meaning in some platforms.
+\end{itemize}
 
 
 \subsection{WD-DataLink-20140505}
 
+\begin{itemize}
+\item
 Changed the standardID for the \blinks\ resource to include version as
 will be described in the StandardsRegExt record.
-
+\item
 Changed service descriptor resource to use
 \attval{type}{meta} \attval{utype}{adhoc:service}
 so VOTable documents pass schema validation and this resource type can
 still be easily found.
-
+\item
 Improved the VOSI-capabilities example so it describes all parameters
 of the example DataLink service.
 Added % sic
-
+\item
 Removed unnecessary HTTP header advice and clarified the strict DataLink
 mimetype usage.
-
+\item
 Removed mention of DALI-examples since it is an optional feature for
 all services.
-
+\item
 Changed name of the input parameters group element in a service descriptor
 to inputParams.
-
+\item
 Fixed reference to DALI document.
-
+\item
 Added SIA-1.0 resource desciptor example.
-
+\item
 Tried to clarify the relationship of the two aspects of DataLink in
 the introduction.
-
+\item
 Specifically allow access\_url in the list of links to be different from
 accessURL in the service descriptor, with VOSpace example.
+\end{itemize}
 
 
 \subsection{WD-DataLink-20140212}
 
+\begin{itemize}
+\item
 Clarified that one can implement a standalone DataLink service or include
 \blinks\ resources in other services.
-
+\item
 Re-ordered sections 2--5 so all the sections describing the
 \blinks\ capability are together.
-
+\item
 Changed from GROUP with PARAM and FIELDref siblings to PARAM with ref
 attribute when defining a parameter-column-with-values in section 4.1.
-
+\item
 Clarified the introduction so it is clear we intend to support linking
 of any services via RESOURCE(s) in any responses.
-
+\item
 Changed the output of \blinks\ resource to clearly differentiate between
 links with usable accessURL and links where the accessURL is a service
 that requires more parameters. Changed the naming style for fields in
 the list of links to use lower case with underscore separator so that
 direct potential implementations don't run into case issues.
+\end{itemize}
 
 
 
