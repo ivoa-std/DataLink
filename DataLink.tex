@@ -286,16 +286,17 @@ of the VOSI resources; this restriction allows a client to construct
 the URL to VOSI resources from any \blinks\ URL and thus discover other
 capabilities or check the availablity f there is a failure. For example,
 a DataLink service could have:
-
-\hspace*{2em}
-\begin{tabular}{l@{---}l}
-\nolinkurl{http://example.com/datalink/links}
-    & anonymous access \\
-\nolinkurl{http://example.com/datalink/auth-links}
-    & HTTP authentication \\
-\nolinkurl{https://example.com/datalink/links}
-    & IVOA single-sign-on authentication
-\end{tabular}
+\begin{quote}
+  \hspace*{-1.5em}
+  {\small\nolinkurl{http://example.com/datalink/links}}
+  --- anonymous access \\
+  \hspace*{-1.5em}
+  {\small\nolinkurl{http://example.com/datalink/auth-links}}
+  --- HTTP authentication \\
+  \hspace*{-1.5em}
+  {\small\nolinkurl{https://example.com/datalink/links}}
+  --- IVOA SSO authentication
+\end{quote}
 
 As a DALI-sync resource, the parameters for a request may be submitted
 using an HTTP GET (query string) or POST action.
@@ -431,7 +432,7 @@ The list of links that is returned by the \blinks\ resource can be
 represented as a table with the following columns:
 \begin{table}[h]
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|l|p{0.29\textwidth}|l|l|}
 \hline
 {\bf name}      & {\bf description} & {\bf required} & {\bf UCD} \\
 \hline
@@ -912,6 +913,7 @@ Parameters for custom access data services can be described such that
 clients can figure out how to call the service and even create a basic
 form-based user interface. The following Rotatable resource describes
 a custom spectral cutout service:
+{\small
 \begin{verbatim}
    <RESOURCE type="meta" utype="adhoc:service" ID="apoadimo">
      <PARAM arraysize="*" datatype="char" name="accessURL"
@@ -920,14 +922,16 @@ a custom spectral cutout service:
      <GROUP name="inputParams">
        <PARAM arraysize="*" datatype="char" name="ID" ref="xjc7ra"
               ucd="meta.id;meta.main" value="">
-         <DESCRIPTION>The pubisher DID of the dataset of interest</DESCRIPTION>
+         <DESCRIPTION>The pubisher DID of the dataset of interest
+         </DESCRIPTION>
        </PARAM>
 
        <PARAM arraysize="*" datatype="char" name="FLUXCALIB"
               ucd="phot.calib" utype="ssa:Char.FluxAxis.Calibration"
               value="">
          <DESCRIPTION>Recalibrate the spectrum. Right now, the only
-         recalibration supported is max(flux)=1 ('RELATIVE').</DESCRIPTION>
+         recalibration supported is max(flux)=1 ('RELATIVE').
+         </DESCRIPTION>
          <VALUES>
            <OPTION name="RELATIVE" value="RELATIVE"/>
            <OPTION name="UNCALIBRATED" value="UNCALIBRATED"/>
@@ -936,7 +940,8 @@ a custom spectral cutout service:
 
        <PARAM ID="axi5fg" datatype="float" name="LAMBDA_MIN"
               ucd="par.min;em.wl" unit="m" value="">
-         <DESCRIPTION>Spectral cutout interval, lower limit</DESCRIPTION>
+         <DESCRIPTION>Spectral cutout interval, lower limit
+         </DESCRIPTION>
          <VALUES>
            <MIN value="3.4211e-07"/>
            <MAX value="5.5927e-07"/>
@@ -945,7 +950,8 @@ a custom spectral cutout service:
 
        <PARAM ID="k4dfpe" datatype="float" name="LAMBDA_MAX"
               ucd="par.max;em.wl" unit="m" value="">
-         <DESCRIPTION>Spectral cutout interval, upper limit</DESCRIPTION>
+         <DESCRIPTION>Spectral cutout interval, upper limit
+         </DESCRIPTION>
          <VALUES>
            <MIN value="3.4211e-07"/>
            <MAX value="5.5927e-07"/>
@@ -953,10 +959,12 @@ a custom spectral cutout service:
        </PARAM>
 
        <PARAM arraysize="*" datatype="char" name="FORMAT"
-              ucd="meta.code.mime" utype="ssa:Access.Format" value="">
+              ucd="meta.code.mime" utype="ssa:Access.Format"
+              value="">
          <DESCRIPTION>MIME type of the output format</DESCRIPTION>
          <VALUES>
-           <OPTION name="FITS binary table" value="application/fits"/>
+           <OPTION name="FITS binary table"
+                   value="application/fits"/>
            <OPTION name="Original format" value="image/fits"/>
            <OPTION name="Comma separated values" value="text/csv"/>
            <OPTION name="VOTable, tabledata encoding"
@@ -970,6 +978,7 @@ a custom spectral cutout service:
      </GROUP>
    </RESOURCE>
 \end{verbatim}
+}
 
 The custom service described above supports 5 input parameters: ID,
 FLUXCALIB, LAMBDA\_MIN, LAMBDA\_MAX, and FORMAT.
@@ -990,7 +999,9 @@ of this parameter it is related to photometric or flux calibration).
 
 The LAMBDA\_MIN and LAMBDA\_MAX parameters allow the user to specify a
 spectral interval to extract from the spectrum. The PARAM(s) specify that
-the values are wavelengths: ucd="par.min;em.wl" and ucd="par.max;em.wl"
+the values are wavelengths:
+ucd=\allowbreak "par.min;em.wl" and
+ucd=\allowbreak "par.max;em.wl"
 say they are minimum (par.min) and maximum (par.max) wavelength (em.wl)
 values. The VALUES child elements convey a range of valid wavelength
 values from which a subset could be extracted.
@@ -1127,7 +1138,7 @@ Changed the standardID for the \blinks\ resource to include version as
 will be described in the StandardsRegExt record.
 
 Changed service descriptor resource to use
-type="meta" utype="adhoc:service"
+type=\allowbreak "meta" utype=\allowbreak "adhoc:service"
 so VOTable documents pass schema validation and this resource type can
 still be easily found.
 
