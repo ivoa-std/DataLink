@@ -110,14 +110,15 @@ DataLink is a data access protocol in the IVOA architecture whose purpose
 is to provide a mechanism to link resources found via one service to
 resources provided by other services.
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
 \includegraphics[width=0.9\textwidth]{role_diagram.pdf}
 \caption{Architecture diagram for this document}
 \label{fig:archdiag}
 \end{figure}
 
-Although not shown above, any implementation of an access protocol could
+Although not shown in Figure \ref{fig:archdiag},
+any implementation of an access protocol could
 make use of DataLink to expose resources. DataLink services conform to
 the Data Access layer Interface (DALI [1]) specification, including the
 Virtual Observatory Support Interfaces (VOSI [2]) resources. DataLink
@@ -141,6 +142,7 @@ it helps to understand the problem area covered by this specification.
 
 
 \subsubsection{Multiple Files per Dataset}
+\label{sec:useMultiFile}
 
 It is very common for a single dataset to be physically manifest as
 multiple files of various types. With a DataLink web service, the client
@@ -176,7 +178,7 @@ a large data cube).
 
 Links to alternate representations may be to pre-generated resources
 or may be computed on the fly, using either an opaque URL or a custom
-parameterised service (see 1.2.5 below).
+parameterised service (see \ref{sec:useCustom} below).
 
 Other alternate representations that are not previews could also
 be included in the list of links. For example, one could provide an
@@ -185,6 +187,7 @@ alternate download format for a data file with different content-type
 
 
 \subsubsection{Standard Services}
+\label{sec:useStandard}
 
 Data providers often implement services that can access a dataset
 or its files using standard service interfaces or provide alternate
@@ -204,6 +207,7 @@ select services they understand and use the link to invoke the service
 
 
 \subsubsection{Free or Custom Services}
+\label{sec:useCustom}
 
 Data providers often implement custom services that can access a dataset
 or its files or provide alternate representations of the dataset. The
@@ -237,25 +241,27 @@ capabilities is in progress in separate specifications.
 
 \subsubsection{Recursive DataLink}
 
-In some cases, a dataset may contain many files (as in 1.2.1 above)
+In some cases, a dataset may contain many files
+(as in \ref{sec:useMultiFile} above)
 and the provider may wish to make some files directly accessible and
 other (less important) files only accessible via additional calls. Such
 organisation of links could be accomplished by including a link to
 another DataLink service in the initial DataLink response (e.g.\ recursive
 DataLink). This service link would be described with both a service type
-(as in 1.2.4 ) and content type.
+(as in \ref{sec:useStandard}) and content type.
 
 
 \section{Resources}
 
 The DataLink web service capability is implemented as an HTTP REST
 [11] web service capability that conforms to the DALI-sync resource
-[1] description. The \blinks\ resource is described fully below (see
-2.1). The values for the identifiers are typically found using a data
+[1] description. The \blinks\ resource is described fully below
+(see \ref{sec:linksResource}).
+The values for the identifiers are typically found using a data
 discovery service (e.g.\ TAP with ObsCore). Data discovery services that
 work with an associated DataLink service should include a resource in
 the discovery response to describe the DataLink service. The mechanism
-for doing this is described below (see 4).
+for doing this is described below (see \ref{sec:serviceDescriptors}).
 
 The requirements for a standalone DataLink service are given in the
 table below.
@@ -279,6 +285,7 @@ resource of that service would also describe the \blinks\ capability.
 
 
 \subsection{\blinks\ resource}
+\label{sec:linksResource}
 
 The \blinks\ resource is a synchronous web service resource that conforms
 to the DALI-sync description [1]. The implementer is free to name for this
@@ -304,6 +311,7 @@ using an HTTP GET (query string) or POST action.
 
 
 \subsubsection{ID}
+\label{sec:resourceId}
 
 The ID parameter is used by the client to specify one or more
 identifiers. The service will return at least one link for each of the
@@ -322,12 +330,15 @@ The service {\bf must not} truncate the output within the set of rows
 (links) for a single ID value if the request exceeds such an input limit.
 
 If the client submits no ID values, the service must respond with a
-normal response (e.g.\ an empty results table for VOTable output). The
-service may include service descriptors (see 4 ) for related services
-and a service descriptor describing itself (see 4.6 ).
+normal response (e.g.\ an empty results table for VOTable output).
+The service may include service descriptors
+(see \ref{sec:serviceDescriptors})
+for related services and a service descriptor describing itself
+(see \ref{sec:selfDescribing}).
 
 
 \subsubsection{RESPONSEFORMAT}
+\label{sec:responseformat}
 
 The RESPONSEFORMAT parameter is described in DALI [1];
 support for RESPONSEFORMAT is mandatory.
@@ -411,6 +422,7 @@ messages for individual input identifier values.
 
 
 \subsection{DataLink MIME Type}
+\label{sec:mime}
 
 In some data discovery responses (e.g.\ ObsCore [7]), there are columns
 with a URL (access\_url in ObsCore) and a content type (access\_format in
@@ -420,14 +432,16 @@ DataLink URL and a parameterised VOTable MIME type:
 \begin{verbatim}
    application/x-votable+xml;content=datalink
 \end{verbatim}
-to denote that the response from that URL is a DataLink response. This
-is also the MIME type for the \blinks\ response (see 3.3 ) unless the
-caller has explicitly requested a specific value via the RESPONSEFORMAT
-parameter (see 2.1.2 ).
+to denote that the response from that URL is a DataLink response.
+This is also the MIME type for the \blinks\ response
+(see \ref{sec:successfulRequests})
+unless the caller has explicitly requested a specific value
+via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 Services may include other MIME type parameters in the response.
 
 
 \subsection{List of Links}
+\label{sec:listOfLinks}
 
 The list of links that is returned by the \blinks\ resource can be
 represented as a table with the following columns:
@@ -463,10 +477,11 @@ content\_length & size of the download the link returns
 \end{tabular}
 \end{center}
 \caption{Required Fields for Links}
+\label{fig:linkFields}
 \end{table}
 
 All fields must be present in the output table; values must be provided
-(or null) as described in the table above. Each row in the table
+(or null) as described in Table \ref{fig:linkFields}. Each row in the table
 represents one link and must have exactly one of:
 \begin{itemize}
   \item an access\_url
@@ -485,7 +500,7 @@ error\_message(s).
 
 Services may include additional columns; this can be used to include
 values that can be referenced from service descriptor input parameters
-(see 4.1).
+(see \ref{sec:serviceResources}).
 
 
 \subsubsection{ID}
@@ -588,7 +603,7 @@ The content\_type column tells the client the general file format
 (mime-type) they will receive if they use the link
 (access\_url or invoking a service).
 For recursive DataLink links, the content\_type value should
-be as specified in section 3.1.
+be as specified in section \ref{sec:mime}.
 This field may be null (blank) if the value is unknown.
 
 
@@ -602,6 +617,7 @@ if unknown and will typically be null for links to services.
 
 
 \subsection{Successful Requests}
+\label{sec:successfulRequests}
 
 Successfully executed requests should result in a response with HTTP
 status code 200 (OK) and a response in the format requested by the client
@@ -613,8 +629,10 @@ Unless the incoming request included a RESPONSEFORMAT parameter requesting
 a different format, the content-type header of the response MUST be
 application/x-votable+xml'' with the
 ``content'' parameter set to ``datalink'',
-with the canonical form given in 3.1 strongly recommended. Contrary to
-all other uses of the string given in 3.1, clients wishing to evaluate
+with the canonical form given in \ref{sec:mime}
+strongly recommended. Contrary to
+all other uses of the string given in \ref{sec:mime},
+clients wishing to evaluate
 the content type of the response must, however, perform a full parse
 of header value. This specification cannot and does not outlaw content
 types with additional parameters
@@ -630,16 +648,18 @@ content-type follows the DALI rules [1].
 
 The table of links {\bf must} be returned in a RESOURCE with
 \attval{type}{results}. The table {\bf must} be in TABLEDATA serialization
-unless another serialization is specifically requested (see 2.1.2)
+unless another serialization is specifically requested
+(see \ref{sec:responseformat})
 and supported by the implementation.
 The name attribute for FIELD elements in the VOTable [5]
-(and the units in one case) are specified above (see 3.2).
+(and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
 
 \subsubsection{Other Output Formats}
 
 This specification does not describe any other output formats, but allows
-(via the RESPONSEFORMAT in section 2.1.2) implementations to provide
+(via the RESPONSEFORMAT in section \ref{sec:responseformat})
+implementations to provide
 output in other formats.
 
 
@@ -648,16 +668,17 @@ output in other formats.
 The error handling specified for DALI-sync [see 1] resources applies
 to service failure (where no links can be generated) and to the usage
 error where no ID parameter is specified. Services should return the
-document format requested by the client (see 2.1.2). For the standard
+document format requested by the client (see \ref{sec:responseformat}).
+For the standard
 output format (VOTable) the error document {\bf must} also be VOTable.
 
 For errors that occur while generating individual links, each
 identifier may result in a link with only an error\_message
 as described above.
 In either case (error document or per-link error\_message),
-the error message must start with one of the strings in the
-following table, in order of specificity:
-\begin{table}[h]
+the error message must start with one of the strings in
+Table \ref{tab:errors}, in order of specificity.
+\begin{table}[ht]
 \begin{center}
 \begin{tabular}{|l|l|}
 \sptablerule
@@ -672,6 +693,7 @@ DefaultFault   & Default failure (not covered above) \\
 \end{tabular}
 \end{center}
 \caption{Error Messages}
+\label{tab:errors}
 \end{table}
 
 In all cases, the service may append additional useful information to the
@@ -686,6 +708,7 @@ from the error string with a colon (:) character, for example:
 
 
 \section{Service Descriptors}
+\label{sec:serviceDescriptors}
 
 The DataLink service interface is designed to add functionality to data
 discovery services by providing the connection between the discovered
@@ -707,6 +730,7 @@ used wherever a VOTable document is created.
 
 
 \subsection{Service Resources}
+\label{sec:serviceResources}
 
 In a data discovery response, one RESOURCE element (usually the first)
 will have an attribute \attval{type}{results} and tabular data; this resource
@@ -722,20 +746,21 @@ A service resource contains PARAM elements to describe the service and
 a GROUP element with additional PARAM elements to describe the input
 parameters.
 The standard PARAM elements for a {\em service\/} resource
-are described in the table below.
+are described in Table \ref{tab:serviceParams}.
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|l|}
 \sptablerule
 {\bf name}  &  {\bf value}  & {\bf required}  \\
 \sptablerule
-accessURL           &  URL to invoke the capability  &  yes  \\
-standardID          &  URI for the capability        &  no   \\
+accessURL           & URL to invoke the capability   &  yes  \\
+standardID          & URI for the capability         &  no   \\
 resourceIdentifier  & IVOA registry identifier       &  no   \\
 \sptablerule
 \end{tabular}
 \end{center}
 \caption{Service Resource Parameters}
+\label{tab:serviceParams}
 \end{table}
 
 For services that implement an IVOA standard, the standardID is specified
@@ -772,7 +797,8 @@ the meaning (UCD) of the value they apply to, etc.
 
 The \blinks\ capability can be used with a result table when one of the
 columns contains identifier values that can be used with the ID parameter
-(see 2.1.1). In order for the service resource to refer to this FIELD,
+(see \ref{sec:resourceId}).
+In order for the service resource to refer to this FIELD,
 the FIELD element describing this column of the table
 {\bf must} include an XML ID attribute
 that uniquely identifies the FIELD (column).
@@ -790,8 +816,8 @@ be found within the RESOURCE of \attval{type}{results}. The same VOTable
 document would have a second RESOURCE with \attval{type}{meta} to describe
 the associated DataLink \blinks\ capability.
 
-The \blinks\ capability described in section 2.1 is described
-by following resource:
+The \blinks\ capability described in section \ref{sec:linksResource}
+is described by following resource:
 \begin{verbatim}
    <RESOURCE type="meta" utype="adhoc:service">
      <PARAM name="standardID" datatype="char" arraysize="*"
@@ -1018,11 +1044,13 @@ used to call the service.
 
 
 \subsection{Example: Self-Describing Service}
+\label{sec:selfDescribing}
 
 A service may include a service descriptor that describes itself with
 it's normal output. This usage is comparable to prototype work on S3 (see
 [12]) and when combined with calling a service with no input parameters
-(e.g as allowed in 2.1.1 ) will make it easy for clients to obtain a
+(e.g as allowed in \ref{sec:resourceId})
+will make it easy for clients to obtain a
 description of both standard and custom features.
 
 The output of a \blinks\ capability with no input ID would include the
@@ -1194,7 +1222,8 @@ Re-ordered sections 2--5 so all the sections describing the
 \blinks\ capability are together.
 \item
 Changed from GROUP with PARAM and FIELDref siblings to PARAM with ref
-attribute when defining a parameter-column-with-values in section 4.1.
+attribute when defining a parameter-column-with-values in section
+\ref{sec:serviceResources}.
 \item
 Clarified the introduction so it is clear we intend to support linking
 of any services via RESOURCE(s) in any responses.
