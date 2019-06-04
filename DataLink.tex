@@ -611,13 +611,15 @@ with some additional details below.
 
 Unless the incoming request included a RESPONSEFORMAT parameter requesting
 a different format, the content-type header of the response MUST be
-application/x-votable+xml" with the "content" parameter set to "datalink",
+application/x-votable+xml'' with the
+``content'' parameter set to ``datalink'',
 with the canonical form given in 3.1 strongly recommended. Contrary to
 all other uses of the string given in 3.1, clients wishing to evaluate
 the content type of the response must, however, perform a full parse
 of header value. This specification cannot and does not outlaw content
-types with additional parameters (e.g.\ {"application/x-votable+xml;
-content=datalink;charset=iso-8859-1"}) or with extra spaces or quotes
+types with additional parameters
+(e.g.\ ``application/x-votable+xml; content=datalink;charset=iso-8859-1'')
+or with extra spaces or quotes
 (as allowed for MIME types ([4]).
 
 If the incoming request includes a DALI RESPONSEFORMAT parameter,
