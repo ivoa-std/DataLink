@@ -121,13 +121,13 @@ resources provided by other services.
 Although not shown in Figure \ref{fig:archdiag},
 any implementation of an access protocol could
 make use of DataLink to expose resources. DataLink services conform to
-the Data Access layer Interface specification
+the Data Access Layer Interface specification
 (DALI, \citet{2013ivoa.spec.1129D}),
 including the
 Virtual Observatory Support Interfaces resources
 (VOSI, \citet{2011ivoa.spec.0531G}).
 DataLink services use VOTable \citep{2013ivoa.spec.0920O}
-as the default output format for both successful
+as the default output format both for successful
 output and to return error documents.
 
 DataLink specifies a standardID for itself, as defined in VODataService
@@ -179,7 +179,7 @@ metadata like content-type (e.g.\ image/png) and content-length to assist
 the client in selecting a preview; multiple previews with different sizes
 (content-length) could be returned in the list of links. Plots derived
 from the dataset could also be linked as previews. Some previews may be
-of the some content-type as the complete dataset, but reduced content
+of the same content-type as the complete dataset, but reduced content
 in some fashion (e.g.\ a representative image or spectrum derived from
 a large data cube).
 
@@ -296,11 +296,11 @@ resource of that service would also describe the \blinks\ capability.
 \label{sec:linksResource}
 
 The \blinks\ resource is a synchronous web service resource that conforms
-to the DALI-sync description. The implementer is free to name for this
+to the DALI-sync description. The implementer is free to name this
 resource however they like as long as the \blinks\ resource is a sibling
 of the VOSI resources; this restriction allows a client to construct
 the URL to VOSI resources from any \blinks\ URL and thus discover other
-capabilities or check the availablity f there is a failure. For example,
+capabilities or check the availablity if there is a failure. For example,
 a DataLink service could have:
 \begin{quote}
   \hspace*{-1.5em}
@@ -405,7 +405,7 @@ and does not require a registry extension schema:
       </resultType>
       <param std="true" use="required">
         <name>ID</name>
-        <description>pubisher dataset identifier</description>
+        <description>publisher dataset identifier</description>
         <ucd>meta.id;meta.main</ucd>
         <dataType>string</dataType>
       </param>
@@ -637,7 +637,7 @@ with some additional details below.
 
 Unless the incoming request included a RESPONSEFORMAT parameter requesting
 a different format, the content-type header of the response MUST be
-application/x-votable+xml'' with the
+``application/x-votable+xml'' with the
 ``content'' parameter set to ``datalink'',
 with the canonical form given in \ref{sec:mime}
 strongly recommended. Contrary to
@@ -749,7 +749,7 @@ contains the query result.
 To describe an associated service, the VOTable would also
 contain one or more resources with attribute \attval{type}{meta} and
 \attval{utype}{adhoc:service}.
-A resource of this type have no tabular data,
+A resource of this type has no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
 A service resource contains PARAM elements to describe the service and
@@ -827,7 +827,7 @@ document would have a second RESOURCE with \attval{type}{meta} to describe
 the associated DataLink \blinks\ capability.
 
 The \blinks\ capability described in section \ref{sec:linksResource}
-is described by following resource:
+is described by the following resource:
 \begin{verbatim}
    <RESOURCE type="meta" utype="adhoc:service">
      <PARAM name="standardID" datatype="char" arraysize="*"
@@ -943,7 +943,8 @@ based input to the service, but they can describe the optional parameters:
             value="http://example.com/vospace/transfers" />
    </RESOURCE>
 \end{verbatim}
-Since the capability being described is RESTful and inputs are , the
+Since the capability being described is RESTful and inputs are
+{\em [?missing text?]}, the
 caller must recognise the standardID values and use a VOSpace-aware
 client to call the service.
 
@@ -1037,7 +1038,7 @@ The FLUXCALIB parameter allows the client to specify one of two values:
 UNCALIBRATED or RELATIVE (listed as OPTIONS along with a description of
 the meaning). The UCD \citep{2005ivoa.spec.0819D} value
 of phot.calib conveys the basic meaning
-of this parameter it is related to photometric or flux calibration).
+of this parameter (it is related to photometric or flux calibration).
 
 The LAMBDA\_MIN and LAMBDA\_MAX parameters allow the user to specify a
 spectral interval to extract from the spectrum. The PARAM(s) specify that
@@ -1058,10 +1059,10 @@ used to call the service.
 \label{sec:selfDescribing}
 
 A service may include a service descriptor that describes itself with
-it's normal output. This usage is comparable to prototype work on S3
+its normal output. This usage is comparable to prototype work on S3
 (see \citet{note:s3})
 and when combined with calling a service with no input parameters
-(e.g as allowed in \ref{sec:resourceId})
+(e.g.\ as allowed in \ref{sec:resourceId})
 will make it easy for clients to obtain a
 description of both standard and custom features.
 
@@ -1087,7 +1088,7 @@ self-describing service descriptor and an empty results table:
        <FIELD name="service_def" datatype="char" arraysize="*"
               ucd="meta.ref" />
        <FIELD name="error_message" datatype="char" arraysize="*"
-              ucd="meta.code.error" x/>
+              ucd="meta.code.error" />
        <FIELD name="semantics" datatype="char" arraysize="*"
               ucd="meta.code" />
        <FIELD name="description" datatype="char" arraysize="*"
@@ -1200,7 +1201,6 @@ still be easily found.
 \item
 Improved the VOSI-capabilities example so it describes all parameters
 of the example DataLink service.
-Added % sic
 \item
 Removed unnecessary HTTP header advice and clarified the strict DataLink
 mimetype usage.
