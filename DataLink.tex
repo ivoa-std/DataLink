@@ -66,16 +66,18 @@ infrastructure that enable VO applications.
 \section{Introduction}
 
 This specification defines mechanisms for connecting metadata about
-discovered datasets to the data, related data products, and web services
-that can act upon the data.
+discovered VO items to  related data products, and web services
 
 The {\em links\/} web service capability is a web service capability
 for drilling
-down from a discovered dataset identifier (typically an IVOA publisher
-dataset identifier) to find details about the data files that can be
+down from a discovered item such as an identifier,
+a source in a catalog or any other data item. In the first case (typically an IVOA publisher dataset identifier) it allows
+ to find details about the data files that can be
 downloaded, alternate representations of the data that are available, and
-services that can act upon the data (usually without having to download
-the entire dataset). The expected usage is for DAL (Data Access Layer)
+services that can act upon these data (usually without having to download
+the entire dataset). 
+In the latter cases it allows to associate metadata, images, cubes, spectra, timeseries or ancillary data to a source in the sky or other kind of time.
+The expected usage for datasets is for DAL (Data Access Layer)
 data discovery services (e.g.\ a TAP service \citep{2010ivoa.spec.0327D}
 with the ObsCore \citep{2017ivoa.spec.0509L} data
 model or one of the simple DAL services) to provide an identifier that
@@ -93,16 +95,12 @@ service metadata tells the client how to invoke a service and, for those
 registered in an IVOA registry, how to lookup additional information
 about the service. The service provider can use this mechanism to tell
 clients about services that can be invoked to access the discovered
-dataset in some way: get additional metadata, download the data, or
+item in some way: get additional metadata, download the data, or
 invoke services that act upon the data files. These services may be
 IVOA standard services or custom services from the data providers. The
 current version provides no way to describe the output of a service,
 but this may be added in a future (minor) revision of this specification.
 
-We expect that the {\em service descriptor resource\/}
-mechanism will be the primary way that clients will find and
-use the {\em links\/} capability from data discovery
-responses.
 
 
 \subsection{The Role in the IVOA Architecture}
@@ -257,6 +255,13 @@ another DataLink service in the initial DataLink response (e.g.\ recursive
 DataLink). This service link would be described with both a service type
 (as in \ref{sec:useStandard}) and content type.
 
+\subsubsection{Datasets linked to an astronomical source}
+
+There are  a lot of catalogs of astronomical sources made available using VO services such as ConeSearch \citep{2008ivoa.specQ0222P} or TAP services. For some catalogs “associated data” are available. These data include images from which sources have been extracted, or imaging the object in  case of extended objects, as well as additional observations such as Spectra or Time Series of the source and even spectral cubes and Time Series of images for extended or varying objects. The \blinks  response obtained for the source id can allow to easilly retrieve all these associated data in one shot.
+
+\subsubsection{Metadata and data related to provenance entities}
+
+The IVOA Provenance datamodel \citep{pr:provdm} represents metadata tracing  the history of data. This information can be retrieved through ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.  The Entity instances represent  the state of the data items between various steps of the data processing flow. “Entities” can be hooked to lists of real datasets retrieval and previews, or Obscore, SimDM and SSA metadata describing them  using the \blinks endpoint.
 
 \section{Resources}
 
