@@ -754,7 +754,7 @@ but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
 A service resource contains PARAM elements to describe the service and
 a GROUP element with additional PARAM elements to describe the input
-parameters.
+parameters or additional RESTful endpoints templates.
 The standard PARAM elements for a {\em service\/} resource
 are described in Table \ref{tab:serviceParams}.
 \begin{table}[h]
@@ -794,6 +794,7 @@ may be used. Since the accessURL may contain parameters; clients must
 parse the URL to decide how to append additional parameters when
 invoking the service.
 
+\subsubsection{Input PARAMETERS}
 A GROUP with \attval{name}{inputParams} contains PARAM elements describing
 how to invoke the service. For services where the parameter values
 come from columns in the results resource, we use the ref attribute of
@@ -801,6 +802,11 @@ the PARAM to indicate the FIELD (column) with the values. Other PARAM
 elements (without a ref attribute) are also allowed; these would describe
 additional service parameters, the type of value that must be specified,
 the meaning (UCD) of the value they apply to, etc.
+
+\subsubsection{Additional templated endpoints for RESTful services}
+In order to describe RESTful services endpoints (eg VOSPACE endpoints) with variable path segments the value of which can be read in FIELDS of the main “results” TABLE, a 
+GROUP with \attval{name}{endpoints} contains  PARAMS  with \attval{utype}{template} defining the relative templated URLs. The templating scheme adopted in the value attribute of this PARAM is following the appropriate IETF RFC \citep{std:RFC6570}. 
+
 
 
 \subsection{Example: Service Descriptor for the \blinks\ Capability}
