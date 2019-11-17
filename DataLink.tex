@@ -451,7 +451,6 @@ unless the caller has explicitly requested a specific value
 via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 Services may include other MIME type parameters in the response.
 
-
 \subsection{List of Links}
 \label{sec:listOfLinks}
 
@@ -522,11 +521,12 @@ The ID column contains the input identifier value.
 
 \subsubsection{access\_url}
 
-The access\_url column contains a URL to download a single resource.
-The URL in this column must be usable as-is with no additional
-parameters or client handling; it can be a link to a dynamic
-resource (e.g.\ preview generation).
+The access\_url column may contain a URL to download a single resource.
+This URL can be a link to a dynamic resource (e.g.\ preview generation).
 
+Beside dereferencable URL, it is allowed to use URI-fragments to link the intial resource to a specific part of the retrievable resource, with its specific semantics and description. Examples of this are section in an html page or paths in an archive file or extensions in a MEF.
+The interpretation of the fragment will depend from the content type of the retrievable resource.
+No other additional parameters or client handling are allowed.
 
 \subsubsection{service\_def}
 
@@ -557,8 +557,8 @@ column; all others should be null.
 
 \subsubsection{description}
 
-The description column should contain a human-readable description of
-the link; it is intended for display by interactive applications.
+The description column SHOULD contain a human-readable description of
+the link; it is intended for display by interactive applications and very important to help user distinguish links with same semantics (see below).
 
 
 \subsubsection{semantics}
@@ -665,6 +665,21 @@ unless another serialization is specifically requested
 and supported by the implementation.
 The name attribute for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
+
+The DALI specification states that a standardID INFO element   with name "standardID" and the actual standardID string as a value SHOULD be provided.
+It is recommended to include such an element to help users and applications to identify VOTAbles as results of DataLink services this way :
+\begin{verbatim}
+
+<RESOURCE type="results" 
+
+... 
+
+<INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.?"/> 
+
+... 
+
+</RESOURCE>
+\end{verbatim}
 
 
 \subsubsection{Other Output Formats}
