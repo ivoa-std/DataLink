@@ -1121,6 +1121,18 @@ description of both standard and custom features (eg PARAMETER Options or specif
 
 In the above example the oid parameter is repeating the value given in the call of the service. The OPTIONS and ranges given for the three other parameters are restricted and adpated to the spectrum so identified.  If the service were called without any parameter the oid would have been free and the ranges and options of the three other parameters would have been valid for the whole service.
 
+\section{New “datalink” content-type for the LINK element in VOTable}
+
+
+When providing a column with URLs, for example outside DAL service responses or when service descriptors  are not defined, if all the URLs are to a DataLink "links" endpoint, then the preferred approach is to add a LINKS element with the content type defined in section \ref{sec:mime}. If some values are to a "links" endpoint and others to different content types (e.g. single file download), then the VOTable would need a second column to convey the content type (see Appendix for details). 
+
+\begin{verbatim} 
+<FIELD name="bla" datatype="char" arraysize="*" utype="Access.reference" ucd="meta.url" > 
+  <LINK content-type="application/x-votable+xml;content=datalink" title="DataLink" /> 
+  <DESCRIPTION> bla bla bla </DESCRIPTION> 
+</FIELD>
+\end{verbatim}
+
 
 \section{Changes}
 
