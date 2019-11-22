@@ -1133,6 +1133,19 @@ When providing a column with URLs, for example outside DAL service responses or 
 </FIELD>
 \end{verbatim}
 
+\section{New “datalink” content-type for the LINK element in VOTable}
+
+Beside the cases where  \blinks URLs are retrievied from standard DAL services responses or service descriptors,  if a FIELD contains an URL retrieving a \blinks  response at each row it is easy to tell this to the client using the content-type attribute of an included LINK element, as long as the content-type  “application/x-votable+xml;content=datalink” is provided. (see Appendix)
+
+\begin{verbatim} 
+<FIELD name="bla" datatype="char" arraysize="*"
+       [utype="Access.reference" ucd="meta.url" ]> 
+  <LINK content-type="application/x-votable+xml;content=datalink" title="DataLink" /> 
+  <DESCRIPTION> bla bla bla </DESCRIPTION> 
+</FIELD>
+\end{verbatim}
+
+
 
 \section{Changes}
 
