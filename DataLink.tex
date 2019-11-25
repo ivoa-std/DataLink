@@ -763,7 +763,7 @@ contains the query result.
 
 To describe an associated service, the VOTable would also
 contain one or more resources with attribute \attval{type}{meta} and
-\attval{utype}{adhoc:service}.
+\attval{utype}{adhoc:service} (or \attval{utype}{adhoc:this} in case of a Self-Describing service -see below \ref{selfDescribing}).
 A resource of this type has no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
@@ -1074,7 +1074,11 @@ used to call the service.
 \label{sec:selfDescribing}
 
 A service may include a service descriptor that describes itself with
-its normal output. This usage is comparable to prototype work on S3
+its normal output. In that case the utype "adhoc:this" indicates the self-describing
+nature of the service descriptor. This convention would make finding the self-description
+unambiguous in cases where the output also contained other service
+descriptors.
+   This usage is comparable to prototype work on S3
 (see \citet{note:s3})
 and will make it easy for clients to obtain a
 description of both standard and custom features (eg PARAMETER Options or specific endpoints for the resource) it gives ranges or options of all accepted parameters. When combined with calling a service with some of the required parameters only (eg an ID)  the response may give defaults specific to the resource identified or selected  by these parameters.
@@ -1082,7 +1086,7 @@ description of both standard and custom features (eg PARAMETER Options or specif
 
 
 \begin{verbatim}
-<RESOURCE type=”meta” utype=”adhoc:service” ID=”PwL” name=”Power Law fitting”>
+<RESOURCE type=”meta” utype=”adhoc:this” ID=”PwL” name=”Power Law fitting”>
 
     <DESCRIPTION>Apply a power law model on a XMM-Newton EPIC spectrum </DESCRIPTION>	
 	<PARAM name="accessURL" datatype="char" arraysize="*" value="http://obs-he-lm:8888/3XMM/fitmodelonspectrum& model=powlaw" />
