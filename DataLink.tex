@@ -749,9 +749,14 @@ contains the query result.
 To describe an associated service, the VOTable would also
 contain one or more resources with attribute \attval{type}{meta} and
 \attval{utype}{adhoc:service}.
+
+A free name  SHOULD be added to each descriptor RESOURCE to help identifying the meaning.\\
+In case a response contains several “descriptor” RESOURCES  and several “results” RESOURCES these RESOURCES should be nested in order to allow correct association.
+
 A resource of this type has no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
+A service RESOURCE SHOULD contain a DESCRIPTION element to explain the purpose of the service.
 A service resource contains PARAM elements to describe the service and
 a GROUP element with additional PARAM elements to describe the input
 parameters.
@@ -766,6 +771,7 @@ are described in Table \ref{tab:serviceParams}.
 accessURL           & URL to invoke the capability   &  yes  \\
 standardID          & URI for the capability         &  no   \\
 resourceIdentifier  & IVOA registry identifier       &  no   \\
+contentType	    & Media type of the service response & no \\
 \sptablerule
 \end{tabular}
 \end{center}
@@ -829,11 +835,15 @@ the associated DataLink \blinks\ capability.
 The \blinks\ capability described in section \ref{sec:linksResource}
 is described by the following resource:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service">
+   <RESOURCE type="meta" utype="adhoc:service" name="{links} for
+Obscore">
+     <DESCRIPTION>Links resources to datasets</DESCRIPTION>
      <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/DataLink#links-1.0" />
      <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/mylinks" />
+     <PARAM name="contentType" datatype="char" arraysize="*" 
+            value="application/x-votable+xml;content=datalink" >
      <GROUP name="inputParams">
        <PARAM name="ID" datatype="char" arraysize="*"
               value="" ref="primaryID"/>
@@ -868,13 +878,16 @@ Suppose you have an SIA-1.0 service and you want users to be able to
 call it to get SIA-1.0 specific metadata. This VOTable RESOURCE describes
 the basic query interface of SIA-1.0:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service">
+   <RESOURCE type="meta" utype="adhoc:service" name="My SIA service">
+     <DESCRIPTION> This is service SIA for so and so</DESCRIPTION>
      <PARAM name="resourceIdentifier" datatype="char" arraysize="*"
             value="ivo://example.com/mySIA" />
      <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/SIA#1.0" />
      <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/sia/query" />
+     <PARAM name="contentType" datatype="char" arraysize="*" 
+            value="application/x-votable+xml" />
      <GROUP name="inputParams">
        <PARAM name="POS" datatype="char" arraysize="*"
               value=""/>
@@ -918,7 +931,8 @@ save the client having to perform a registry lookup to find and use the
 service. The descriptors cannot describe the path usage and XML document
 based input to the service, but they can describe the optional parameters:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" ID="vnodes">
+   <RESOURCE type="meta" utype="adhoc:service" ID="vnodes" name="My VOSPACE">
+     <DESCRIPTION>A nice container to share space</DESCRIPTION>
      <PARAM name="resourceIdentifier"
             value="ivo://example.com/vospace" />
      <PARAM name="standardID"
@@ -957,10 +971,13 @@ form-based user interface. The following Rotatable resource describes
 a custom spectral cutout service:
 {\small
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" ID="apoadimo">
+   <RESOURCE type="meta" utype="adhoc:service" ID="apoadimo" name="Custom Recalibration">
+     <DESCRIPTION>Custom APOADIMO spectrum recalibration service</DESCRIPTION>
      <PARAM arraysize="*" datatype="char" name="accessURL"
             ucd="meta.ref.url"
             value="http://dc.zah.uni-heidelberg.de/flashheros/q/sdl/dlget"/>
+     <PARAM name="contentType" datatype="char" arraysize="*" 
+            value="application/fits" />
      <GROUP name="inputParams">
        <PARAM arraysize="*" datatype="char" name="ID" ref="xjc7ra"
               ucd="meta.id;meta.main" value="">
@@ -1061,50 +1078,60 @@ used to call the service.
 A service may include a service descriptor that describes itself with
 its normal output. This usage is comparable to prototype work on S3
 (see \citet{note:s3})
-and will make it easy for clients to obtain a
-description of both standard and custom features (eg PARAMETER Options or specific endpoints for the resource) it gives ranges or options of all accepted parameters. When combined with calling a service with some of the required parameters only (eg an ID)  the response may give defaults specific to the resource identified or selected  by these parameters.
+and when combined with calling a service with no input parameters
+(e.g.\ as allowed in \ref{sec:resourceId})
+will make it easy for clients to obtain a
+description of both standard and custom features.
 
-
-
+The output of a \blinks\ capability with no input ID would include the
+self-describing service descriptor and an empty results table:
 \begin{verbatim}
-<RESOURCE type=”meta” utype=”adhoc:service” ID=”PwL” name=”Power Law fitting”>
-
-    <DESCRIPTION>Apply a power law model on a XMM-Newton EPIC spectrum </DESCRIPTION>	
-	<PARAM name="accessURL" datatype="char" arraysize="*" value="http://obs-he-lm:8888/3XMM/fitmodelonspectrum& model=powlaw" />
-   <GROUP name=”inputParams”>
-      <PARAM name=”oid” datatype=”char” arraysize=”*” 
-        value=”1160803203386703876” unit =”none” >
-         <DESCRIPTION>Spectrum internal ID in the database </DESCRIPTION>
-      </PARAM>
-      <PARAM name=”binSize” ucd=”spect.binSize” datatype=”int” unit=”none” value=”10” >
-         <DESCRIPTION>Number of counts per bin</DESCRIPTION>
-         <VALUES>
-             <OPTION value=”1” />
-             <OPTION value=”5” />
-             <OPTION value=”10” />
-             <OPTION value=”20” />
-             <OPTION value=”50” />
-         </VALUES>
-       </PARAM>
-      <PARAM name=”nh” ucd=”phys.abund.X” datatype=”float” unit=”1e22cm-2” value=”0.01” >
-         <DESCRIPTION>Galactical NH</DESCRIPTION>
-         <VALUES>
-         <MIN value=”0” />
-             <MAX value=”1” />
-         </VALUES>
-       </PARAM>
-      <PARAM name=”alpha” ucd=”meta.code;spect.index” datatype=”float” unit=”none” value=”1.7” >
-         <DESCRIPTION>Photon index of power law</DESCRIPTION>
-         <VALUES>
-             <MIN value=”1” />
-             <MAX value=”9” />
-         </VALUES>
-       </PARAM>
-   </GROUP>
-</RESOURCE>
+   <RESOURCE type="meta" utype="adhoc:service" name="this">
+     <DESCRIPTION> DataLink service autodescription </DESCRIPTION>
+     <PARAM name="standardID" datatype="char" arraysize="*"
+            value="ivo://ivoa.net/std/DataLink#links-1.0" />
+     <PARAM name="accessURL" datatype="char" arraysize="*"
+            value="http://example.com/mylinks" />
+     <PARAM name="contentType" datatype="char" arraysize="*"
+             value=""application/x-votable+xml;content=datalink" />
+     <GROUP name="inputParams">
+       <PARAM name="ID" datatype="char" arraysize="*"
+              value="" ref="primaryID"/>
+     </GROUP>
+   </RESOURCE>
+   <RESOURCE type="results">
+     <TABLE>
+       <FIELD name="ID" datatype="char" arraysize="*"
+              ucd="meta.id;meta.main" />
+       <FIELD name="access_url" datatype="char" arraysize="*"
+              ucd="meta.ref.url" />
+       <FIELD name="service_def" datatype="char" arraysize="*"
+              ucd="meta.ref" />
+       <FIELD name="error_message" datatype="char" arraysize="*"
+              ucd="meta.code.error" />
+       <FIELD name="semantics" datatype="char" arraysize="*"
+              ucd="meta.code" />
+       <FIELD name="description" datatype="char" arraysize="*"
+              ucd="meta.note" />
+       <FIELD name="content_type" datatype="char" arraysize="*"
+              ucd="meta.code.mime" />
+       <FIELD name="content_length" datatype="long" unit="byte"
+              ucd="phys.size;meta.file" />
+       <DATA> <TABLEDATA/> </DATA>
+     </TABLE>
+   </RESOURCE>
 \end{verbatim}
 
-In the above example the oid parameter is repeating the value given in the call of the service. The OPTIONS and ranges given for the three other parameters are restricted and adpated to the spectrum so identified.  If the service were called without any parameter the oid would have been free and the ranges and options of the three other parameters would have been valid for the whole service.
+In the above example we give the self-describing service descriptor a
+name attribute with the value ``this'' to indicate the self-describing
+nature. This convention would make finding the self-description
+unambiguous in cases where (i) the output also contained other service
+descriptors and (ii) the caller could not infer which descriptor was
+the self-describing one from the standardID (because it is optional
+and not present for custom services and because they might just have a
+URL). Even trying to match the URL that was used with the accessURL in
+the descriptors is likely to be unreliable (e.g.\ if providers use HTTP
+redirects to make old URLs work when service deployment changes).
 
 
 \section{Changes}
