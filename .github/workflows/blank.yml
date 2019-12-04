@@ -13,6 +13,7 @@ jobs:
         submodules: true
     - name: Setup dependencies
       run: |
+        sudo apt update
         sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc
       
     - name: Build the document
