@@ -258,64 +258,20 @@ DataLink). This service link would be described with both a service type
 (as in \ref{sec:useStandard}) and content type.
 
 
-\section{Resources}
+\section{The \blinks~endpoint}
 
-The DataLink web service capability is implemented as an HTTP REST
-\citep{richardson07} web service capability
-that conforms to the DALI-sync resource
-description. The \blinks\ resource is described fully below
-(see \ref{sec:linksResource}).
-The values for the identifiers are typically found using a data
-discovery service (e.g.\ TAP with ObsCore). Data discovery services that
-work with an associated DataLink service should include a resource in
-the discovery response to describe the DataLink service. The mechanism
-for doing this is described below (see \ref{sec:serviceDescriptors}).
+\label{sec:linksEndpoint}
 
-The requirements for a standalone DataLink service are given in the
-table below.
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\sptablerule
-{\bf endpoint type} & {\bf endpoint name} & {\bf required} \\
-\sptablerule
-\blinks             & service specific    & yes            \\
-VOSI-availability   & /availability       & yes            \\
-VOSI-capabilities   & /capabilities       & yes            \\
-\sptablerule
-\end{tabular}
-\end{center}
+Most commonly, DataLink link lists are retrieved from \blinks~endpoints.
+These are DALI-sync endpoints with implementor-defined names.
+As specified by DALI-sync, the parameters for a request may be submitted
+using an HTTP GET (query string) or POST action.  Any service may offer
+zero or more datalink endpoints.
 
-A standalone DataLink service must have at least one \blinks\ endpoint;
-it could have multiple \blinks\ endpoints (e.g.\ to support alternate
-authentication schemes). Alternatively, the \blinks\ endpoint may be
-embedded in another web service, in which case the VOSI-capabilities
-resource of that service would also describe the \blinks\ capability.
+\subsection{Parameters on \blinks~endpoints}
 
-
-\subsection{\blinks\ endpoint}
-\label{sec:linksResource}
-
-The \blinks\ endpoint is a synchronous web service resource that conforms
-to the DALI-sync description. The implementer is free to name this
-resource however they like as long as the \blinks\ endpoint is a sibling
-of the VOSI resources; this restriction allows a client to construct
-the URL to VOSI resources from any \blinks\ URL and thus discover other
-capabilities or check the availablity if there is a failure. For example,
-a DataLink service could have:
-\begin{quote}
-  \hspace*{-1.5em}
-  {\small\nolinkurl{http://example.com/datalink/links}}
-  --- anonymous access \\
-  \hspace*{-1.5em}
-  {\small\nolinkurl{http://example.com/datalink/auth-links}}
-  --- HTTP authentication \\
-  \hspace*{-1.5em}
-  {\small\nolinkurl{https://example.com/datalink/links}}
-  --- IVOA SSO authentication
-\end{quote}
-
-As a DALI-sync resource, the parameters for a request may be submitted
-using an HTTP GET (query string) or POST action.
+On \blinks~endpoints, the ID and RESPONSEFORMAT parameters as defined
+below are mandatory.
 
 
 \subsubsection{ID}
@@ -369,31 +325,30 @@ Service implementers may support additional output formats but must follow
 the DALI specification if they chose any formats described there.
 
 
-\subsection{Availability: VOSI-availability}
+\subsection{Registering \blinks~endpoints}
 
-A DataLink web service must have a VOSI-availability endpoint,
-as defined by DALI and VOSI.
+Since normal datalink operations do not involve the Registry, this
+specification poses no requirements to register \blinks~endpoints.
+Datalink clients also generally have no reason to inspect VOSI
+capabilities endpoints, and hence there are no requirements on
+mentioning \blinks~endpoints in any VOSI capability documents.
 
-
-\subsection{Capabilities: VOSI-capabilities}
-
-A standalone DataLink web service must have a
-VOSI-capabilities endpoint as defined by DALI and VOSI.
-The standardID for the \blinks\ endpoint is
+Operators still wishing to declare \blinks~endpoints can do this by
+giving a capability with a standardID of
 \begin{verbatim}
    ivo://ivoa.net/std/DataLink#links-1.0
 \end{verbatim}
 
-The following capabilities document shows the minimal metadata
-and does not require a registry extension schema:
+This specification does not constrain the capability type used in such
+declarations.  The access URL of the \blinks~endpoint must be given in a
+\xmlel{vs:ParamHTTP}-typed interface element.
+
+Hence, a single datalink capability could be declared as follows within
+either a VOResource record or a VOSI capabilities element:
+
 \begin{verbatim}
-<?xml version="1.0" encoding="UTF-8"?>
-<vosi:capabilities
-   xmlns:vosi="http://www.ivoa.net/xml/VOSICapabilities/v1.0"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1">
-  ...
-  <capability standardID="ivo://ivoa.net/std/DataLink#links-1.0">
+<capability standardID="ivo://ivoa.net/std/DataLink#links-1.0"
+    xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1">
     <interface xsi:type="vs:ParamHTTP" role="std" version="1.0">
       <accessURL use="base">
         http://example.com/datalink/mylinks
@@ -409,19 +364,14 @@ and does not require a registry extension schema:
         <ucd>meta.id;meta.main</ucd>
         <dataType>string</dataType>
       </param>
+      <param std="true" use="required">
+        <name>RESPONSEFORMAT</name>
+        <description>Return the links in this tabular format (defaults
+          to VOTable).</description>
+      </param>
     </interface>
-  </capability>
-</vosi:capabilities>
+</capability>
 \end{verbatim}
-
-Multiple capability elements for the \blinks\ endpoint may be included;
-this is typically used if they differ in protocol (http vs.\ https)
-and/or authentication requirements.
-
-The \blinks\ capability may also be included as a resource in another
-service, in which case the VOSI-Capabilities for that service would
-describe all the capabilities of that service, including \blinks.
-
 
 \section{\blinks\ Response}
 
@@ -841,7 +791,7 @@ be found within the RESOURCE of \attval{type}{results}. The same VOTable
 document would have a second RESOURCE with \attval{type}{meta} to describe
 the associated DataLink \blinks\ capability.
 
-The \blinks\ capability described in section \ref{sec:linksResource}
+The \blinks\ capability described in section \ref{sec:linksEndpoint}
 is described by the following resource:
 \begin{verbatim}
    <RESOURCE type="meta" utype="adhoc:service">
