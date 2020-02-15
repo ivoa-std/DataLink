@@ -65,12 +65,12 @@ infrastructure that enable VO applications.
 
 \section{Introduction}
 
-This specification defines mechanisms for connecting metadata items
+This specification defines mechanisms for connecting data items
 discovered via one service to  related data products, and web services
 
 The {\em links\/} web service capability is a web service capability
 for drilling
-down from a discovered data/metadata item such as an identifier,
+down from a discovered data item such as an identifier,
 a source in a catalog or any other data item. In the first case (typically an IVOA publisher dataset identifier) it allows
  to find details about the data files that can be
 downloaded, alternate representations of the data that are available, and
@@ -95,7 +95,7 @@ service metadata tells the client how to invoke a service and, for those
 registered in an IVOA registry, how to lookup additional information
 about the service. The service provider can use this mechanism to tell
 clients about services that can be invoked to access the discovered
-data/metadata item in some way: get additional metadata, download the data, or
+data item in some way: get additional metadata, download the data, or
 invoke services that act upon the data files. These services may be
 IVOA standard services or custom services from the data providers. The
 current version provides no way to describe the output of a service,
@@ -261,7 +261,7 @@ There are  a lot of catalogs of astronomical sources made available using VO ser
 
 \subsubsection{Metadata and data related to provenance entities}
 
-The IVOA Provenance datamodel \citep{pr:provdm} represents metadata tracing  the history of data. This information can be retrieved through ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.  The Entity instances represent  the state of the data items between various steps of the data processing flow. “Entities” can be hooked to the more complete data/metadata they represent using the \blinks endpoint.
+The IVOA Provenance datamodel \citep{pr:provdm} represents metadata tracing  the history of data. This information can be retrieved through ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.  The Entity instances represent  the state of the data items between various steps of the data processing flow. “Entities” can be hooked to the more complete data they represent using the \blinks endpoint.
 
 \section{Resources}
 
