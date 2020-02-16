@@ -752,13 +752,14 @@ To describe an associated service, the VOTable would also
 contain one or more resources with attribute \attval{type}{meta} and
 \attval{utype}{adhoc:service}.
 
-A free name  SHOULD be added to each descriptor RESOURCE to help identifying the meaning.\\
-In case a response contains several “descriptor” RESOURCES  and several “results” RESOURCES these RESOURCES should be nested in order to allow correct association.
+A short name attribute, and a more verbose DESCRIPTION  subelement, MAY be added to the service descriptor RESOURCE to  provide the user with information about the service's purpose or  semantics. This SHOULD be done if the semantics are not obvious,  and especially in the case of multiple sibling service  descriptors, or non-standard services.
 
 A resource of this type has no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
-A service RESOURCE SHOULD contain a DESCRIPTION element to explain the purpose of the service.
+
+In case a response contains several “descriptor” RESOURCES  and several “results” RESOURCES these RESOURCES MAY be nested in order to better display correct association.
+
 A service resource contains PARAM elements to describe the service and
 a GROUP element with additional PARAM elements to describe the input
 parameters.
@@ -837,9 +838,12 @@ the associated DataLink \blinks\ capability.
 The \blinks\ capability described in section \ref{sec:linksResource}
 is described by the following resource:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" name="{links} for
-Obscore">
-     <DESCRIPTION>Links resources to datasets</DESCRIPTION>
+   <RESOURCE type="meta" utype="adhoc:service" name="RawAndCatalogDataLinks"
+">
+     <DESCRIPTION>
+     This datalink service gives access to the raw data for the
+     discovered datasets as well as to catalogues of extracted sources
+    </DESCRIPTION>
      <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/DataLink#links-1.0" />
      <PARAM name="accessURL" datatype="char" arraysize="*"
@@ -880,8 +884,12 @@ Suppose you have an SIA-1.0 service and you want users to be able to
 call it to get SIA-1.0 specific metadata. This VOTable RESOURCE describes
 the basic query interface of SIA-1.0:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" name="My SIA service">
-     <DESCRIPTION> This is service SIA for so and so</DESCRIPTION>
+   <RESOURCE type="meta" utype="adhoc:service" 
+             name="RadioCubeDiscoveryService">
+     <DESCRIPTION> 
+      This parameter based HTTP service allows discovery of Radio Cubes 
+      obtained by LOFAR observationos processing 
+     </DESCRIPTION>
      <PARAM name="resourceIdentifier" datatype="char" arraysize="*"
             value="ivo://example.com/mySIA" />
      <PARAM name="standardID" datatype="char" arraysize="*"
@@ -933,8 +941,11 @@ save the client having to perform a registry lookup to find and use the
 service. The descriptors cannot describe the path usage and XML document
 based input to the service, but they can describe the optional parameters:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" ID="vnodes" name="My VOSPACE">
-     <DESCRIPTION>A nice container to share space</DESCRIPTION>
+   <RESOURCE type="meta" utype="adhoc:service" ID="vnodes" name="CADC-Store">
+     <DESCRIPTION>
+      Datasets discovered here are automatically available in 
+      CADC's VOSpace under the URI produced here
+     </DESCRIPTION>
      <PARAM name="resourceIdentifier"
             value="ivo://example.com/vospace" />
      <PARAM name="standardID"
@@ -973,8 +984,14 @@ form-based user interface. The following Rotatable resource describes
 a custom spectral cutout service:
 {\small
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" ID="apoadimo" name="Custom Recalibration">
-     <DESCRIPTION>Custom APOADIMO spectrum recalibration service</DESCRIPTION>
+   <RESOURCE type="meta" utype="adhoc:service" ID="apoadimo" 
+             name="CustomSpectrumRecalibration">
+     <DESCRIPTION>
+       This service lets you retrieve the spectra discovered uncalibrated,
+        with flux calibration, and continuum normalised (where some 
+        spectra are now availble in continuum normalisation because the 
+        pipeline failed to identify a continuum)
+     </DESCRIPTION>
      <PARAM arraysize="*" datatype="char" name="accessURL"
             ucd="meta.ref.url"
             value="http://dc.zah.uni-heidelberg.de/flashheros/q/sdl/dlget"/>
