@@ -27,7 +27,7 @@ jobs:
         test -f DataLink.bbl
         
     - name: Build the implementation note
-      run: make --makefile=MakefileImp forcetex
+      run: make --makefile=MakefileImp biblio forcetex
       
     - name: Check the output
       run: test -f DataLinkImp.pdf
