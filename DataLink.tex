@@ -568,6 +568,8 @@ For recursive DataLink links, the content\_type value should
 be as specified in section \ref{sec:mime}.
 This field may be null (blank) if the value is unknown.
 
+In various usecases the link delivers a dataproduct. In order to tell the client which dataproduct type it will receive by calling the link, the mime-type may be completed by a parameter called dataproduct\_type (for example a content\_type "application/fits;dataproduct\_type=image" would state for an image in fits format). This parameter list of admitted values is currently  identical to the dataproduct\_type value list in ObsCore. It will move to the dataproduct\_type vocabulary managed by the semantics Working Group when this one will be available.     
+
 
 \subsubsection{content\_length}
 
