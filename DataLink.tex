@@ -14,6 +14,8 @@
        {Laurent Michel}
 \author[http://www.ivoa.net/twiki/bin/view/IVOA/MarkusDemleitner]
        {Markus Demleitner}
+\author[http://www.ivoa.net/twiki/bin/view/IVOA/MarkTaylor]
+       {Mark Taylor}
 \editor[http://www.ivoa.net/twiki/bin/view/IVOA/PatrickDowler]
        {Patrick Dowler}
 
@@ -74,10 +76,8 @@ down from a discovered data item such as an identifier,
 a source in a catalog or any other data item. In the first case (typically an IVOA publisher dataset identifier) it allows
  to find details about the data files that can be
 downloaded, alternate representations of the data that are available, and
-services that can act upon these data (usually without having to download
-the entire dataset). 
-In the latter cases it allows to associate metadata, images, cubes, spectra, timeseries or ancillary data to a source in the sky or other kind of time.
-The expected usage for datasets is for DAL (Data Access Layer)
+services that can act upon the data (usually without having to download
+the entire dataset). The expected usage is for DAL (Data Access Layer)
 data discovery services (e.g.\ a TAP service \citep{2010ivoa.spec.0327D}
 with the ObsCore \citep{2017ivoa.spec.0509L} data
 model or one of the simple DAL services) to provide an identifier that
@@ -101,6 +101,10 @@ IVOA standard services or custom services from the data providers. The
 current version provides no way to describe the output of a service,
 but this may be added in a future (minor) revision of this specification.
 
+We expect that the {\em service descriptor resource\/}
+mechanism will be the primary way that clients will find and
+use the {\em links\/} capability from data discovery
+responses.
 
 
 \subsection{The Role in the IVOA Architecture}
@@ -255,72 +259,31 @@ another DataLink service in the initial DataLink response (e.g.\ recursive
 DataLink). This service link would be described with both a service type
 (as in \ref{sec:useStandard}) and content type.
 
+
 \subsubsection{Datasets linked to an astronomical source}
 
 There are  a lot of catalogs of astronomical sources made available using VO services such as ConeSearch \citep{2008ivoa.specQ0222P} or TAP services. For some catalogs “associated data” are available. These data include images from which sources have been extracted, or imaging the object in  case of extended objects, as well as additional observations such as Spectra or Time Series of the source and even spectral cubes and Time Series of images for extended or varying objects. The \blinks  response obtained for the source id can allow to easilly retrieve all these associated data in one shot.
 
 \subsubsection{Metadata and data related to provenance entities}
 
+
+
 The IVOA Provenance datamodel \citep{pr:provdm} represents metadata tracing  the history of data. This information can be retrieved through ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.  The Entity instances represent  the state of the data items between various steps of the data processing flow. “Entities” can be hooked to the more complete data they represent using the \blinks endpoint.
 
-\section{Resources}
+\section{The \blinks~endpoint}
 
-The DataLink web service capability is implemented as an HTTP REST
-\citep{richardson07} web service capability
-that conforms to the DALI-sync resource
-description. The \blinks\ resource is described fully below
-(see \ref{sec:linksResource}).
-The values for the identifiers are typically found using a data
-discovery service (e.g.\ TAP with ObsCore). Data discovery services that
-work with an associated DataLink service should include a resource in
-the discovery response to describe the DataLink service. The mechanism
-for doing this is described below (see \ref{sec:serviceDescriptors}).
+\label{sec:linksEndpoint}
 
-The requirements for a standalone DataLink service are given in the
-table below.
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\sptablerule
-{\bf resource type} & {\bf resource name} & {\bf required} \\
-\sptablerule
-\blinks             & service specific    & yes            \\
-VOSI-availability   & /availability       & yes            \\
-VOSI-capabilities   & /capabilities       & yes            \\
-\sptablerule
-\end{tabular}
-\end{center}
+Most commonly, DataLink link lists are retrieved from \blinks~endpoints.
+These are DALI-sync endpoints with implementor-defined names.
+As specified by DALI-sync, the parameters for a request may be submitted
+using an HTTP GET (query string) or POST action.  Any service may offer
+zero or more datalink endpoints.
 
-A standalone DataLink service must have at least one \blinks\ resource;
-it could have multiple \blinks\ resources (e.g.\ to support alternate
-authentication schemes). Alternatively, the \blinks\ resource may be
-embedded in another web service, in which case the VOSI-capabilities
-resource of that service would also describe the \blinks\ capability.
+\subsection{Parameters on \blinks~endpoints}
 
-
-\subsection{\blinks\ resource}
-\label{sec:linksResource}
-
-The \blinks\ resource is a synchronous web service resource that conforms
-to the DALI-sync description. The implementer is free to name this
-resource however they like as long as the \blinks\ resource is a sibling
-of the VOSI resources; this restriction allows a client to construct
-the URL to VOSI resources from any \blinks\ URL and thus discover other
-capabilities or check the availablity if there is a failure. For example,
-a DataLink service could have:
-\begin{quote}
-  \hspace*{-1.5em}
-  {\small\nolinkurl{http://example.com/datalink/links}}
-  --- anonymous access \\
-  \hspace*{-1.5em}
-  {\small\nolinkurl{http://example.com/datalink/auth-links}}
-  --- HTTP authentication \\
-  \hspace*{-1.5em}
-  {\small\nolinkurl{https://example.com/datalink/links}}
-  --- IVOA SSO authentication
-\end{quote}
-
-As a DALI-sync resource, the parameters for a request may be submitted
-using an HTTP GET (query string) or POST action.
+On \blinks~endpoints, the ID and RESPONSEFORMAT parameters as defined
+below are mandatory.
 
 
 \subsubsection{ID}
@@ -361,7 +324,7 @@ TABLEDATA serialization; services must support this format. Clients
 that want to get the standard (VOTable) output format should simply
 ignore this parameter.
 
-To comply with this standard, a \blinks\ resource only needs to strip
+To comply with this standard, a \blinks\ endpoint only needs to strip
 off MIME type parameters and understand the following:
 \begin{itemize}
   \item no RESPONSEFORMAT
@@ -374,31 +337,30 @@ Service implementers may support additional output formats but must follow
 the DALI specification if they chose any formats described there.
 
 
-\subsection{Availability: VOSI-availability}
+\subsection{Registering \blinks~endpoints}
 
-A DataLink web service must have a VOSI-availability resource,
-as defined by DALI and VOSI.
+Since normal datalink operations do not involve the Registry, this
+specification poses no requirements to register \blinks~endpoints.
+Datalink clients also generally have no reason to inspect VOSI
+capabilities endpoints, and hence there are no requirements on
+mentioning \blinks~endpoints in any VOSI capability documents.
 
-
-\subsection{Capabilities: VOSI-capabilities}
-
-A standalone DataLink web service must have a
-VOSI-capabilities resource as defined by DALI and VOSI.
-The standardID for the \blinks\ resource is
+Operators still wishing to declare \blinks~endpoints can do this by
+giving a capability with a standardID of
 \begin{verbatim}
    ivo://ivoa.net/std/DataLink#links-1.0
 \end{verbatim}
 
-The following capabilities document shows the minimal metadata
-and does not require a registry extension schema:
+This specification does not constrain the capability type used in such
+declarations.  The access URL of the \blinks~endpoint must be given in a
+\xmlel{vs:ParamHTTP}-typed interface element.
+
+Hence, a single datalink capability could be declared as follows within
+either a VOResource record or a VOSI capabilities element:
+
 \begin{verbatim}
-<?xml version="1.0" encoding="UTF-8"?>
-<vosi:capabilities
-   xmlns:vosi="http://www.ivoa.net/xml/VOSICapabilities/v1.0"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1">
-  ...
-  <capability standardID="ivo://ivoa.net/std/DataLink#links-1.0">
+<capability standardID="ivo://ivoa.net/std/DataLink#links-1.0"
+    xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1">
     <interface xsi:type="vs:ParamHTTP" role="std" version="1.0">
       <accessURL use="base">
         http://example.com/datalink/mylinks
@@ -414,23 +376,18 @@ and does not require a registry extension schema:
         <ucd>meta.id;meta.main</ucd>
         <dataType>string</dataType>
       </param>
+      <param std="true" use="required">
+        <name>RESPONSEFORMAT</name>
+        <description>Return the links in this tabular format (defaults
+          to VOTable).</description>
+      </param>
     </interface>
-  </capability>
-</vosi:capabilities>
+</capability>
 \end{verbatim}
-
-Multiple capability elements for the \blinks\ resource may be included;
-this is typically used if they differ in protocol (http vs.\ https)
-and/or authentication requirements.
-
-The \blinks\ capability may also be included as a resource in another
-service, in which case the VOSI-Capabilities for that service would
-describe all the capabilities of that service, including \blinks.
-
 
 \section{\blinks\ Response}
 
-All responses from the \blinks\ resource follow the rules for DALI-sync
+All responses from the \blinks\ endpoint follow the rules for DALI-sync
 resources, except that the \blinks\ response allows for error
 messages for individual input identifier values.
 
@@ -454,11 +411,10 @@ unless the caller has explicitly requested a specific value
 via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 Services may include other MIME type parameters in the response.
 
-
 \subsection{List of Links}
 \label{sec:listOfLinks}
 
-The list of links that is returned by the \blinks\ resource can be
+The list of links that is returned by the \blinks\ endpoint can be
 represented as a table with the following columns:
 \begin{table}[h]
 \begin{center}
@@ -525,11 +481,12 @@ The ID column contains the input identifier value.
 
 \subsubsection{access\_url}
 
-The access\_url column contains a URL to download a single resource.
-The URL in this column must be usable as-is with no additional
-parameters or client handling; it can be a link to a dynamic
-resource (e.g.\ preview generation).
+The access\_url column may contain a URL to download a single resource.
+This URL can be a link to a dynamic resource (e.g.\ preview generation).
 
+Beside dereferencable URL, it is allowed to use URI-fragments to link the intial resource to a specific part of the retrievable resource, with its specific semantics and description. Examples of this are section in an html page or paths in an archive file or extensions in a MEF.
+The interpretation of the fragment will depend from the content type of the retrievable resource.
+No other additional parameters or client handling are allowed.
 
 \subsubsection{service\_def}
 
@@ -560,8 +517,8 @@ column; all others should be null.
 
 \subsubsection{description}
 
-The description column should contain a human-readable description of
-the link; it is intended for display by interactive applications.
+The description column SHOULD contain a human-readable description of
+the link; it is intended for display by interactive applications and very important to help user distinguish links with same semantics (see below).
 
 
 \subsubsection{semantics}
@@ -669,6 +626,21 @@ and supported by the implementation.
 The name attribute for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
+The DALI specification states that a standardID INFO element   with name "standardID" and the actual standardID string as a value SHOULD be provided.
+It is recommended to include such an element to help users and applications to identify VOTAbles as results of DataLink services this way :
+\begin{verbatim}
+
+<RESOURCE type="results" 
+
+... 
+
+<INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.?"/> 
+
+... 
+
+</RESOURCE>
+\end{verbatim}
+
 
 \subsubsection{Other Output Formats}
 
@@ -753,10 +725,19 @@ contains the query result.
 
 To describe an associated service, the VOTable would also
 contain one or more resources with attribute \attval{type}{meta} and
-\attval{utype}{adhoc:service}.
+
+\attval{utype}{adhoc:service}  (or \attval{utype}{adhoc:this} in case of a Self-Describing service -see below \ref{selfDescribing}).
+
+A short name attribute, and a more verbose DESCRIPTION  subelement, MAY be added to the service descriptor RESOURCE to  provide the user with information about the service's purpose or  semantics. This SHOULD be done if the semantics are not obvious,  and especially in the case of multiple sibling service  descriptors, or non-standard services.
+
+
+
 A resource of this type has no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
+
+In case a response contains several “descriptor” RESOURCES  and several “results” RESOURCES these RESOURCES MAY be nested in order to better display correct association.
+
 A service resource contains PARAM elements to describe the service and
 a GROUP element with additional PARAM elements to describe the input
 parameters.
@@ -771,6 +752,7 @@ are described in Table \ref{tab:serviceParams}.
 accessURL           & URL to invoke the capability   &  yes  \\
 standardID          & URI for the capability         &  no   \\
 resourceIdentifier  & IVOA registry identifier       &  no   \\
+contentType	    & Media type of the service response & no \\
 \sptablerule
 \end{tabular}
 \end{center}
@@ -831,14 +813,21 @@ be found within the RESOURCE of \attval{type}{results}. The same VOTable
 document would have a second RESOURCE with \attval{type}{meta} to describe
 the associated DataLink \blinks\ capability.
 
-The \blinks\ capability described in section \ref{sec:linksResource}
+The \blinks\ capability described in section \ref{sec:linksEndpoint}
 is described by the following resource:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service">
+   <RESOURCE type="meta" utype="adhoc:service" name="RawAndCatalogDataLinks"
+">
+     <DESCRIPTION>
+     This datalink service gives access to the raw data for the
+     discovered datasets as well as to catalogues of extracted sources
+    </DESCRIPTION>
      <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/DataLink#links-1.0" />
      <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/mylinks" />
+     <PARAM name="contentType" datatype="char" arraysize="*" 
+            value="application/x-votable+xml;content=datalink" >
      <GROUP name="inputParams">
        <PARAM name="ID" datatype="char" arraysize="*"
               value="" ref="primaryID"/>
@@ -873,13 +862,20 @@ Suppose you have an SIA-1.0 service and you want users to be able to
 call it to get SIA-1.0 specific metadata. This VOTable RESOURCE describes
 the basic query interface of SIA-1.0:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service">
+   <RESOURCE type="meta" utype="adhoc:service" 
+             name="RadioCubeDiscoveryService">
+     <DESCRIPTION> 
+      This parameter based HTTP service allows discovery of Radio Cubes 
+      obtained by LOFAR observations processing 
+     </DESCRIPTION>
      <PARAM name="resourceIdentifier" datatype="char" arraysize="*"
             value="ivo://example.com/mySIA" />
      <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/SIA#1.0" />
      <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/sia/query" />
+     <PARAM name="contentType" datatype="char" arraysize="*" 
+            value="application/x-votable+xml" />
      <GROUP name="inputParams">
        <PARAM name="POS" datatype="char" arraysize="*"
               value=""/>
@@ -923,7 +919,11 @@ save the client having to perform a registry lookup to find and use the
 service. The descriptors cannot describe the path usage and XML document
 based input to the service, but they can describe the optional parameters:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" ID="vnodes">
+   <RESOURCE type="meta" utype="adhoc:service" ID="vnodes" name="CADC-Store">
+     <DESCRIPTION>
+      Datasets discovered here are automatically available in 
+      CADC's VOSpace under the URI produced here
+     </DESCRIPTION>
      <PARAM name="resourceIdentifier"
             value="ivo://example.com/vospace" />
      <PARAM name="standardID"
@@ -962,10 +962,19 @@ form-based user interface. The following Rotatable resource describes
 a custom spectral cutout service:
 {\small
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" ID="apoadimo">
+   <RESOURCE type="meta" utype="adhoc:service" ID="apoadimo" 
+             name="CustomSpectrumRecalibration">
+     <DESCRIPTION>
+       This service lets you retrieve the spectra discovered uncalibrated,
+        with flux calibration, and continuum normalised (where some 
+        spectra are now availble in continuum normalisation because the 
+        pipeline failed to identify a continuum)
+     </DESCRIPTION>
      <PARAM arraysize="*" datatype="char" name="accessURL"
             ucd="meta.ref.url"
             value="http://dc.zah.uni-heidelberg.de/flashheros/q/sdl/dlget"/>
+     <PARAM name="contentType" datatype="char" arraysize="*" 
+            value="application/fits" />
      <GROUP name="inputParams">
        <PARAM arraysize="*" datatype="char" name="ID" ref="xjc7ra"
               ucd="meta.id;meta.main" value="">
@@ -1064,7 +1073,11 @@ used to call the service.
 \label{sec:selfDescribing}
 
 A service may include a service descriptor that describes itself with
-its normal output. This usage is comparable to prototype work on S3
+its normal output. In that case the utype "adhoc:this" indicates the self-describing
+nature of the service descriptor. This convention would make finding the self-description
+unambiguous in cases where the output also contained other service
+descriptors.
+   This usage is comparable to prototype work on S3
 (see \citet{note:s3})
 and when combined with calling a service with no input parameters
 (e.g.\ as allowed in \ref{sec:resourceId})
@@ -1074,37 +1087,43 @@ description of both standard and custom features.
 The output of a \blinks\ capability with no input ID would include the
 self-describing service descriptor and an empty results table:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" name="this">
-     <PARAM name="standardID" datatype="char" arraysize="*"
-            value="ivo://ivoa.net/std/DataLink#links-1.0" />
-     <PARAM name="accessURL" datatype="char" arraysize="*"
-            value="http://example.com/mylinks" />
-     <GROUP name="inputParams">
-       <PARAM name="ID" datatype="char" arraysize="*"
-              value="" ref="primaryID"/>
-     </GROUP>
-   </RESOURCE>
-   <RESOURCE type="results">
-     <TABLE>
-       <FIELD name="ID" datatype="char" arraysize="*"
-              ucd="meta.id;meta.main" />
-       <FIELD name="access_url" datatype="char" arraysize="*"
-              ucd="meta.ref.url" />
-       <FIELD name="service_def" datatype="char" arraysize="*"
-              ucd="meta.ref" />
-       <FIELD name="error_message" datatype="char" arraysize="*"
-              ucd="meta.code.error" />
-       <FIELD name="semantics" datatype="char" arraysize="*"
-              ucd="meta.code" />
-       <FIELD name="description" datatype="char" arraysize="*"
-              ucd="meta.note" />
-       <FIELD name="content_type" datatype="char" arraysize="*"
-              ucd="meta.code.mime" />
-       <FIELD name="content_length" datatype="long" unit="byte"
-              ucd="phys.size;meta.file" />
-       <DATA> <TABLEDATA/> </DATA>
-     </TABLE>
-   </RESOURCE>
+
+<RESOURCE type=”meta” utype=”adhoc:this” ID=”PwL” name=”Power Law fitting”>
+
+    <DESCRIPTION>Apply a power law model on a XMM-Newton EPIC spectrum </DESCRIPTION>	
+	<PARAM name="accessURL" datatype="char" arraysize="*" value="http://obs-he-lm:8888/3XMM/fitmodelonspectrum& model=powlaw" />
+   <GROUP name=”inputParams”>
+      <PARAM name=”oid” datatype=”char” arraysize=”*” 
+        value=”1160803203386703876” unit =”none” >
+         <DESCRIPTION>Spectrum internal ID in the database </DESCRIPTION>
+      </PARAM>
+      <PARAM name=”binSize” ucd=”spect.binSize” datatype=”int” unit=”none” value=”10” >
+         <DESCRIPTION>Number of counts per bin</DESCRIPTION>
+         <VALUES>
+             <OPTION value=”1” />
+             <OPTION value=”5” />
+             <OPTION value=”10” />
+             <OPTION value=”20” />
+             <OPTION value=”50” />
+         </VALUES>
+       </PARAM>
+      <PARAM name=”nh” ucd=”phys.abund.X” datatype=”float” unit=”1e22cm-2” value=”0.01” >
+         <DESCRIPTION>Galactical NH</DESCRIPTION>
+         <VALUES>
+         <MIN value=”0” />
+             <MAX value=”1” />
+         </VALUES>
+       </PARAM>
+      <PARAM name=”alpha” ucd=”meta.code;spect.index” datatype=”float” unit=”none” value=”1.7” >
+         <DESCRIPTION>Photon index of power law</DESCRIPTION>
+         <VALUES>
+             <MIN value=”1” />
+             <MAX value=”9” />
+         </VALUES>
+       </PARAM>
+   </GROUP>
+</RESOURCE>
+
 \end{verbatim}
 
 In the above example we give the self-describing service descriptor a
@@ -1117,6 +1136,18 @@ and not present for custom services and because they might just have a
 URL). Even trying to match the URL that was used with the accessURL in
 the descriptors is likely to be unreliable (e.g.\ if providers use HTTP
 redirects to make old URLs work when service deployment changes).
+
+\section{New “datalink” content-type for the LINK element in VOTable}
+
+
+When providing a column with URLs, for example outside DAL service responses or when service descriptors  are not defined, if all the URLs are to a DataLink "links" endpoint, then the preferred approach is to add a LINKS element with the content type defined in section for \ref{sec:mime}. If some values are to a "links" endpoint and others to different content types (e.g. single file download), then the VOTable would need a second column to convey the content type (see Appendix for details). 
+
+\begin{verbatim} 
+<FIELD name="bla" datatype="char" arraysize="*" utype="Access.reference" ucd="meta.url" > 
+  <LINK content-type="application/x-votable+xml;content=datalink" title="DataLink" /> 
+  <DESCRIPTION> bla bla bla </DESCRIPTION> 
+</FIELD>
+\end{verbatim}
 
 
 \section{Changes}
