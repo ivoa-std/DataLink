@@ -1,0 +1,159 @@
+\documentclass[11pt,a4paper]{ivoa}
+\input tthdefs
+
+\title{IVOA DataLink Implementation note}
+
+% see ivoatexDoc for what group names to use here
+\ivoagroup{DAL}
+
+\author[http://www.ivoa.net/twiki/bin/view/IVOA/PatrickDowler]
+       {Patrick Dowler}
+\author[http://www.ivoa.net/twiki/bin/view/IVOA/FrancoisBonnarel]
+       {Fran\c{c}ois Bonnarel}
+\author[http://www.ivoa.net/twiki/bin/view/IVOA/LaurentMichel]
+       {Laurent Michel}
+\author[http://www.ivoa.net/twiki/bin/view/IVOA/MarkusDemleitner]
+       {Markus Demleitner}
+\author[http://www.ivoa.net/twiki/bin/view/IVOA/MarkTaylor]
+       {Mark Taylor}
+\editor[http://www.ivoa.net/twiki/bin/view/IVOA/PatrickDowler]
+       {Patrick Dowler}
+
+% \previousversion[????URL????]{????Concise Document Label????}
+\previousversion{This is the first public release}
+
+\newcommand{\blinks}{\{links\}}
+\newcommand{\attval}[2]{#1={\allowbreak}{"}#2{"}}
+
+
+\begin{document}
+
+
+\begin{abstract}
+This note gives some hints on how the DataLink specification should be used.
+The DataLink specification document \citep{std:DataLink} describes the linking of data discovery metadata
+to access to the data itself, further detailed metadata, related
+resources, and to services that perform operations on the data. 
+\end{abstract}
+
+
+\section*{Acknowledgments}
+
+The authors would like to thank all the participants in DAL-WG discussions
+for their ideas, critical reviews, and contributions to this document.
+
+
+\section*{Conformance-related definitions}
+
+The words ``MUST'', ``SHALL'', ``SHOULD'', ``MAY'', ``RECOMMENDED'', and
+``OPTIONAL'' (in upper or lower case) used in this document are to be
+interpreted as described in IETF standard RFC2119 \citep{std:RFC2119}.
+
+The \emph{Virtual Observatory (VO)} is a
+general term for a collection of federated resources that can be used
+to conduct astronomical research, education, and outreach.
+The \href{http://www.ivoa.net}{International
+Virtual Observatory Alliance (IVOA)} is a global
+collaboration of separately funded projects to develop standards and
+infrastructure that enable VO applications.
+
+
+\section{Introduction}
+
+The DataLink  specification \citep{std:DataLink} defines mechanisms for connecting data items discovered
+via one service to  related data products, and web services
+that can act upon the data.
+
+The {\em links\/} web service capability is a web service capability
+for drilling
+down from a discovered data item such as  a dataset identifier, a source in a cata-
+log or any other data item. In the first case (typically an IVOA publisher
+dataset identifier) iit allows to find details about the data files that can be
+downloaded, alternate representations of the data that are available, and
+services that can act upon the data (usually without having to download
+the entire dataset). In the latter cases it allows to associate metadata, images,
+cubes, spectra, timeseries or ancillary data to a source in the sky or other
+kind of time. The expected usage is for DAL (Data Access Layer)
+data discovery services (e.g.\ a TAP service \citep{2010ivoa.spec.0327D}
+with the ObsCore \citep{2017ivoa.spec.0509L} data
+model or one of the simple DAL services) to provide an identifier that
+can be used to query the associated DataLink capability. The DataLink
+capability will respond with a list of links that can be used to access
+the data. 
+
+
+The  current document  is an implementation note for \blinks endpoint recognition in various contexts.
+We reviewing three methods by which DataLink documents can be associated to  resource entries in service responses and suggest possible choices according to the context. 
+
+\section{DataLink and SIAP-2.0 or ObsTAP services}
+
+SIAP-2.0 \citep{2015ivoa.spec.1223D} services  are queriable by setting contraints on the four "axes" of the data (2D-space, spectral, time and polarization) and their properties. Other archive metadata or data details are also queriable  (target, collection, facilities, etc...). ObsTAP services are TAP services delivering the ivoa.Obscore table queriable via ADQL. The successfull response is a VOTable containing a mandatory  result TABLE and optional service descriptor resource(s).
+
+\subsection{DataLink discovery via format and reference columns}
+The result table describes the dataset characterization on the different axes and give additional operative features. The various columns are mapped from the ObsCore-1.1 data model (reference). The accessReference and AccessFormat fields give different solutions to reach the dataset for download or access.  This can be done in two ways: 
+\begin{itemize}
+\item The data discovery step has yielded a result with the AccessFormat value (media type) : application/x-votable+xml;content=datalink
+ To the client, this indicates that what is given in the access reference (e.g., the access\_url column in ObsTAP or SIAP-2.0)  is a datalink document (see below for DataLink functionalities). 
+\item In case the media type is different, the access reference is a direct link to the dataset download. 
+\end{itemize}
+
+\subsection{SIAP-2.0, ObsTAP and service descriptors}
+To  enable additional Datalink functionalities, SIAP-2.0 or ObsTAP services can then add a service descriptor in the query response that indicates the availability of a Datalink service accompanying the DAL service.  It references one (or more) field(s) from the DAL response.
+
+This is explained in  detail in DataLink specification, section 4.2. The net result is that DataLink-enabled clients can find ancillary data and use associated services for data access or processing by virtue of being able to retrieve Datalink documents. 
+
+The service descriptor embedded in an ObsTAP query response is allowed because ObsTAP is a peculiar TAP service and TAP allows the TAP response to contain additional resources in addition to the "results" one (See section 2.9 of TAP-1.0 specification).  Hence the inclusion of a service descriptor service is valid.
+
+
+\section{DataLink in the context of other dataset discovery methods} 
+Datasets can also be discovered in various other ways. Dataset "discovery" is defined as the discovery of the ivoa publisher\_did of a dataset in standard services or by the ad hoc discovery of "obsids" in combination with the a priori knowledge of a DataLink service "aware" of these obsids.
+
+Beside the most standard and modern discovery path via ObsTAP/SIAP-2.0, the following alternative scenarii are possible: 
+\begin{itemize}
+\item The discovery can be done via an SIAP-1.0 or an SSA service. A DataLink service descriptor should have been added to the Service query response to allow further guiding to additional resources 
+\item The discovery can be done via a paper in a journal implementing  publication of datasets associated with articles. The editor should describe or implement a DataLink service (eg via a service descriptor valid for the journal) for further usage and access to download, DataAcces, metadata resources. 
+\item  Logs of observations are dataset descriptions belonging to the catalog category. They can be exposed in the VO using ConeSearch or TAP. They are in general not consistent with the ObsCore model. However they allow some kind of "dataset discovery". A Service descriptor can be added to the VOTable containing the log file. 
+\item HiPS  is an IVOA standard for a global and hierarchical 	allsky access to pixel and catalogue data (reference HIPS). HiPS cells contain ids for original dataset which have been processed to build the Healpix maps. HiPS metadata file allows to generate a specific VOTable record for each cell of the HiPS collection including a "progenitor" url. This can be a new way to discover datasets and start a DataLink session to find out additional associated resources.   
+\end{itemize}
+
+\section{DataLink outside Data discovery context}
+
+DataLink 1.0 provides description of resources to be attached to a dataset. In the current specification it is actually indifferent to DataLink output what is the real content of the VOTable entry it is attached to. That's why it is   tempting to use DataLink mechanisms in other VO contexts than Dataset discovery.
+
+  For example it could be useful to attach to a source in a catalog table such resources as 
+\begin{itemize}
+\item data  records for the same object contained in another catalog/database 
+\item a service interface to an external  database prepared to query around the object position.
+\item Datasets associated to the source (such as images, spectra, etc..) 
+\end{itemize}
+     In addition we could attach links to each measurement in a measurement list for an individual source formatted in VOTable.  Light curves or radial velocity TimeSeries are good examples of such measurement lists. These links can attach:
+\begin{itemize}
+\item original dataset from which the measurement is extracted 
+\item metadata describing the extraction method 
+\item calibration information  
+\end{itemize}
+We could also attach links to entities in an IVOA provenance metadata service response.
+\section{Various recognition solutions for use cases introduced in section 3 and 4}
+      In such contexts,  the links ressource URL attached to a record  may be given in various ways: 
+\begin{itemize}
+\item  It may be deduced from an "identifier" given by one of the main table FIELD. In that case it is easy to attach a service descriptor to the main VOTable containing the measurements. 
+\item  It may be given directly in one of the FIELD of the table (let's say the name of this FIELD is "bla"). In that case we may still have two different situations. 
+\begin{itemize}
+\item If the FIELD "bla" contains URL driving different contents from row to row, it is a good idea to use an "Obscore"-like solution, consisting in addding the utype "Access.reference" to FIELD bla, and to add a "foo" column with utype "Access.format" to tell the client what is the nature of the retrieved resource (\{links\} resource or whatever other media type). 
+\item  If the FIELD "bla" contains always an URL to the \{links\} resource (or whatever media type) without any change from row to row, it is recommendedd to use a LINK element inside the FIELD "bla" to qualify the url as described in DataLink specification, section 5. 
+\end{itemize}
+\end{itemize}
+
+
+
+
+
+\section{Changes}
+
+This is the initial version of this document.
+
+
+\bibliography{ivoatex/ivoabib,ivoatex/docrepo,localrefs}
+
+
+\end{document}
