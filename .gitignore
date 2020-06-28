@@ -1,0 +1,12 @@
+*.blg
+*.toc
+*.out
+*.pdf
+*.aux
+*.bbl
+ivoatexmeta.tex
+gitmeta.tex
+vcsmeta.tex
+*.log
+*.html
+*.zip
