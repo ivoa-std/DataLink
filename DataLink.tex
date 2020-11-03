@@ -473,6 +473,28 @@ Services may include additional columns; this can be used to include
 values that can be referenced from service descriptor input parameters
 (see \ref{sec:serviceResources}).
 
+Service implementers should include one or both of the optional fields as 
+described in Table \ref{fig:optionalLinkFields} to indicate whether the link 
+(access\_url or service\_def) imposes any authentication requirements.
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|l|p{0.29\textwidth}|l|l|}
+\hline
+{\bf name}       & {\bf description} & {\bf required} & {\bf UCD} \\
+\hline
+link\_auth       & use of the link requires authentication
+                 & no & meta.code \\
+\hline
+link\_authorized & caller is authorized to use the link
+                 & no & meta.code \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Optional Fields for Links}
+\label{fig:optionalLinkFields}
+\end{table}
+
+
 
 \subsubsection{ID}
 
@@ -587,6 +609,37 @@ if they use the link, in bytes. For VOTable, the FIELD must be
 The value may be null (blank)
 if unknown and will typically be null for links to services.
 
+\subsubsection{link\_auth}
+
+The link\_auth column tells the client whether or not authentication is required 
+to use the link. Valid values are: false (anonymous access) and true (authentication 
+is required). Examples:
+
+link to public data: false
+
+link to proprietary data: true
+
+link to open service acting on public data: false
+
+link to restricted service acting on public data: true
+
+\subsubsection{link\_authorized}
+
+The link\_authorized column tells the client whether the currently authenticated 
+identity is authorized to use the link. This is generally a prediction to save 
+clients from trying to use a link and getting a permission denied response. Valid 
+values: false (current user not authorized) or true (current user is authorized).
+Examples:
+
+anonymous request for link to public data: true
+
+authenticated request for link to public data: true
+
+anonymous request for link to proprietary data: false
+
+authenticated request by non-authorized user for link to proprietary data: false
+
+authenticated request by authorized user for link to proprietary data: true
 
 \subsection{Successful Requests}
 \label{sec:successfulRequests}
