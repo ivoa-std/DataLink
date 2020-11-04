@@ -20,7 +20,7 @@
        {Patrick Dowler}
 
 % \previousversion[????URL????]{????Concise Document Label????}
-\previousversion{This is the first public release}
+\previousversion[https://www.ivoa.net/documents/DataLink/20150617/]{DataLink-1.0}
 
 \newcommand{\blinks}{\{links\}}
 \newcommand{\attval}[2]{#1={\allowbreak}{"}#2{"}}
@@ -460,8 +460,8 @@ represents one link and must have exactly one of:
   \item an error\_message
 \end{itemize}
 
-All links for a single ID value must be grouped (consecutive rows in the
-table) in the output.
+To facilitate consumption of large datalink results in streaming mode, all links 
+for a single ID value MUST be served in consecutive rows in the output.
 
 If an error occurs while processing an ID value, there should be at least
 one row for that ID value and an error\_message. For example, if an input
@@ -1156,8 +1156,9 @@ When providing a column with URLs, for example outside DAL service responses or 
 
 \section{Changes}
 
-This is the initial version of this document.
+\subsection{DataLink-1.1}
 
+TODO: extract change log from commit messages before PR.
 
 \subsection{PR-DataLink-1.0-20150413}
 
