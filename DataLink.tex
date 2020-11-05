@@ -418,40 +418,46 @@ The list of links that is returned by the \blinks\ endpoint can be
 represented as a table with the following columns:
 \begin{table}[h]
 \begin{center}
-\begin{tabular}{|l|p{0.29\textwidth}|l|l|}
+\begin{tabular}{|l|p{0.29\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|l|}
 \hline
-{\bf name}      & {\bf description} & {\bf required} & {\bf UCD} \\
+{\bf name}      & {\bf description} & {\bf field \newline required} & {\bf value \newline required} & {\bf UCD} \\
 \hline
-ID              & Input identifier & yes & meta.id;meta.main \\
+ID              & Input identifier & yes & yes & meta.id;meta.main \\
 \hline
-access\_url     & link to data or service
-                &          & meta.ref.url \\
-\cline{1-2} \cline{4-4}
+access\_url     & link to data or service 
+                & yes &          & meta.ref.url \\
+\cline{1-3} \cline{5-5}
 service\_def    & reference to a service descriptor resource
-                & one only & meta.ref \\
-\cline{1-2} \cline{4-4}
+                & yes & one only & meta.ref \\
+\cline{1-3} \cline{5-5}
 error\_message  & error if an access\_url cannot be created
-                &          & meta.code.error \\
+                & yes &          & meta.code.error \\
 \hline
 description     & human-readable text describing this link
-                & yes & meta.note \\
+                & yes & yes & meta.note \\
 \hline
 semantics       & Term from a controlled vocabulary describing the link
-                & yes & meta.code \\
+                & yes & yes & meta.code \\
 \hline
 content\_type   & mime-type of the content the link returns
-                & no & meta.code.mime \\
+                & yes & no & meta.code.mime \\
 \hline
 content\_length & size of the download the link returns
-                & no & phys.size;meta.file \\
+                & yes & no & phys.size;meta.file \\
+\hline
+link\_auth       & use of the link requires authentication
+                 & no & no & meta.code \\
+\hline
+link\_authorized & caller is authorized to use the link
+                 & no & no & meta.code \\
 \hline
 \end{tabular}
 \end{center}
-\caption{Required Fields for Links}
+\caption{Fields for Links Output}
 \label{fig:linkFields}
 \end{table}
 
-All fields must be present in the output table; values must be provided
+Fields must be present and values provided
 (or null) as described in Table \ref{fig:linkFields}. Each row in the table
 represents one link and must have exactly one of:
 \begin{itemize}
@@ -473,28 +479,8 @@ Services may include additional columns; this can be used to include
 values that can be referenced from service descriptor input parameters
 (see \ref{sec:serviceResources}).
 
-Service implementers should include one or both of the optional fields as 
-described in Table \ref{fig:optionalLinkFields} to indicate whether the link 
-(access\_url or service\_def) imposes any authentication requirements.
-\begin{table}[h]
-\begin{center}
-\begin{tabular}{|l|p{0.29\textwidth}|l|l|}
-\hline
-{\bf name}       & {\bf description} & {\bf required} & {\bf UCD} \\
-\hline
-link\_auth       & use of the link requires authentication
-                 & no & meta.code \\
-\hline
-link\_authorized & caller is authorized to use the link
-                 & no & meta.code \\
-\hline
-\end{tabular}
-\end{center}
-\caption{Optional Fields for Links}
-\label{fig:optionalLinkFields}
-\end{table}
-
-
+Unless specified otherwise below, all fields are text values (\attval{datatype}{char} 
+in the VOTable FIELD).
 
 \subsubsection{ID}
 
@@ -609,37 +595,39 @@ if they use the link, in bytes. For VOTable, the FIELD must be
 The value may be null (blank)
 if unknown and will typically be null for links to services.
 
+
 \subsubsection{link\_auth}
 
 The link\_auth column tells the client whether or not authentication is required 
-to use the link. Valid values are: false (anonymous access) and true (authentication 
-is required). Examples:
+to use the link. Valid values are:
 
-link to public data: false
+\verb|false| : the link allows anonymous access only
 
-link to proprietary data: true
+\verb|optional| : the link supports both anonymous and authenticated access
 
-link to open service acting on public data: false
+\verb|true| : authentication is required
 
-link to restricted service acting on public data: true
+This field may be null (blank) if the value is unknown.
 
 \subsubsection{link\_authorized}
 
 The link\_authorized column tells the client whether the currently authenticated 
 identity is authorized to use the link. This is generally a prediction to save 
 clients from trying to use a link and getting a permission denied response. Valid 
-values: false (current user not authorized) or true (current user is authorized).
-Examples:
+values are:
 
-anonymous request for link to public data: true
+\verb|false| : current user not authorized
 
-authenticated request for link to public data: true
+\verb|true| : current user is authorized
 
-anonymous request for link to proprietary data: false
+If the value is \verb|false| and the caller tries to use the link anyway, it may be 
+challenged for credentials (e.g. HTTP 401 response with WWW-Authenticate header) or 
+denied (e.g. HTTP 403 "permission denied").
 
-authenticated request by non-authorized user for link to proprietary data: false
+If the value is \verb|true|, the caller should proceed with the same authentication
+and should expect to succeed.
 
-authenticated request by authorized user for link to proprietary data: true
+This field may be null (blank) if the value is unknown.
 
 \subsection{Successful Requests}
 \label{sec:successfulRequests}
