@@ -726,7 +726,7 @@ contains the query result.
 To describe an associated service, the VOTable would also
 contain one or more resources with attribute \attval{type}{meta} and
 
-\attval{utype}{adhoc:service}  (or \attval{utype}{adhoc:this} in case of a Self-Describing service -see below \ref{selfDescribing}).
+\attval{utype}{adhoc:service}  (or \attval{utype}{adhoc:this} in case of a Self-Describing service -see below \ref{sec:selfDescribing}).
 
 A short name attribute, and a more verbose DESCRIPTION  subelement, MAY be added to the service descriptor RESOURCE to  provide the user with information about the service's purpose or  semantics. This SHOULD be done if the semantics are not obvious,  and especially in the case of multiple sibling service  descriptors, or non-standard services.
 
@@ -749,7 +749,7 @@ are described in Table \ref{tab:serviceParams}.
 \sptablerule
 {\bf name}  &  {\bf value}  & {\bf required}  \\
 \sptablerule
-accessURL           & URL to invoke the capability   &  yes  \\
+accessURL           & URL or URL template to invoke the capability   &  yes  \\
 standardID          & URI for the capability         &  no   \\
 resourceIdentifier  & IVOA registry identifier       &  no   \\
 contentType	    & Media type of the service response & no \\
@@ -771,23 +771,104 @@ free or custom services could be registered in an IVOA registry and thus
 have a resourceIdentifier to enable lookup of the record.
 
 For standard services, the value of the accessURL PARAM must be the
-accessURL for the capability specified by the standardID. The accessURL
+accessURL or accessURL template (see next subsection for description of the templating mechanism)
+for the capability specified by the standardID. The accessURL
 is not generally usable as-is; the client must include extra parameters
 as described below. If a standardID indicates a capability that supports
 multiple HTTP verbs (GET, POST, etc.), the client may use any supported
-verbs. Otherwise, there is no way in this version to specify that POST
-(for example) is supported so clients should assume that only HTTP GET
-may be used. Since the accessURL may contain parameters; clients must
-parse the URL to decide how to append additional parameters when
-invoking the service.
+verbs. Otherwise, there is no way in this version to specify that a verb
+(for example POST) is supported so clients should assume that only HTTP GET
+may be used. Since the accessURL may contain parameters or template segments
+clients must parse the URL to decide how to append additional parameters
+or resolve the template segments when invoking the service.
 
 A GROUP with \attval{name}{inputParams} contains PARAM elements describing
 how to invoke the service. For services where the parameter values
 come from columns in the results resource, we use the ref attribute of
 the PARAM to indicate the FIELD (column) with the values. Other PARAM
 elements (without a ref attribute) are also allowed; these would describe
-additional service parameters, the type of value that must be specified,
+additional service parameters, the value type that can be set,
 the meaning (UCD) of the value they apply to, etc.
+
+\subsubsection{Templated endpoints for REST-like services}
+
+In order to describe services served by URLs not matching the URL pattern applicable for Data links 1.0 (?name=value\&name=value) a templating mechanism is proposed.
+It covers the cases of either REST like URLs (collection of  resource path segments) or URLs including elements made with VOTable field values or  URLs including variable path segments or path elements that are not named.
+
+The templating scheme adopted in the value attribute
+of the accessURL PARAM  follows the appropriate IETF RFC \citep{std:RFC6570}
+ level 1, 2 and 3.
+
+The variable names used in the templates are intended to be either
+PARAM names present in the inputParams GROUP of the service descriptor
+or FIELD names present in the "results" table of the VOTable including
+ the service descriptor. In the latter case the variable name must be prefixed 
+ with "Fields:" namespace in order to tell the client where it has to be
+ searched.
+
+ \begin{itemize}
+ \item The first example shows up a level 3 template of a REST like URL including  an input PARAM : 
+	 \begin{verbatim}
+<RESOURCE type="meta" utype="adhoc:service" name="templated_service">
+   <PARAM name="accessURL" datatype="char" arraysize="*"
+         value="http://blabla.net/myorganisation/tap{/synOrasync}?REQUEST=doQuery"/>
+   <PARAM name="contentType" datatype="char" arraysize="*" value="text/html"/>
+    <GROUP name="inputParams">
+       <PARAM name="synOrasync" datatype="char"  value=""/>
+         <VALUES>
+           <OPTION value="sync" />
+           <OPTION value="async" />
+         </VALUES>
+    </GROUP>
+</RESOURCE>
+	 \end{verbatim}
+		 This could resolve in :\\
+http://blabla.net/myorganisation/tap/sync?REQUEST=doQuery or \\
+
+http://blabla.net/myorganisation/tap/async?REQUEST=doQuery or \\
+
+http://blabla.net/myorganisation/tap?REQUEST=doQuery
+
+ \item This second example shows up and URL level 1 template including unnamed params values.
+	 \begin{verbatim}
+ <RESOURCE type="meta" utype="adhoc:service" name="templated_service">
+   <PARAM name="accessURL" datatype="char" arraysize="*"
+	 value="http://blabla.net/myorganisation/service?{myparam}"/>
+   <PARAM name="contentType" datatype="char" arraysize="*" value="text/html"/>
+    <GROUP name="inputParams">
+       <PARAM name="myparam" datatype="char"  value=""/>
+    </GROUP>
+</RESOURCE>
+
+	 \end{verbatim}
+		 This could resolve in :\\
+http://blabla.net/myorganisation/service?sdss \\
+		 if the user entered "sdss"
+ \item In this third example we template a standard parameter by picking up two FIELD values in the "results" table of the VOTAble 
+	 document using level 1 of the RFC 
+	 \begin{verbatim}
+<RESOURCE type="meta" utype="adhoc:service" name="templated_service">
+   <PARAM name="accessURL" datatype="char" arraysize="*"
+         value="http://vizier.u-strasbg.fr/viz-bin/VizieR-5?-info=XML&-source=PFr&-c={Fields:RAJ2000}{Fields:DEJ2000}"/>
+   <PARAM name="contentType" datatype="char" arraysize="*" value="text/html"/>
+</RESOURCE>
+<RESOURCE type="result">
+  <TABLE>
+    <FIELD ID="RAJ2000" name="RAJ2000"  datatype="double" arraysize="1"/>
+    <FIELD ID="DEJ2000" name="DEJ2000"  datatype="double" arraysize="1"/>
+     ...
+
+  </TABLE>
+</RESOURCE>
+
+	 \end{verbatim}
+		 This could resolve in :\\
+http://vizier.u-strasbg.fr/viz-bin/VizieR-5?-info=XML&-source=PFr&-c=250.456+27.863 or \\
+any other values picked up from the "results" table
+
+
+ \end{itemize}
+
 
 
 \subsection{Example: Service Descriptor for the \blinks\ Capability}
