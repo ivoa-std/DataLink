@@ -771,7 +771,8 @@ free or custom services could be registered in an IVOA registry and thus
 have a resourceIdentifier to enable lookup of the record.
 
 For standard services, the value of the accessURL PARAM must be the
-accessURL or accessURL template (see next subsection for description of the templating mechanism)
+accessURL or accessURL template (see next subsection for description of the
+templating mechanism based on IETF RFC \citep{std:RFC6570})
 for the capability specified by the standardID. The accessURL
 is not generally usable as-is; the client must include extra parameters
 as described below. If a standardID indicates a capability that supports
@@ -792,19 +793,19 @@ the meaning (UCD) of the value they apply to, etc.
 
 \subsubsection{Templated endpoints for REST-like services}
 
-In order to describe services served by URLs not matching the URL pattern applicable for Data links 1.0 (?name=value\&name=value) a templating mechanism is proposed.
+In order to describe services served by URLs not matching the URL pattern applicable for Data links 1.0 (?name=value\&name=value) the accessURL has to be interpreted according to RFC6570  \citep{std:RFC6570}.
 It covers the cases of either REST like URLs (collection of  resource path segments) or URLs including elements made with VOTable field values or  URLs including variable path segments or path elements that are not named.
 
-The templating scheme adopted in the value attribute
-of the accessURL PARAM  follows the appropriate IETF RFC \citep{std:RFC6570}
- level 1, 2 and 3.
+In this version, the templating scheme adopted in the value attribute
+of the accessURL PARAM  follows the appropriate IETF RFC level 1, 2 and 3.
 
 The variable names used in the templates are intended to be either
 PARAM names present in the inputParams GROUP of the service descriptor
 or FIELD names present in the "results" table of the VOTable including
- the service descriptor. In the latter case the variable name must be prefixed 
- with "Fields:" namespace in order to tell the client where it has to be
- searched.
+ the service descriptor. We exclude using IDs for reference because they are internal keys.
+ In the latter case the variable name must be prefixed 
+ with "Fields." prefix in order to tell the client where it has to be
+ searched. Note that according to the RFC variable names must be exclusively composed of  alphanumeric characters, periods, underscore and percent encoded characters.
 
  \begin{itemize}
  \item The first example shows up a level 3 template of a REST like URL including  an input PARAM : 
@@ -829,7 +830,7 @@ http://blabla.net/myorganisation/tap/async?REQUEST=doQuery or \\
 
 http://blabla.net/myorganisation/tap?REQUEST=doQuery
 
- \item This second example shows up and URL level 1 template including unnamed params values.
+ \item This second example shows up an URL level 1 template including unnamed params values.
 	 \begin{verbatim}
  <RESOURCE type="meta" utype="adhoc:service" name="templated_service">
    <PARAM name="accessURL" datatype="char" arraysize="*"
@@ -854,8 +855,8 @@ http://blabla.net/myorganisation/service?sdss \\
 </RESOURCE>
 <RESOURCE type="result">
   <TABLE>
-    <FIELD ID="RAJ2000" name="RAJ2000"  datatype="double" arraysize="1"/>
-    <FIELD ID="DEJ2000" name="DEJ2000"  datatype="double" arraysize="1"/>
+    <FIELD ID="ra2000" name="RAJ2000"  datatype="double" />
+    <FIELD ID="de2000" name="DEJ2000"  datatype="double" />
      ...
 
   </TABLE>
@@ -863,7 +864,7 @@ http://blabla.net/myorganisation/service?sdss \\
 
 	 \end{verbatim}
 		 This could resolve in :\\
-http://vizier.u-strasbg.fr/viz-bin/VizieR-5?-info=XML&-source=PFr&-c=250.456+27.863 or \\
+http://vizier.u-strasbg.fr/viz-bin/VizieR-5?-info=XML&-source=PFr&-c=250.456%2B27.863 or \\
 any other values picked up from the "results" table
 
 
