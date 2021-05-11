@@ -20,7 +20,7 @@
        {Patrick Dowler}
 
 % \previousversion[????URL????]{????Concise Document Label????}
-\previousversion{This is the first public release}
+\previousversion[https://www.ivoa.net/documents/DataLink/20150617/]{DataLink-1.0}
 
 \newcommand{\blinks}{\{links\}}
 \newcommand{\attval}[2]{#1={\allowbreak}{"}#2{"}}
@@ -292,18 +292,18 @@ below are mandatory.
 The ID parameter is used by the client to specify one or more
 identifiers. The service will return at least one link for each of the
 specified values. The ID values are found in data discovery services
-and may be readable URIs or opaque strings.
+and may be readable URIs or opaque strings. Submitting ID values in batches
+may be more efficient if the client is planning to submit many such values;
+clients can control the size of the output by limiting the number of ID values 
+they submit in each request.
 
-If an ID value specified by the client is not understandable by the
-DataLink service, the service must include a single link in the output
-with the ID and an error message (see below).
-
-If the client submits more ID values than a service is prepared to
+Services may place a limit on the number of ID values they will process in one 
+request. If the client submits more ID values than a service is prepared to
 process, the service should process ID values up to the limit and
-{\bf must} include an overflow indicator in the output
-as described in DALI.
+{\bf must} include an overflow indicator in the output to denote that
+the result is truncated as described in DALI.
 The service {\bf must not} truncate the output within the set of rows
-(links) for a single ID value if the request exceeds such an input limit.
+(links) for a single ID value.
 
 If the client submits no ID values, the service must respond with a
 normal response (e.g.\ an empty results table for VOTable output).
@@ -465,6 +465,9 @@ represents one link and must have exactly one of:
   \item a service\_def
   \item an error\_message
 \end{itemize}
+
+To facilitate consumption of large datalink results in streaming mode, all links 
+for a single ID value MUST be served in consecutive rows in the output.
 
 If an error occurs while processing an ID value, there should be at least
 one row for that ID value and an error\_message. For example, if an input
@@ -1194,8 +1197,9 @@ When providing a column with URLs, for example outside DAL service responses or 
 
 \section{Changes}
 
-This is the initial version of this document.
+\subsection{DataLink-1.1}
 
+TODO: extract change log from commit messages before PR.
 
 \subsection{PR-DataLink-1.0-20150413}
 
