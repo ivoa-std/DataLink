@@ -376,7 +376,7 @@ either a VOResource record or a VOSI capabilities element:
         <ucd>meta.id;meta.main</ucd>
         <dataType>string</dataType>
       </param>
-      <param std="true" use="required">
+      <param std="true" use="optional">
         <name>RESPONSEFORMAT</name>
         <description>Return the links in this tabular format (defaults
           to VOTable).</description>
@@ -444,6 +444,9 @@ content\_type   & mime-type of the content the link returns
 \hline
 content\_length & size of the download the link returns
                 & yes & no & phys.size;meta.file \\
+\hline
+content\_qualifier & nature of the content the link returns
+                & no & no & \\
 \hline
 link\_auth       & use of the link requires authentication
                  & no & no & meta.code \\
@@ -579,7 +582,6 @@ as much as possible, but may use a custom vocabulary as long as they
 use a custom vocabulary namespace (base URI); the base URI should be
 resolvable to a human-readable document describing the terms.
 
-
 \subsubsection{content\_type}
 
 The content\_type column tells the client the general file format
@@ -589,7 +591,6 @@ For recursive DataLink links, the content\_type value should
 be as specified in section \ref{sec:mime}.
 This field may be null (blank) if the value is unknown.
 
-
 \subsubsection{content\_length}
 
 The content\_length column tells the client the size of the download
@@ -598,6 +599,15 @@ if they use the link, in bytes. For VOTable, the FIELD must be
 The value may be null (blank)
 if unknown and will typically be null for links to services.
 
+\subsubsection{content\_qualifier}
+
+The content\_qualifier column is optional. If it is present, it tells 
+the client the nature of the thing or service they will receive or access 
+if they use the link. If the target is a data product, the field SHOULD contain 
+one of the terms defined in the IVOA product\_type vocabulary (currently at 
+\url{https://www.ivoa.net/rdf/product-type/}). For other natures of the target 
+the field SHOULD contain a term defined in another IVOA or proprietary vocabulary 
+refered by its URI.
 
 \subsubsection{link\_auth}
 
