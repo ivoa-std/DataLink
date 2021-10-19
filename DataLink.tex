@@ -1209,7 +1209,20 @@ When providing a column with URLs, for example outside DAL service responses or 
 
 \subsection{DataLink-1.1}
 
-TODO: extract change log from commit messages before PR.
+\begin{itemize}
+\item added optional content\_qualifier to describe link target content with terms from 
+the product-type vocabulary
+\item added optional link\_auth and link\_authorized to signal whether authentication
+is necessary to use the link
+\item clarified use of multiple ID values and possible OVERFLOW
+\item clarified use of utype for self-describing service descriptors
+\item generalize by adding use cases for links to content other than data files 
+\item added using LINK to convey when datalink request URL is in a table column
+\end{itemize}
+
+\subsection{DataLink-1.0}
+
+Detailed evolution up to version 1.0 described below.
 
 \subsection{PR-DataLink-1.0-20150413}
 
