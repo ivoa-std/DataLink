@@ -265,7 +265,7 @@ DataLink). This service link would be described with both a service type
 
 There are  a lot of catalogs of astronomical sources made available
 using VO services such as ConeSearch \citep{2008ivoa.specQ0222P} or TAP
-services. For some catalogs “associated data” are available. These
+services. For some catalogs ``associated data'' are available. These
 data include images from which sources have been extracted, or imaging the
 object in  case of extended objects, as well as additional observations
 such as Spectra or Time Series of the source and even spectral cubes
@@ -281,7 +281,7 @@ The IVOA Provenance datamodel \citep{pr:provdm} represents metadata
 tracing  the history of data. This information can be retrieved through
 ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.
 The Entity instances represent  the state of the data items between
-various steps of the data processing flow. “Entities” can be hooked
+various steps of the data processing flow. ``Entities'' can be hooked
 to the more complete data they represent using the \blinks endpoint.
 
 \section{The \blinks~endpoint}
@@ -655,7 +655,7 @@ values are:
 
 If the value is \verb|false| and the caller tries to use the link anyway, it may be 
 challenged for credentials (e.g. HTTP 401 response with WWW-Authenticate header) or 
-denied (e.g. HTTP 403 "permission denied").
+denied (e.g. HTTP 403 ``permission denied'').
 
 If the value is \verb|true|, the caller should proceed with the same authentication
 and should expect to succeed.
@@ -701,7 +701,7 @@ The name attribute for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
 The DALI specification states that a standardID INFO element   with
-name "standardID" and the actual standardID string as a value SHOULD
+name ``standardID'' and the actual standardID string as a value SHOULD
 be provided.  It is recommended to include such an element to help users
 and applications to identify VOTAbles as results of DataLink services
 this way:
@@ -818,8 +818,8 @@ A resource of this type has no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
 
-In case a response contains several “descriptor” RESOURCES
-and several “results” RESOURCES these RESOURCES MAY be nested in
+In case a response contains several ``descriptor'' RESOURCES
+and several ``results'' RESOURCES these RESOURCES MAY be nested in
 order to better display correct association.
 
 A service resource contains PARAM elements to describe the service and
@@ -1156,7 +1156,7 @@ used to call the service.
 \label{sec:selfDescribing}
 
 A service may include a service descriptor that describes itself with
-its normal output. In that case the utype "adhoc:this" indicates the
+its normal output. In that case the utype ``adhoc:this'' indicates the
 self-describing
 nature of the service descriptor. This convention would make finding
 the self-description
@@ -1224,14 +1224,14 @@ URL). Even trying to match the URL that was used with the accessURL in
 the descriptors is likely to be unreliable (e.g.\ if providers use HTTP
 redirects to make old URLs work when service deployment changes).
 
-\section{New “datalink” content-type for the LINK element in VOTable}
+\section{New ``datalink'' content-type for the LINK element in VOTable}
 
 
 When providing a column with URLs, for example outside DAL service
 responses or when service descriptors  are not defined, if all the
-URLs are to a DataLink "links" endpoint, then the preferred approach
+URLs are to a DataLink ``links'' endpoint, then the preferred approach
 is to add a LINKS element with the content type defined in section for
-\ref{sec:mime}. If some values are to a "links" endpoint and others to
+\ref{sec:mime}. If some values are to a ``links'' endpoint and others to
 different content types (e.g. single file download), then the VOTable
 would need a second column to convey the content type (see Appendix
 for details).
