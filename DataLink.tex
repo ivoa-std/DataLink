@@ -73,8 +73,9 @@ discovered via one service to  related data products, and web services
 The {\em links\/} web service capability is a web service capability
 for drilling
 down from a discovered data item such as an identifier,
-a source in a catalog or any other data item. In the first case (typically an IVOA publisher dataset identifier) it allows
- to find details about the data files that can be
+a source in a catalog or any other data item. In the first case
+(typically an IVOA publisher dataset identifier) it allows
+to find details about the data files that can be
 downloaded, alternate representations of the data that are available, and
 services that can act upon the data (usually without having to download
 the entire dataset). The expected usage is for DAL (Data Access Layer)
@@ -262,13 +263,26 @@ DataLink). This service link would be described with both a service type
 
 \subsubsection{Datasets linked to an astronomical source}
 
-There are  a lot of catalogs of astronomical sources made available using VO services such as ConeSearch \citep{2008ivoa.specQ0222P} or TAP services. For some catalogs “associated data” are available. These data include images from which sources have been extracted, or imaging the object in  case of extended objects, as well as additional observations such as Spectra or Time Series of the source and even spectral cubes and Time Series of images for extended or varying objects. The \blinks  response obtained for the source id can allow to easilly retrieve all these associated data in one shot.
+There are  a lot of catalogs of astronomical sources made available
+using VO services such as ConeSearch \citep{2008ivoa.specQ0222P} or TAP
+services. For some catalogs “associated data” are available. These
+data include images from which sources have been extracted, or imaging the
+object in  case of extended objects, as well as additional observations
+such as Spectra or Time Series of the source and even spectral cubes
+and Time Series of images for extended or varying objects. The \blinks
+response obtained for the source id can allow to easilly retrieve all
+these associated data in one shot.
 
 \subsubsection{Metadata and data related to provenance entities}
 
 
 
-The IVOA Provenance datamodel \citep{pr:provdm} represents metadata tracing  the history of data. This information can be retrieved through ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.  The Entity instances represent  the state of the data items between various steps of the data processing flow. “Entities” can be hooked to the more complete data they represent using the \blinks endpoint.
+The IVOA Provenance datamodel \citep{pr:provdm} represents metadata
+tracing  the history of data. This information can be retrieved through
+ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.
+The Entity instances represent  the state of the data items between
+various steps of the data processing flow. “Entities” can be hooked
+to the more complete data they represent using the \blinks endpoint.
 
 \section{The \blinks~endpoint}
 
@@ -420,7 +434,8 @@ represented as a table with the following columns:
 \begin{center}
 \begin{tabular}{|l|p{0.29\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|l|}
 \hline
-{\bf name}      & {\bf description} & {\bf field \newline required} & {\bf value \newline required} & {\bf UCD} \\
+{\bf name}      & {\bf description} & {\bf field \newline required}
+                & {\bf value \newline required} & {\bf UCD} \\
 \hline
 ID              & Input identifier & yes & yes & meta.id;meta.main \\
 \hline
@@ -498,9 +513,13 @@ The ID column contains the input identifier value.
 The access\_url column may contain a URL to download a single resource.
 This URL can be a link to a dynamic resource (e.g.\ preview generation).
 
-Beside dereferencable URL, it is allowed to use URI-fragments to link the intial resource to a specific part of the retrievable resource, with its specific semantics and description. Examples of this are section in an html page or paths in an archive file or extensions in a MEF.
-The interpretation of the fragment will depend from the content type of the retrievable resource.
-No other additional parameters or client handling are allowed.
+Beside dereferencable URL, it is allowed to use URI-fragments to link
+the intial resource to a specific part of the retrievable resource, with
+its specific semantics and description. Examples of this are section
+in an html page or paths in an archive file or extensions in a MEF.
+The interpretation of the fragment will depend from the content type
+of the retrievable resource.  No other additional parameters or client
+handling are allowed.
 
 \subsubsection{service\_def}
 
@@ -532,7 +551,8 @@ column; all others should be null.
 \subsubsection{description}
 
 The description column SHOULD contain a human-readable description of
-the link; it is intended for display by interactive applications and very important to help user distinguish links with same semantics (see below).
+the link; it is intended for display by interactive applications and very
+important to help user distinguish links with same semantics (see below).
 
 
 \subsubsection{semantics}
@@ -680,8 +700,11 @@ and supported by the implementation.
 The name attribute for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
-The DALI specification states that a standardID INFO element   with name "standardID" and the actual standardID string as a value SHOULD be provided.
-It is recommended to include such an element to help users and applications to identify VOTAbles as results of DataLink services this way :
+The DALI specification states that a standardID INFO element   with
+name "standardID" and the actual standardID string as a value SHOULD
+be provided.  It is recommended to include such an element to help users
+and applications to identify VOTAbles as results of DataLink services
+this way:
 \begin{verbatim}
 
 <RESOURCE type="results" 
@@ -780,9 +803,14 @@ contains the query result.
 To describe an associated service, the VOTable would also
 contain one or more resources with attribute \attval{type}{meta} and
 
-\attval{utype}{adhoc:service}  (or \attval{utype}{adhoc:this} in case of a Self-Describing service -see below \ref{selfDescribing}).
+\attval{utype}{adhoc:service}  (or \attval{utype}{adhoc:this} in case of
+a Self-Describing service -see below \ref{selfDescribing}).
 
-A short name attribute, and a more verbose DESCRIPTION  subelement, MAY be added to the service descriptor RESOURCE to  provide the user with information about the service's purpose or  semantics. This SHOULD be done if the semantics are not obvious,  and especially in the case of multiple sibling service  descriptors, or non-standard services.
+A short name attribute, and a more verbose DESCRIPTION  subelement,
+MAY be added to the service descriptor RESOURCE to  provide the user
+with information about the service's purpose or  semantics. This SHOULD
+be done if the semantics are not obvious,  and especially in the case
+of multiple sibling service  descriptors, or non-standard services.
 
 
 
@@ -790,7 +818,9 @@ A resource of this type has no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
 
-In case a response contains several “descriptor” RESOURCES  and several “results” RESOURCES these RESOURCES MAY be nested in order to better display correct association.
+In case a response contains several “descriptor” RESOURCES
+and several “results” RESOURCES these RESOURCES MAY be nested in
+order to better display correct association.
 
 A service resource contains PARAM elements to describe the service and
 a GROUP element with additional PARAM elements to describe the input
@@ -1126,8 +1156,10 @@ used to call the service.
 \label{sec:selfDescribing}
 
 A service may include a service descriptor that describes itself with
-its normal output. In that case the utype "adhoc:this" indicates the self-describing
-nature of the service descriptor. This convention would make finding the self-description
+its normal output. In that case the utype "adhoc:this" indicates the
+self-describing
+nature of the service descriptor. This convention would make finding
+the self-description
 unambiguous in cases where the output also contained other service
 descriptors.
    This usage is comparable to prototype work on S3
@@ -1195,7 +1227,14 @@ redirects to make old URLs work when service deployment changes).
 \section{New “datalink” content-type for the LINK element in VOTable}
 
 
-When providing a column with URLs, for example outside DAL service responses or when service descriptors  are not defined, if all the URLs are to a DataLink "links" endpoint, then the preferred approach is to add a LINKS element with the content type defined in section for \ref{sec:mime}. If some values are to a "links" endpoint and others to different content types (e.g. single file download), then the VOTable would need a second column to convey the content type (see Appendix for details). 
+When providing a column with URLs, for example outside DAL service
+responses or when service descriptors  are not defined, if all the
+URLs are to a DataLink "links" endpoint, then the preferred approach
+is to add a LINKS element with the content type defined in section for
+\ref{sec:mime}. If some values are to a "links" endpoint and others to
+different content types (e.g. single file download), then the VOTable
+would need a second column to convey the content type (see Appendix
+for details).
 
 \begin{verbatim} 
 <FIELD name="bla" datatype="char" arraysize="*" utype="Access.reference" ucd="meta.url" > 
