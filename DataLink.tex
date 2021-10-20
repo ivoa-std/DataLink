@@ -1142,37 +1142,37 @@ self-describing service descriptor and an empty results table:
 \begin{verbatim}
 
 
-<RESOURCE type=”meta” utype=”adhoc:this” ID=”PwL” name=”Power Law fitting”>
+<RESOURCE type="meta" utype="adhoc:this" ID="PwL" name="Power Law fitting">
 
     <DESCRIPTION>Apply a power law model on a XMM-Newton EPIC spectrum </DESCRIPTION>	
 	<PARAM name="accessURL" datatype="char" arraysize="*" value="http://obs-he-lm:8888/3XMM/fitmodelonspectrum& model=powlaw" />
-   <GROUP name=”inputParams”>
-      <PARAM name=”oid” datatype=”char” arraysize=”*” 
-        value=”1160803203386703876” unit =”none” >
+   <GROUP name="inputParams">
+      <PARAM name="oid" datatype="char" arraysize="*" 
+        value="1160803203386703876" unit ="none" >
          <DESCRIPTION>Spectrum internal ID in the database </DESCRIPTION>
       </PARAM>
-      <PARAM name=”binSize” ucd=”spect.binSize” datatype=”int” unit=”none” value=”10” >
+      <PARAM name="binSize" ucd="spect.binSize" datatype="int" unit="none" value="10" >
          <DESCRIPTION>Number of counts per bin</DESCRIPTION>
          <VALUES>
-             <OPTION value=”1” />
-             <OPTION value=”5” />
-             <OPTION value=”10” />
-             <OPTION value=”20” />
-             <OPTION value=”50” />
+             <OPTION value="1" />
+             <OPTION value="5" />
+             <OPTION value="10" />
+             <OPTION value="20" />
+             <OPTION value="50" />
          </VALUES>
        </PARAM>
-      <PARAM name=”nh” ucd=”phys.abund.X” datatype=”float” unit=”1e22cm-2” value=”0.01” >
+      <PARAM name="nh" ucd="phys.abund.X" datatype="float" unit="1e22cm-2" value="0.01" >
          <DESCRIPTION>Galactical NH</DESCRIPTION>
          <VALUES>
-         <MIN value=”0” />
-             <MAX value=”1” />
+         <MIN value="0" />
+             <MAX value="1" />
          </VALUES>
        </PARAM>
-      <PARAM name=”alpha” ucd=”meta.code;spect.index” datatype=”float” unit=”none” value=”1.7” >
+      <PARAM name="alpha" ucd="meta.code;spect.index" datatype="float" unit="none" value="1.7" >
          <DESCRIPTION>Photon index of power law</DESCRIPTION>
          <VALUES>
-             <MIN value=”1” />
-             <MAX value=”9” />
+             <MIN value="1" />
+             <MAX value="9" />
          </VALUES>
        </PARAM>
    </GROUP>
