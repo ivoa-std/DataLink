@@ -350,6 +350,8 @@ giving a capability with a standardID of
 \begin{verbatim}
    ivo://ivoa.net/std/DataLink#links-1.0
 \end{verbatim}
+Note this is applicable to endpoints following any version 1.*
+of the DataLink standard, to avoid backward compatibility problems.
 
 This specification does not constrain the capability type used in such
 declarations.  The access URL of the \blinks~endpoint must be given in a
@@ -688,7 +690,7 @@ It is recommended to include such an element to help users and applications to i
 
 ... 
 
-<INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.?"/> 
+<INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.0"/> 
 
 ... 
 
