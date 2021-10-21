@@ -1162,40 +1162,45 @@ description of both standard and custom features.
 The output of a \blinks\ capability with no input ID would include the
 self-describing service descriptor and an empty results table:
 \begin{verbatim}
-<RESOURCE type="meta" utype="adhoc:this" ID="PwL" name="Power Law fitting">
-
-    <DESCRIPTION>Apply a power law model on a XMM-Newton EPIC spectrum </DESCRIPTION>	
-	<PARAM name="accessURL" datatype="char" arraysize="*" value="http://obs-he-lm:8888/3XMM/fitmodelonspectrum&amp;model=powlaw" />
-   <GROUP name="inputParams">
-      <PARAM name="oid" datatype="char" arraysize="*" 
-        value="1160803203386703876">
-         <DESCRIPTION>Spectrum internal ID in the database </DESCRIPTION>
-      </PARAM>
-      <PARAM name="binSize" ucd="spect.binSize" datatype="int" value="10" >
-         <DESCRIPTION>Number of counts per bin</DESCRIPTION>
-         <VALUES>
-             <OPTION value="1" />
-             <OPTION value="5" />
-             <OPTION value="10" />
-             <OPTION value="20" />
-             <OPTION value="50" />
-         </VALUES>
-       </PARAM>
-      <PARAM name="nh" ucd="phys.abund.X" datatype="float" unit="1e22cm**-2" value="0.01" >
-         <DESCRIPTION>Galactical NH</DESCRIPTION>
-         <VALUES>
-         <MIN value="0" />
-             <MAX value="1" />
-         </VALUES>
-       </PARAM>
-      <PARAM name="alpha" ucd="meta.code;spect.index" datatype="float" value="1.7" >
-         <DESCRIPTION>Photon index of power law</DESCRIPTION>
-         <VALUES>
-             <MIN value="1" />
-             <MAX value="9" />
-         </VALUES>
-       </PARAM>
-   </GROUP>
+<RESOURCE type="meta" utype="adhoc:this" ID="PwL"
+          name="Power Law fitting">
+  <DESCRIPTION>
+    Apply a power law model on a XMM-Newton EPIC spectrum
+  </DESCRIPTION>
+  <PARAM name="accessURL" datatype="char" arraysize="*"
+         value="http://obs-he-lm:8888/3XMM/fitmodelonspectrum&amp;model=powlaw"/>
+  <GROUP name="inputParams">
+    <PARAM name="oid" datatype="char" arraysize="*"
+           value="1160803203386703876">
+      <DESCRIPTION>Spectrum internal ID in the database </DESCRIPTION>
+    </PARAM>
+    <PARAM name="binSize" ucd="spect.binSize" datatype="int" value="10" >
+      <DESCRIPTION>Number of counts per bin</DESCRIPTION>
+      <VALUES>
+        <OPTION value="1" />
+        <OPTION value="5" />
+        <OPTION value="10" />
+        <OPTION value="20" />
+        <OPTION value="50" />
+      </VALUES>
+    </PARAM>
+    <PARAM name="nh" ucd="phys.abund.X" datatype="float"
+           unit="1e22cm**-2" value="0.01" >
+      <DESCRIPTION>Galactical NH</DESCRIPTION>
+      <VALUES>
+        <MIN value="0" />
+        <MAX value="1" />
+      </VALUES>
+    </PARAM>
+    <PARAM name="alpha" ucd="meta.code;spect.index" datatype="float"
+           value="1.7" >
+      <DESCRIPTION>Photon index of power law</DESCRIPTION>
+      <VALUES>
+        <MIN value="1" />
+        <MAX value="9" />
+      </VALUES>
+    </PARAM>
+  </GROUP>
 </RESOURCE>
 \end{verbatim}
 
