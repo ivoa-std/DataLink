@@ -1007,27 +1007,27 @@ based input to the service, but they can describe the optional parameters:
       Datasets discovered here are automatically available in 
       CADC's VOSpace under the URI produced here
      </DESCRIPTION>
-     <PARAM name="resourceIdentifier"
+     <PARAM name="resourceIdentifier" datatype="char" arraysize="*"
             value="ivo://example.com/vospace" />
-     <PARAM name="standardID"
+     <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/VOSpace/v2.0#nodes" />
-     <PARAM name="accessURL"
+     <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/vospace/nodes" />
      <GROUP name="inputParams">
        <PARAM name="detail" datatype="char" arraysize="*"
               value="min"/>
-       <PARAM name="limit" datatype="integer"
+       <PARAM name="limit" datatype="int"
               value="1000"/>
        <PARAM name="uri" datatype="char" arraysize="*"
               value=""/>
      </GROUP>
    </RESOURCE>
    <RESOURCE type="meta" utype="adhoc:service" ID="vtrans">
-     <PARAM name="resourceIdentifier"
+     <PARAM name="resourceIdentifier" datatype="char" arraysize="*"
             value="ivo://example.com/vospace" />
-     <PARAM name="standardID"
+     <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/VOSpace/v2.0#transfers" />
-     <PARAM name="accessURL"
+     <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/vospace/transfers" />
    </RESOURCE>
 \end{verbatim}
