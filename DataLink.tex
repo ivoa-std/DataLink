@@ -900,8 +900,7 @@ the associated DataLink \blinks\ capability.
 The \blinks\ capability described in section \ref{sec:linksEndpoint}
 is described by the following resource:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" name="RawAndCatalogDataLinks"
-">
+   <RESOURCE type="meta" utype="adhoc:service" name="RawAndCatalogDataLinks">
      <DESCRIPTION>
      This datalink service gives access to the raw data for the
      discovered datasets as well as to catalogues of extracted sources
@@ -911,7 +910,7 @@ is described by the following resource:
      <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/mylinks" />
      <PARAM name="contentType" datatype="char" arraysize="*" 
-            value="application/x-votable+xml;content=datalink" >
+            value="application/x-votable+xml;content=datalink" />
      <GROUP name="inputParams">
        <PARAM name="ID" datatype="char" arraysize="*"
               value="" ref="primaryID"/>
