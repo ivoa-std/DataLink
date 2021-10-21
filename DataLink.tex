@@ -68,7 +68,7 @@ infrastructure that enable VO applications.
 \section{Introduction}
 
 This specification defines mechanisms for connecting data items
-discovered via one service to  related data products, and web services
+discovered via one service to related data products and web services.
 
 The {\em links\/} web service capability is a web service capability
 for drilling
@@ -269,8 +269,8 @@ services. For some catalogs ``associated data'' are available. These
 data include images from which sources have been extracted, or imaging the
 object in  case of extended objects, as well as additional observations
 such as Spectra or Time Series of the source and even spectral cubes
-and Time Series of images for extended or varying objects. The \blinks
-response obtained for the source id can allow to easilly retrieve all
+and Time Series of images for extended or varying objects. The {\blinks}
+response obtained for the source id can allow to easily retrieve all
 these associated data in one shot.
 
 \subsubsection{Metadata and data related to provenance entities}
@@ -280,7 +280,7 @@ tracing  the history of data. This information can be retrieved through
 ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.
 The Entity instances represent  the state of the data items between
 various steps of the data processing flow. ``Entities'' can be hooked
-to the more complete data they represent using the \blinks endpoint.
+to the more complete data they represent using the {\blinks} endpoint.
 
 \section{The \blinks~endpoint}
 
@@ -427,7 +427,7 @@ Services may include other MIME type parameters in the response.
 \label{sec:listOfLinks}
 
 The list of links that is returned by the \blinks\ endpoint can be
-represented as a table with the following columns:
+represented as a table with the columns listed in Table \ref{fig:linkFields}. 
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|p{0.29\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|l|}
@@ -701,7 +701,7 @@ The name and UCD attributes for FIELD elements in the VOTable
 The DALI specification states that a standardID INFO element with
 name ``standardID'' and the actual standardID string as a value SHOULD
 be provided.  It is recommended to include such an element to help users
-and applications to identify VOTAbles as results of DataLink services
+and applications to identify VOTables as results of DataLink services
 this way:
 \begin{verbatim}
 
@@ -852,7 +852,7 @@ as described below. If a standardID indicates a capability that supports
 multiple HTTP verbs (GET, POST, etc.), the client may use any supported
 verbs. Otherwise, there is no way in this version to specify that POST
 (for example) is supported so clients should assume that only HTTP GET
-may be used. Since the accessURL may contain parameters; clients must
+may be used. Since the accessURL may contain parameters, clients must
 parse the URL to decide how to append additional parameters when
 invoking the service.
 
@@ -1137,7 +1137,7 @@ values. The VALUES child elements convey a range of valid wavelength
 values from which a subset could be extracted.
 
 The FORMAT parameter allows the client to select from a list of output
-formats for the extracted spectrum. Here, the name of the PARAM is
+formats for the extracted spectrum. Here, the name of each OPTION is
 suitable to display (e.g.\ in a user interface) while the value would be
 used to call the service.
 
@@ -1205,7 +1205,7 @@ self-describing service descriptor and an empty results table:
 \end{verbatim}
 
 In the above example we give the self-describing service descriptor a
-name attribute with the value ``this'' to indicate the self-describing
+name attribute with the value ``adhoc:this'' to indicate the self-describing
 nature. This convention would make finding the self-description
 unambiguous in cases where (i) the output also contained other service
 descriptors and (ii) the caller could not infer which descriptor was
