@@ -275,8 +275,6 @@ these associated data in one shot.
 
 \subsubsection{Metadata and data related to provenance entities}
 
-
-
 The IVOA Provenance datamodel \citep{pr:provdm} represents metadata
 tracing  the history of data. This information can be retrieved through
 ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.
@@ -700,21 +698,17 @@ and supported by the implementation.
 The name attribute for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
-The DALI specification states that a standardID INFO element   with
+The DALI specification states that a standardID INFO element with
 name ``standardID'' and the actual standardID string as a value SHOULD
 be provided.  It is recommended to include such an element to help users
 and applications to identify VOTAbles as results of DataLink services
 this way:
 \begin{verbatim}
 
-<RESOURCE type="results" 
-
-... 
-
-<INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.?"/> 
-
-... 
-
+<RESOURCE type="results">
+  ... 
+  <INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.?"/> 
+  ... 
 </RESOURCE>
 \end{verbatim}
 
@@ -802,7 +796,6 @@ contains the query result.
 
 To describe an associated service, the VOTable would also
 contain one or more resources with attribute \attval{type}{meta} and
-
 \attval{utype}{adhoc:service}  (or \attval{utype}{adhoc:this} in case of
 a Self-Describing service -see below \ref{selfDescribing}).
 
@@ -811,8 +804,6 @@ MAY be added to the service descriptor RESOURCE to  provide the user
 with information about the service's purpose or  semantics. This SHOULD
 be done if the semantics are not obvious,  and especially in the case
 of multiple sibling service  descriptors, or non-standard services.
-
-
 
 A resource of this type has no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
@@ -902,9 +893,9 @@ is described by the following resource:
 \begin{verbatim}
    <RESOURCE type="meta" utype="adhoc:service" name="RawAndCatalogDataLinks">
      <DESCRIPTION>
-     This datalink service gives access to the raw data for the
-     discovered datasets as well as to catalogues of extracted sources
-    </DESCRIPTION>
+       This datalink service gives access to the raw data for the
+       discovered datasets as well as to catalogues of extracted sources
+     </DESCRIPTION>
      <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/DataLink#links-1.0" />
      <PARAM name="accessURL" datatype="char" arraysize="*"
@@ -1171,8 +1162,6 @@ description of both standard and custom features.
 The output of a \blinks\ capability with no input ID would include the
 self-describing service descriptor and an empty results table:
 \begin{verbatim}
-
-
 <RESOURCE type="meta" utype="adhoc:this" ID="PwL" name="Power Law fitting">
 
     <DESCRIPTION>Apply a power law model on a XMM-Newton EPIC spectrum </DESCRIPTION>	
@@ -1208,8 +1197,6 @@ self-describing service descriptor and an empty results table:
        </PARAM>
    </GROUP>
 </RESOURCE>
-
-
 \end{verbatim}
 
 In the above example we give the self-describing service descriptor a
