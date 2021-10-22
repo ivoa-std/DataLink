@@ -807,6 +807,7 @@ accessURL           & URL to invoke the capability   &  yes  \\
 standardID          & URI for the capability         &  no   \\
 resourceIdentifier  & IVOA registry identifier       &  no   \\
 contentType	    & Media type of the service response & no \\
+exampleURL     & example of described service  URL & no \\
 \sptablerule
 \end{tabular}
 \end{center}
@@ -834,6 +835,8 @@ verbs. Otherwise, there is no way in this version to specify that POST
 may be used. Since the accessURL may contain parameters; clients must
 parse the URL to decide how to append additional parameters when
 invoking the service.
+
+In case the contentType is "text/html" the client SHOULD send the result of the service query to a web browser, would it be an html document or a web interactive interface. 
 
 A GROUP with \attval{name}{inputParams} contains PARAM elements describing
 how to invoke the service. For services where the parameter values
@@ -882,6 +885,8 @@ is described by the following resource:
             value="http://example.com/mylinks" />
      <PARAM name="contentType" datatype="char" arraysize="*" 
             value="application/x-votable+xml;content=datalink" >
+     <PARAM name="exampleURL" datatype="char" arraysize="*" 
+            value="http://example.com/mylinks?ID=%22NGC%206946%22" >       
      <GROUP name="inputParams">
        <PARAM name="ID" datatype="char" arraysize="*"
               value="" ref="primaryID"/>
