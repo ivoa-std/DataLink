@@ -536,51 +536,56 @@ the link; it is intended for display by interactive applications and very import
 
 
 \subsubsection{semantics}
+\label{sect:semantics}
 
-The semantics column contains a single term from an external RDF
-vocabulary that describes the meaning of this linked resource relative
-to the identified dataset. The semantics column is intended to be
-machine-readable and assist automating data retrieval and processing.
+The semantics column contains a URI for a concept
+that describes the meaning of the linked item relative
+to what ID references. The semantics column is intended to be
+machine-readable and to assist automated link selection, presentation, and
+usage.
+
+The value is always interpreted as a URI; relative URIs
+\citep{std:RFC3986} are completed using the base URI of the
+core DataLink vocabulary,
+\url{http://www.ivoa.net/rdf/datalink/core}.  Terms from this
+vocabulary must always be written as relative URIs.  This means that for
+concpets from the core vocabulary, the value in the semantics column
+always starts with a hash.
+
+For example, if the \blinks\ table contains a
+link to a preview of a dataset, the ID column will contain the dataset
+identifier, the access\_url column will contain the URL of the preview,
+and the semantics column will be \verb|#preview|.
 
 The core DataLink vocabulary defines a special term for
 the concept of {\em this\/};
-this term is used to describe links used for retrieval of the
-dataset file(s). Since null values are not permitted, the semantics
-value in cases where only an error\_message is supplied should be the
-most appropriate for the link the service was trying to generate.
+this term is used to describe links available for the retrieval of the
+file(s) making up what ID references.
 
-The value is always interpreted as a URI; if it is a relative URI,
-it is resolved \citep{std:RFC3986} against the base URI of the
-core DataLink vocabulary:
-\begin{verbatim}
-   http://www.ivoa.net/rdf/datalink/core
-\end{verbatim}
+Since NULL values are not permitted in the semantics column, when only
+an error\_message is supplied its value should be the most appropriate
+for the link the service was trying to generate.
 
-The value used in the semantics column is normally the URI of the
-vocabulary, followed by a fragment (\#), followed by a predicate from
-the specified vocabulary.  For example, if the \blinks\ table contains a
-link to a preview of a dataset, the ID column will contain the dataset
-identifier, the access\_url column will contain the URL to the preview,
-and the semantics column could contain this predicate:
-\begin{verbatim}
-   http://www.ivoa.net/rdf/datalink/core#preview
-\end{verbatim}
-or this relative URI:
-\begin{verbatim}
-   #preview
-\end{verbatim}
-For predicates outside the core DataLink vocabulary,
-the full URI is required.
+For concepts outside the core DataLink vocabulary, the full concept URI
+must be given.  It should resolve to a human-readable document
+describing what the concept means and what clients are expected to do
+with links annotated with it.
 
-The core DataLink vocabulary is published at:
-\begin{quote}
-  \url{http://www.ivoa.net/rdf/datalink/core}
-\end{quote}
-and the latest version is available as a human readable document and an
-RDF XML document. Services are encouraged to use the core vocabulary
-as much as possible, but may use a custom vocabulary as long as they
-use a custom vocabulary namespace (base URI); the base URI should be
-resolvable to a human-readable document describing the terms.
+As per Vocabularies in the VO 2 \citep{2021ivoa.spec.0525D}, at
+\url{http://www.ivoa.net/rdf/datalink/core} the datalink core vocabulary
+can be retrieved in various formats including HTML (in a way that the
+concept URI is usable in a web browser), various RDF serialisations, and
+the VO-specific Desise optimised for simple machine consumption; this
+should be used by clients to present the user with labels (and perhaps
+definitions) rather than the URI parts given in the semantics column.
+
+In RDF terms, the concepts in datalink core are properties.  A datalink
+row can be interpreted as an RDF triple 
+$$(
+\langle\textit{access\_url\/}\rangle,
+\textit{is-a-}\langle\textit{semantics\/}\rangle\textit{-for},
+\langle\textrm{ID}\rangle
+).$$
 
 \subsubsection{content\_type}
 
@@ -603,11 +608,21 @@ if unknown and will typically be null for links to services.
 
 The content\_qualifier column is optional. If it is present, it tells 
 the client the nature of the thing or service they will receive or access 
-if they use the link. If the target is a data product, the field SHOULD contain 
-one of the terms defined in the IVOA product\_type vocabulary (currently at 
-\url{https://www.ivoa.net/rdf/product-type/}). For other natures of the target 
-the field SHOULD contain a term defined in another IVOA or proprietary vocabulary 
-refered by its URI.
+if they use the link. 
+
+If the access\_url references a data product, the content\_qualifier
+field should define its product type.  In that case, the considerations
+for the semantics column (Sect.~\ref{sect:semantics}) apply, except that
+the basic vocabulary is \url{http://www.ivoa.net/rdf/product-type}, and
+the interpretation as an RDF triple would be $$(
+\langle\textit{access\_url}\rangle, \textit{is-a},
+\langle\textit{content\_qualifier}\rangle)$$
+
+For rows not linking to data products, content\_qualifier's
+interpretation will be different, and the default vocabulary will be
+inappropriate.  Full concept URIs will have to be used in this case, and
+their translations to RDF triples is not covered by this version of
+DataLink.
 
 \subsubsection{link\_auth}
 
