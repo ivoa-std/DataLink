@@ -10,3 +10,5 @@ vcsmeta.tex
 *.log
 *.html
 *.zip
+*.fdb_latexmk
+*.fls
