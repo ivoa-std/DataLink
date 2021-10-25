@@ -360,6 +360,8 @@ giving a capability with a standardID of
 \begin{verbatim}
    ivo://ivoa.net/std/DataLink#links-1.0
 \end{verbatim}
+Note this is applicable to endpoints following any version 1.*
+of the DataLink standard, to avoid backward compatibility problems.
 
 This specification does not constrain the capability type used in such
 declarations.  The access URL of the \blinks~endpoint must be given in a
@@ -703,11 +705,14 @@ and applications to identify VOTables as results of DataLink services
 this way:
 \begin{verbatim}
 
-<RESOURCE type="results">
-  ... 
-  <INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.?"/> 
-  ... 
-</RESOURCE>
+<RESOURCE type="results" 
+
+... 
+
+<INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.0"/> 
+
+... 
+
 \end{verbatim}
 
 
