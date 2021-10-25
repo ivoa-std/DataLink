@@ -1007,99 +1007,73 @@ caller must recognise the standardID values and use a VOSpace-aware
 client to call the service.
 
 
-\subsection{Example: Custom Access Data Service}
+\subsection{Example: SODA Spectral Cutout with Custom Parameters}
 
-Parameters for custom access data services can be described such that
-clients can figure out how to call the service and even create a basic
-form-based user interface. The following Rotatable resource describes
-a custom spectral cutout service:
+The following service descriptor conforms to the requirements of SODA
+\citep{2017ivoa.spec.0517B} and offers a cutout service for a spectrum.
+It also offers further, non-standard parameters for format conversion
+and basic re-calibration.  It gives enough metadata to enable
+informative user interfaces.
+
 {\small
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" ID="apoadimo" 
-             name="CustomSpectrumRecalibration">
-     <DESCRIPTION>
-       This service lets you retrieve the spectra discovered uncalibrated,
-        with flux calibration, and continuum normalised (where some 
-        spectra are now availble in continuum normalisation because the 
-        pipeline failed to identify a continuum)
-     </DESCRIPTION>
-     <PARAM arraysize="*" datatype="char" name="accessURL"
-            ucd="meta.ref.url"
-            value="http://dc.zah.uni-heidelberg.de/flashheros/q/sdl/dlget"/>
-     <PARAM name="contentType" datatype="char" arraysize="*" 
-            value="application/fits" />
-     <GROUP name="inputParams">
-       <PARAM arraysize="*" datatype="char" name="ID" ref="xjc7ra"
-              ucd="meta.id;meta.main" value="">
-         <DESCRIPTION>The pubisher DID of the dataset of interest
-         </DESCRIPTION>
-       </PARAM>
+<RESOURCE ID="procsvc" name="proc_svc" type="meta" 
+    utype="adhoc:service">
+  <GROUP name="inputParams">
+    <PARAM arraysize="*" datatype="char" name="ID" 
+      ucd="meta.id;meta.main" 
+      value="ivo://org.gavo.dc/~?feros/data/f08751.fits">
+      <DESCRIPTION>The pubisher DID of the dataset of 
+        interest</DESCRIPTION>
+    </PARAM>
+    <PARAM arraysize="*" datatype="char" name="FLUXCALIB" 
+      ucd="phot.calib" utype="ssa:Char.FluxAxis.Calibration" 
+      value="">
+      <DESCRIPTION>Recalibrate the spectrum.  Right now, 
+        the only recalibration supported is max(flux)=1 
+        ('RELATIVE').</DESCRIPTION>
+      <VALUES>
+        <OPTION name="RELATIVE" value="RELATIVE"/>
+        <OPTION name="UNCALIBRATED" value="UNCALIBRATED"/>
+      </VALUES>
+    </PARAM>
+    <PARAM arraysize="2" datatype="double" name="BAND" 
+      ucd="em.wl" unit="m" value="" 
+      xtype="interval">
+      <DESCRIPTION>Spectral cutout interval</DESCRIPTION>
+      <VALUES>
+        <MIN value="3.52631986e-07"/>
+        <MAX value="9.21500998e-07"/>
+      </VALUES>
+    </PARAM>
+    <PARAM arraysize="*" datatype="char" name="FORMAT" 
+      ucd="meta.code.mime" utype="ssa:Access.Format" value="">
+      <DESCRIPTION>MIME type of the output format</DESCRIPTION>
+      <VALUES>
+        <OPTION name="VOTable, binary encoding" 
+          value="application/x-votable+xml"/>
+        <OPTION name="VOTable, tabledata encoding" 
+          value="application/x-votable+xml;serialization=tabledata"/>
+        <OPTION name="Tab separated values" value="text/plain"/>
+        <OPTION name="Comma separated values" value="text/csv"/>
+        <OPTION name="FITS binary table" value="application/fits"/>
+      </VALUES>
+    </PARAM>
+  </GROUP>
+  <PARAM arraysize="*" datatype="char" name="accessURL" 
+    ucd="meta.ref.url" 
+    value="http://dc.zah.uni-heidelberg.de/feros/q/sdl/dlget"/>
+  <PARAM arraysize="*" datatype="char" name="standardID" 
+    value="ivo://ivoa.net/std/SODA#sync-1.0"/>
+</RESOURCE>
 
-       <PARAM arraysize="*" datatype="char" name="FLUXCALIB"
-              ucd="phot.calib" utype="ssa:Char.FluxAxis.Calibration"
-              value="">
-         <DESCRIPTION>Recalibrate the spectrum. Right now, the only
-         recalibration supported is max(flux)=1 ('RELATIVE').
-         </DESCRIPTION>
-         <VALUES>
-           <OPTION name="RELATIVE" value="RELATIVE"/>
-           <OPTION name="UNCALIBRATED" value="UNCALIBRATED"/>
-         </VALUES>
-       </PARAM>
-
-       <PARAM ID="axi5fg" datatype="float" name="LAMBDA_MIN"
-              ucd="par.min;em.wl" unit="m" value="">
-         <DESCRIPTION>Spectral cutout interval, lower limit
-         </DESCRIPTION>
-         <VALUES>
-           <MIN value="3.4211e-07"/>
-           <MAX value="5.5927e-07"/>
-         </VALUES>
-       </PARAM>
-
-       <PARAM ID="k4dfpe" datatype="float" name="LAMBDA_MAX"
-              ucd="par.max;em.wl" unit="m" value="">
-         <DESCRIPTION>Spectral cutout interval, upper limit
-         </DESCRIPTION>
-         <VALUES>
-           <MIN value="3.4211e-07"/>
-           <MAX value="5.5927e-07"/>
-         </VALUES>
-       </PARAM>
-
-       <PARAM arraysize="*" datatype="char" name="FORMAT"
-              ucd="meta.code.mime" utype="ssa:Access.Format"
-              value="">
-         <DESCRIPTION>MIME type of the output format</DESCRIPTION>
-         <VALUES>
-           <OPTION name="FITS binary table"
-                   value="application/fits"/>
-           <OPTION name="Original format" value="image/fits"/>
-           <OPTION name="Comma separated values" value="text/csv"/>
-           <OPTION name="VOTable, tabledata encoding"
-                   value="application/x-votable+xml;serialization=tabledata"/>
-           <OPTION name="VOTable, binary encoding"
-                   value="application/x-votable+xml"/>
-           <OPTION name="Tab separated values"
-                   value="text/tab-separated-values"/>
-         </VALUES>
-       </PARAM>
-     </GROUP>
-   </RESOURCE>
 \end{verbatim}
 }
 
-The custom service described above supports 5 input parameters: ID,
-FLUXCALIB, LAMBDA\_MIN, LAMBDA\_MAX, and FORMAT.
-
-The PARAM describing the ID parameter has a ref attribute; the value is
-the XML ID of a FIELD element in a results table in the same document
-(the value {\em xjc7ra\/} is arbitrary;
-it is an opaque string that matches
-an ID value elsewhere in the document). The specified column contains
-values for the ID parameter. The client (user) will pick rows (presumably
-spectra) from the results table and then can invoke the service via the
-ID parameter and value from that row.
+The PARAM describing the ID parameter has a non-empty value attribute,
+meaning that a client will always call the service with the dataset ID
+of a specific dataset.  This is typical for service descriptors in
+datalink documents.
 
 The FLUXCALIB parameter allows the client to specify one of two values:
 UNCALIBRATED or RELATIVE (listed as OPTIONS along with a description of
@@ -1107,19 +1081,23 @@ the meaning). The UCD \citep{2005ivoa.spec.0819D} value
 of phot.calib conveys the basic meaning
 of this parameter (it is related to photometric or flux calibration).
 
-The LAMBDA\_MIN and LAMBDA\_MAX parameters allow the user to specify a
-spectral interval to extract from the spectrum. The PARAM(s) specify that
-the values are wavelengths:
-\attval{ucd}{par.min;em.wl} and
-\attval{ucd}{par.max;em.wl}
-say they are minimum (par.min) and maximum (par.max) wavelength (em.wl)
-values. The VALUES child elements convey a range of valid wavelength
-values from which a subset could be extracted.
+The BAND parameter allows the user to specify a spectral interval to
+extract from the spectrum and follows SODA's regulations.  Its VALUES
+child declares the range of wavelengths in the dataset; services should
+always try to give information on the sensible ranges of input
+parameters, and clients should strive to make them easily accessible to
+users, if possible in the users' preferred units.  Given that at this
+point users do not have access to the full dataset, it is otherwise hard
+for them to guess what could be entered.
 
-The FORMAT parameter allows the client to select from a list of output
-formats for the extracted spectrum. Here, the name of the PARAM is
-suitable to display (e.g.\ in a user interface) while the value would be
-used to call the service.
+Finally, note the standardID PARAM outside of the GROUP of input
+parameters.  It is a promise that the service conforms to SODA's
+guarantees (e.g., that BAND actually works as specified there).  Clients
+must compare its value case-insensitively (because it is an IVOA
+identifier) and should for robustness ignore everything after the dot in
+the fragment identifier when determining whether or not to treat a
+service as a SODA version 1 service, as the minor version is guaranteed
+to be operationally insignificant.
 
 
 \subsection{Example: Self-Describing Service}
