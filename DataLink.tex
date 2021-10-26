@@ -643,7 +643,8 @@ This field may be null (blank) if the value is unknown.
 \subsubsection{link\_authorized}
 
 The link\_authorized column tells the client whether the currently authenticated 
-identity is authorized to use the link. This is generally a prediction to save 
+identity is authorized to use the link. For VOTable, the FIELD must be
+\attval{datatype}{boolean}. This is generally a prediction to save 
 clients from trying to use a link and getting a permission denied response. Valid 
 values are:
 
@@ -1221,7 +1222,23 @@ for details).
 
 \subsection{DataLink-1.1}
 
-TODO: extract change log from commit messages before PR.
+\begin{itemize}
+\item added optional content\_qualifier to describe link target content with terms from 
+the product-type vocabulary
+\item added optional link\_auth and link\_authorized to signal whether authentication
+is necessary to use the link
+\item clarified use of multiple ID values and possible OVERFLOW
+\item clarified use of utype for self-describing service descriptors
+\item generalize by adding use cases for links to content other than data files 
+\item added using LINK to convey when datalink request URL is in a table column
+\item service descriptors can include a contentType param to describe service
+output and should include a name and description
+\item VOSI-availability and VOSI-capabilities endpoints are now optional
+\end{itemize}
+
+\subsection{DataLink-1.0}
+
+Detailed evolution up to version 1.0 described below.
 
 \subsection{PR-DataLink-1.0-20150413}
 
