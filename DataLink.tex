@@ -242,10 +242,9 @@ interface, allowing scenarios like ``give me all voxels around positions
 X in wavelength range Y of all spectral cubes from services Z\_1, Z\_2,
 and Z\_9''.
 
-Access data services may also be standard services or custom services;
-at the time of writing, the definition of standard access service
-capabilities is in progress in separate specifications.
-
+Access data services may  be custom services with peculiar functionalities 
+or IVOA standard services. The IVOA access data service standard is SODA \citep{2017ivoa.spec.0517B}. SODA services should  be described in the same
+ way than custom access data services.
 
 \subsubsection{Recursive DataLink}
 
@@ -422,6 +421,21 @@ This is also the MIME type for the \blinks\ response
 unless the caller has explicitly requested a specific value
 via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 Services may include other MIME type parameters in the response.
+
+\subsubsection{DataLink recognition outside the context of DAL discovery services responses}
+
+
+When providing a column with URLs, for example outside DAL service
+responses or when service descriptors  are not defined, if all the
+URLs are to a DataLink \blinks endpoint, then the preferred approach
+is to add a LINK element with the content type defined above. 
+
+If some values are to a \blinks endpoint and others to
+different content types (e.g. single file download), then the VOTable
+would need a second column to convey the content type.
+ObsCore utypes for access\_url and access\_format SHOULD 
+be added to the appropriate corresponding columns in the table  for
+better recognition. 
 
 \subsection{List of Links}
 \label{sec:listOfLinks}
@@ -1198,17 +1212,7 @@ URL). Even trying to match the URL that was used with the accessURL in
 the descriptors is likely to be unreliable (e.g.\ if providers use HTTP
 redirects to make old URLs work when service deployment changes).
 
-\section{New ``datalink'' content-type for the LINK element in VOTable}
 
-
-When providing a column with URLs, for example outside DAL service
-responses or when service descriptors  are not defined, if all the
-URLs are to a DataLink ``links'' endpoint, then the preferred approach
-is to add a LINKS element with the content type defined in section for
-\ref{sec:mime}. If some values are to a ``links'' endpoint and others to
-different content types (e.g. single file download), then the VOTable
-would need a second column to convey the content type (see Appendix
-for details).
 
 \begin{verbatim} 
 <FIELD name="bla" datatype="char" arraysize="*" utype="Access.reference" ucd="meta.url" > 
