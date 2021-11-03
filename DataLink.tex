@@ -68,13 +68,14 @@ infrastructure that enable VO applications.
 \section{Introduction}
 
 This specification defines mechanisms for connecting data items
-discovered via one service to  related data products, and web services
+discovered via one service to related data products and web services.
 
 The {\em links\/} web service capability is a web service capability
 for drilling
 down from a discovered data item such as an identifier,
-a source in a catalog or any other data item. In the first case (typically an IVOA publisher dataset identifier) it allows
- to find details about the data files that can be
+a source in a catalog or any other data item. In the first case
+(typically an IVOA publisher dataset identifier) it allows
+to find details about the data files that can be
 downloaded, alternate representations of the data that are available, and
 services that can act upon the data (usually without having to download
 the entire dataset). The expected usage is for DAL (Data Access Layer)
@@ -97,9 +98,7 @@ about the service. The service provider can use this mechanism to tell
 clients about services that can be invoked to access the discovered
 data item in some way: get additional metadata, download the data, or
 invoke services that act upon the data files. These services may be
-IVOA standard services or custom services from the data providers. The
-current version provides no way to describe the output of a service,
-but this may be added in a future (minor) revision of this specification.
+IVOA standard services or custom services from the data providers.
 
 We expect that the {\em service descriptor resource\/}
 mechanism will be the primary way that clients will find and
@@ -243,10 +242,9 @@ interface, allowing scenarios like ``give me all voxels around positions
 X in wavelength range Y of all spectral cubes from services Z\_1, Z\_2,
 and Z\_9''.
 
-Access data services may also be standard services or custom services;
-at the time of writing, the definition of standard access service
-capabilities is in progress in separate specifications.
-
+Access data services may  be custom services with peculiar functionalities 
+or IVOA standard services. The IVOA access data service standard is SODA \citep{2017ivoa.spec.0517B}. SODA services should  be described in the same
+ way than custom access data services.
 
 \subsubsection{Recursive DataLink}
 
@@ -262,13 +260,24 @@ DataLink). This service link would be described with both a service type
 
 \subsubsection{Datasets linked to an astronomical source}
 
-There are  a lot of catalogs of astronomical sources made available using VO services such as ConeSearch \citep{2008ivoa.specQ0222P} or TAP services. For some catalogs “associated data” are available. These data include images from which sources have been extracted, or imaging the object in  case of extended objects, as well as additional observations such as Spectra or Time Series of the source and even spectral cubes and Time Series of images for extended or varying objects. The \blinks  response obtained for the source id can allow to easilly retrieve all these associated data in one shot.
+There are  a lot of catalogs of astronomical sources made available
+using VO services such as ConeSearch \citep{2008ivoa.specQ0222P} or TAP
+services. For some catalogs ``associated data'' are available. These
+data include images from which sources have been extracted, or imaging the
+object in  case of extended objects, as well as additional observations
+such as Spectra or Time Series of the source and even spectral cubes
+and Time Series of images for extended or varying objects. The {\blinks}
+response obtained for the source id can allow to easily retrieve all
+these associated data in one shot.
 
 \subsubsection{Metadata and data related to provenance entities}
 
-
-
-The IVOA Provenance datamodel \citep{pr:provdm} represents metadata tracing  the history of data. This information can be retrieved through ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.  The Entity instances represent  the state of the data items between various steps of the data processing flow. “Entities” can be hooked to the more complete data they represent using the \blinks endpoint.
+The IVOA Provenance datamodel \citep{pr:provdm} represents metadata
+tracing  the history of data. This information can be retrieved through
+ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.
+The Entity instances represent  the state of the data items between
+various steps of the data processing flow. ``Entities'' can be hooked
+to the more complete data they represent using the {\blinks} endpoint.
 
 \section{The \blinks~endpoint}
 
@@ -350,6 +359,8 @@ giving a capability with a standardID of
 \begin{verbatim}
    ivo://ivoa.net/std/DataLink#links-1.0
 \end{verbatim}
+Note this is applicable to endpoints following any version 1.*
+of the DataLink standard, to avoid backward compatibility problems.
 
 This specification does not constrain the capability type used in such
 declarations.  The access URL of the \blinks~endpoint must be given in a
@@ -411,16 +422,32 @@ unless the caller has explicitly requested a specific value
 via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 Services may include other MIME type parameters in the response.
 
+\subsubsection{DataLink recognition outside the context of DAL discovery services responses}
+
+
+When providing a column with URLs, for example outside DAL service
+responses or when service descriptors  are not defined, if all the
+URLs are to a DataLink \blinks endpoint, then the preferred approach
+is to add a LINK element with the content type defined above. 
+
+If some values are to a \blinks endpoint and others to
+different content types (e.g. single file download), then the VOTable
+would need a second column to convey the content type.
+ObsCore utypes for access\_url and access\_format SHOULD 
+be added to the appropriate corresponding columns in the table  for
+better recognition. 
+
 \subsection{List of Links}
 \label{sec:listOfLinks}
 
 The list of links that is returned by the \blinks\ endpoint can be
-represented as a table with the following columns:
+represented as a table with the columns listed in Table \ref{fig:linkFields}. 
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|p{0.29\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|l|}
 \hline
-{\bf name}      & {\bf description} & {\bf field \newline required} & {\bf value \newline required} & {\bf UCD} \\
+{\bf name}      & {\bf description} & {\bf field \newline required}
+                & {\bf value \newline required} & {\bf UCD} \\
 \hline
 ID              & Input identifier & yes & yes & meta.id;meta.main \\
 \hline
@@ -498,9 +525,13 @@ The ID column contains the input identifier value.
 The access\_url column may contain a URL to download a single resource.
 This URL can be a link to a dynamic resource (e.g.\ preview generation).
 
-Beside dereferencable URL, it is allowed to use URI-fragments to link the intial resource to a specific part of the retrievable resource, with its specific semantics and description. Examples of this are section in an html page or paths in an archive file or extensions in a MEF.
-The interpretation of the fragment will depend from the content type of the retrievable resource.
-No other additional parameters or client handling are allowed.
+Beside dereferencable URL, it is allowed to use URI-fragments to link
+the intial resource to a specific part of the retrievable resource, with
+its specific semantics and description. Examples of this are section
+in an html page or paths in an archive file or extensions in a MEF.
+The interpretation of the fragment will depend from the content type
+of the retrievable resource.  No other additional parameters or client
+handling are allowed.
 
 \subsubsection{service\_def}
 
@@ -532,7 +563,8 @@ column; all others should be null.
 \subsubsection{description}
 
 The description column SHOULD contain a human-readable description of
-the link; it is intended for display by interactive applications and very important to help user distinguish links with same semantics (see below).
+the link; it is intended for display by interactive applications and very
+important to help user distinguish links with same semantics (see below).
 
 
 \subsubsection{semantics}
@@ -640,7 +672,8 @@ This field may be null (blank) if the value is unknown.
 \subsubsection{link\_authorized}
 
 The link\_authorized column tells the client whether the currently authenticated 
-identity is authorized to use the link. This is generally a prediction to save 
+identity is authorized to use the link. For VOTable, the FIELD must be
+\attval{datatype}{boolean}. This is generally a prediction to save 
 clients from trying to use a link and getting a permission denied response. Valid 
 values are:
 
@@ -650,7 +683,7 @@ values are:
 
 If the value is \verb|false| and the caller tries to use the link anyway, it may be 
 challenged for credentials (e.g. HTTP 401 response with WWW-Authenticate header) or 
-denied (e.g. HTTP 403 "permission denied").
+denied (e.g. HTTP 403 ``permission denied'').
 
 If the value is \verb|true|, the caller should proceed with the same authentication
 and should expect to succeed.
@@ -692,21 +725,19 @@ The table of links {\bf must} be returned in a RESOURCE with
 unless another serialization is specifically requested
 (see \ref{sec:responseformat})
 and supported by the implementation.
-The name attribute for FIELD elements in the VOTable
+The name and UCD attributes for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
-The DALI specification states that a standardID INFO element   with name "standardID" and the actual standardID string as a value SHOULD be provided.
-It is recommended to include such an element to help users and applications to identify VOTAbles as results of DataLink services this way :
+The DALI specification states that a standardID INFO element with
+name ``standardID'' and the actual standardID string as a value SHOULD
+be provided.  It is recommended to include such an element to help users
+and applications to identify VOTables as results of DataLink services
+this way:
 \begin{verbatim}
-
-<RESOURCE type="results" 
-
-... 
-
-<INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.?"/> 
-
-... 
-
+<RESOURCE type="results">
+  ... 
+  <INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.0"/> 
+  ... 
 </RESOURCE>
 \end{verbatim}
 
@@ -794,18 +825,22 @@ contains the query result.
 
 To describe an associated service, the VOTable would also
 contain one or more resources with attribute \attval{type}{meta} and
+\attval{utype}{adhoc:service}  (or \attval{utype}{adhoc:this} in case of
+a Self-Describing service --- see \ref{sec:selfDescribing}).
 
-\attval{utype}{adhoc:service}  (or \attval{utype}{adhoc:this} in case of a Self-Describing service -see below \ref{selfDescribing}).
-
-A short name attribute, and a more verbose DESCRIPTION  subelement, MAY be added to the service descriptor RESOURCE to  provide the user with information about the service's purpose or  semantics. This SHOULD be done if the semantics are not obvious,  and especially in the case of multiple sibling service  descriptors, or non-standard services.
-
-
+A short name attribute, and a more verbose DESCRIPTION  subelement,
+MAY be added to the service descriptor RESOURCE to  provide the user
+with information about the service's purpose or  semantics. This SHOULD
+be done if the semantics are not obvious,  and especially in the case
+of multiple sibling service  descriptors, or non-standard services.
 
 A resource of this type has no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
 
-In case a response contains several “descriptor” RESOURCES  and several “results” RESOURCES these RESOURCES MAY be nested in order to better display correct association.
+In case a response contains several ``descriptor'' RESOURCEs
+and several ``results'' RESOURCEs these RESOURCEs MAY be nested in
+order to better display correct association.
 
 A service resource contains PARAM elements to describe the service and
 a GROUP element with additional PARAM elements to describe the input
@@ -846,7 +881,7 @@ as described below. If a standardID indicates a capability that supports
 multiple HTTP verbs (GET, POST, etc.), the client may use any supported
 verbs. Otherwise, there is no way in this version to specify that POST
 (for example) is supported so clients should assume that only HTTP GET
-may be used. Since the accessURL may contain parameters; clients must
+may be used. Since the accessURL may contain parameters, clients must
 parse the URL to decide how to append additional parameters when
 invoking the service.
 
@@ -874,7 +909,7 @@ would use the following:
    <FIELD name="obs_publisher_did" ID="primaryID"
           utype="obscore:Curation.PublisherDID"
           ucd="meta.ref.url;meta.curation"
-          xtype="adql:VARCHAR" datatype="char" arraysize="256*" />
+          datatype="char" arraysize="256*" />
 \end{verbatim}
 where the ID value {\em primaryID\/} is arbitrary.
 This FIELD would typically
@@ -885,18 +920,17 @@ the associated DataLink \blinks\ capability.
 The \blinks\ capability described in section \ref{sec:linksEndpoint}
 is described by the following resource:
 \begin{verbatim}
-   <RESOURCE type="meta" utype="adhoc:service" name="RawAndCatalogDataLinks"
-">
+   <RESOURCE type="meta" utype="adhoc:service" name="RawAndCatalogDataLinks">
      <DESCRIPTION>
-     This datalink service gives access to the raw data for the
-     discovered datasets as well as to catalogues of extracted sources
-    </DESCRIPTION>
+       This datalink service gives access to the raw data for the
+       discovered datasets as well as to catalogues of extracted sources
+     </DESCRIPTION>
      <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/DataLink#links-1.0" />
      <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/mylinks" />
      <PARAM name="contentType" datatype="char" arraysize="*" 
-            value="application/x-votable+xml;content=datalink" >
+            value="application/x-votable+xml;content=datalink" />
      <GROUP name="inputParams">
        <PARAM name="ID" datatype="char" arraysize="*"
               value="" ref="primaryID"/>
@@ -993,27 +1027,27 @@ based input to the service, but they can describe the optional parameters:
       Datasets discovered here are automatically available in 
       CADC's VOSpace under the URI produced here
      </DESCRIPTION>
-     <PARAM name="resourceIdentifier"
+     <PARAM name="resourceIdentifier" datatype="char" arraysize="*"
             value="ivo://example.com/vospace" />
-     <PARAM name="standardID"
+     <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/VOSpace/v2.0#nodes" />
-     <PARAM name="accessURL"
+     <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/vospace/nodes" />
      <GROUP name="inputParams">
        <PARAM name="detail" datatype="char" arraysize="*"
               value="min"/>
-       <PARAM name="limit" datatype="integer"
+       <PARAM name="limit" datatype="int"
               value="1000"/>
        <PARAM name="uri" datatype="char" arraysize="*"
               value=""/>
      </GROUP>
    </RESOURCE>
    <RESOURCE type="meta" utype="adhoc:service" ID="vtrans">
-     <PARAM name="resourceIdentifier"
+     <PARAM name="resourceIdentifier" datatype="char" arraysize="*"
             value="ivo://example.com/vospace" />
-     <PARAM name="standardID"
+     <PARAM name="standardID" datatype="char" arraysize="*"
             value="ivo://ivoa.net/std/VOSpace/v2.0#transfers" />
-     <PARAM name="accessURL"
+     <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/vospace/transfers" />
    </RESOURCE>
 \end{verbatim}
@@ -1096,6 +1130,7 @@ the meaning). The UCD \citep{2005ivoa.spec.0819D} value
 of phot.calib conveys the basic meaning
 of this parameter (it is related to photometric or flux calibration).
 
+
 The BAND parameter allows the user to specify a spectral interval to
 extract from the spectrum and follows SODA's regulations.  Its VALUES
 child declares the range of wavelengths in the dataset; services should
@@ -1119,8 +1154,10 @@ to be operationally insignificant.
 \label{sec:selfDescribing}
 
 A service may include a service descriptor that describes itself with
-its normal output. In that case the utype "adhoc:this" indicates the self-describing
-nature of the service descriptor. This convention would make finding the self-description
+its normal output. In that case the utype ``adhoc:this'' indicates the
+self-describing
+nature of the service descriptor. This convention would make finding
+the self-description
 unambiguous in cases where the output also contained other service
 descriptors.
    This usage is comparable to prototype work on S3
@@ -1133,49 +1170,50 @@ description of both standard and custom features.
 The output of a \blinks\ capability with no input ID would include the
 self-describing service descriptor and an empty results table:
 \begin{verbatim}
-
-
-<RESOURCE type=”meta” utype=”adhoc:this” ID=”PwL” name=”Power Law fitting”>
-
-    <DESCRIPTION>Apply a power law model on a XMM-Newton EPIC spectrum </DESCRIPTION>	
-	<PARAM name="accessURL" datatype="char" arraysize="*" value="http://obs-he-lm:8888/3XMM/fitmodelonspectrum& model=powlaw" />
-   <GROUP name=”inputParams”>
-      <PARAM name=”oid” datatype=”char” arraysize=”*” 
-        value=”1160803203386703876” unit =”none” >
-         <DESCRIPTION>Spectrum internal ID in the database </DESCRIPTION>
-      </PARAM>
-      <PARAM name=”binSize” ucd=”spect.binSize” datatype=”int” unit=”none” value=”10” >
-         <DESCRIPTION>Number of counts per bin</DESCRIPTION>
-         <VALUES>
-             <OPTION value=”1” />
-             <OPTION value=”5” />
-             <OPTION value=”10” />
-             <OPTION value=”20” />
-             <OPTION value=”50” />
-         </VALUES>
-       </PARAM>
-      <PARAM name=”nh” ucd=”phys.abund.X” datatype=”float” unit=”1e22cm-2” value=”0.01” >
-         <DESCRIPTION>Galactical NH</DESCRIPTION>
-         <VALUES>
-         <MIN value=”0” />
-             <MAX value=”1” />
-         </VALUES>
-       </PARAM>
-      <PARAM name=”alpha” ucd=”meta.code;spect.index” datatype=”float” unit=”none” value=”1.7” >
-         <DESCRIPTION>Photon index of power law</DESCRIPTION>
-         <VALUES>
-             <MIN value=”1” />
-             <MAX value=”9” />
-         </VALUES>
-       </PARAM>
-   </GROUP>
+<RESOURCE type="meta" utype="adhoc:this" ID="PwL"
+          name="Power Law fitting">
+  <DESCRIPTION>
+    Apply a power law model on a XMM-Newton EPIC spectrum
+  </DESCRIPTION>
+  <PARAM name="accessURL" datatype="char" arraysize="*"
+         value="http://obs-he-lm:8888/3XMM/fitmodelonspectrum&amp;model=powlaw"/>
+  <GROUP name="inputParams">
+    <PARAM name="oid" datatype="char" arraysize="*"
+           value="1160803203386703876">
+      <DESCRIPTION>Spectrum internal ID in the database </DESCRIPTION>
+    </PARAM>
+    <PARAM name="binSize" ucd="spect.binSize" datatype="int" value="10" >
+      <DESCRIPTION>Number of counts per bin</DESCRIPTION>
+      <VALUES>
+        <OPTION value="1" />
+        <OPTION value="5" />
+        <OPTION value="10" />
+        <OPTION value="20" />
+        <OPTION value="50" />
+      </VALUES>
+    </PARAM>
+    <PARAM name="nh" ucd="phys.abund.X" datatype="float"
+           unit="1e22cm**-2" value="0.01" >
+      <DESCRIPTION>Galactical NH</DESCRIPTION>
+      <VALUES>
+        <MIN value="0" />
+        <MAX value="1" />
+      </VALUES>
+    </PARAM>
+    <PARAM name="alpha" ucd="meta.code;spect.index" datatype="float"
+           value="1.7" >
+      <DESCRIPTION>Photon index of power law</DESCRIPTION>
+      <VALUES>
+        <MIN value="1" />
+        <MAX value="9" />
+      </VALUES>
+    </PARAM>
+  </GROUP>
 </RESOURCE>
-
-
 \end{verbatim}
 
 In the above example we give the self-describing service descriptor a
-name attribute with the value ``this'' to indicate the self-describing
+name attribute with the value ``adhoc:this'' to indicate the self-describing
 nature. This convention would make finding the self-description
 unambiguous in cases where (i) the output also contained other service
 descriptors and (ii) the caller could not infer which descriptor was
@@ -1185,10 +1223,7 @@ URL). Even trying to match the URL that was used with the accessURL in
 the descriptors is likely to be unreliable (e.g.\ if providers use HTTP
 redirects to make old URLs work when service deployment changes).
 
-\section{New “datalink” content-type for the LINK element in VOTable}
 
-
-When providing a column with URLs, for example outside DAL service responses or when service descriptors  are not defined, if all the URLs are to a DataLink "links" endpoint, then the preferred approach is to add a LINKS element with the content type defined in section for \ref{sec:mime}. If some values are to a "links" endpoint and others to different content types (e.g. single file download), then the VOTable would need a second column to convey the content type (see Appendix for details). 
 
 \begin{verbatim} 
 <FIELD name="bla" datatype="char" arraysize="*" utype="Access.reference" ucd="meta.url" > 
@@ -1202,7 +1237,23 @@ When providing a column with URLs, for example outside DAL service responses or 
 
 \subsection{DataLink-1.1}
 
-TODO: extract change log from commit messages before PR.
+\begin{itemize}
+\item added optional content\_qualifier to describe link target content with terms from 
+the product-type vocabulary
+\item added optional link\_auth and link\_authorized to signal whether authentication
+is necessary to use the link
+\item clarified use of multiple ID values and possible OVERFLOW
+\item clarified use of utype for self-describing service descriptors
+\item generalize by adding use cases for links to content other than data files 
+\item added using LINK to convey when datalink request URL is in a table column
+\item service descriptors can include a contentType param to describe service
+output and should include a name and description
+\item VOSI-availability and VOSI-capabilities endpoints are now optional
+\end{itemize}
+
+\subsection{DataLink-1.0}
+
+Detailed evolution up to version 1.0 described below.
 
 \subsection{PR-DataLink-1.0-20150413}
 
