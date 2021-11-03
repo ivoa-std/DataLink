@@ -719,15 +719,11 @@ be provided.  It is recommended to include such an element to help users
 and applications to identify VOTables as results of DataLink services
 this way:
 \begin{verbatim}
-
-<RESOURCE type="results" 
-
-... 
-
-<INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.0"/> 
-
-... 
-
+<RESOURCE type="results">
+  ... 
+  <INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.0"/> 
+  ... 
+</RESOURCE>
 \end{verbatim}
 
 
@@ -827,8 +823,8 @@ A resource of this type has no tabular data,
 but may include a rich set of metadata. The utype attribute makes it
 easy for clients to find the RESOURCE elements that describe services.
 
-In case a response contains several ``descriptor'' RESOURCES
-and several ``results'' RESOURCES these RESOURCES MAY be nested in
+In case a response contains several ``descriptor'' RESOURCEs
+and several ``results'' RESOURCEs these RESOURCEs MAY be nested in
 order to better display correct association.
 
 A service resource contains PARAM elements to describe the service and
