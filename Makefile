@@ -7,7 +7,7 @@ DOCNAME = DataLink
 DOCVERSION = 1.1
 
 # Publication date, ISO format; update manually for "releases"
-DOCDATE = 2021-10-19
+DOCDATE = 2021-11-04
 
 # What is it you're writing: NOTE, WD, PR, REC, PEN, or EN
 DOCTYPE = WD
