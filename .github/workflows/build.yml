@@ -15,6 +15,7 @@ jobs:
         submodules: true
     - name: Setup dependencies
       run: |
+        sudo add-apt-repository ppa:inkscape.dev/stable
         sudo apt update
         sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc ghostscript cm-super librsvg2-bin inkscape
       
