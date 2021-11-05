@@ -429,11 +429,11 @@ Services may include other MIME type parameters in the response.
 
 When providing a column with URLs, for example outside DAL service
 responses or when service descriptors  are not defined, if all the
-URLs are to a DataLink \blinks endpoint, then the preferred approach
+URLs are to a DataLink {\blinks} endpoint, then the preferred approach
 is to add a LINK element with the content type defined above. 
 
-If some values are to a \blinks endpoint and others to
-different content types (e.g. single file download), then the VOTable
+If some values are to a {\blinks} endpoint and others to
+different content types (e.g.\ single file download), then the VOTable
 would need a second column to convey the content type.
 ObsCore utypes for access\_url and access\_format SHOULD 
 be added to the appropriate corresponding columns in the table  for
@@ -684,8 +684,8 @@ values are:
 \verb|true| : current user is authorized
 
 If the value is \verb|false| and the caller tries to use the link anyway, it may be 
-challenged for credentials (e.g. HTTP 401 response with WWW-Authenticate header) or 
-denied (e.g. HTTP 403 ``permission denied'').
+challenged for credentials (e.g.\ HTTP 401 response with WWW-Authenticate header) or 
+denied (e.g.\ HTTP 403 ``permission denied'').
 
 If the value is \verb|true|, the caller should proceed with the same authentication
 and should expect to succeed.
