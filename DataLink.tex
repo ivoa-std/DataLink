@@ -1090,14 +1090,14 @@ informative user interfaces.
     utype="adhoc:service">
   <GROUP name="inputParams">
     <PARAM arraysize="*" datatype="char" name="ID" 
-      ucd="meta.id;meta.main" 
-      value="ivo://org.gavo.dc/~?feros/data/f08751.fits">
-      <DESCRIPTION>The pubisher DID of the dataset of 
+           ucd="meta.id;meta.main" 
+           value="ivo://org.gavo.dc/~?feros/data/f08751.fits">
+      <DESCRIPTION>The publisher DID of the dataset of 
         interest</DESCRIPTION>
     </PARAM>
     <PARAM arraysize="*" datatype="char" name="FLUXCALIB" 
-      ucd="phot.calib" utype="ssa:Char.FluxAxis.Calibration" 
-      value="">
+           ucd="phot.calib" utype="ssa:Char.FluxAxis.Calibration" 
+           value="">
       <DESCRIPTION>Recalibrate the spectrum.  Right now, 
         the only recalibration supported is max(flux)=1 
         ('RELATIVE').</DESCRIPTION>
@@ -1107,8 +1107,8 @@ informative user interfaces.
       </VALUES>
     </PARAM>
     <PARAM arraysize="2" datatype="double" name="BAND" 
-      ucd="em.wl" unit="m" value="" 
-      xtype="interval">
+           ucd="em.wl" unit="m" value="" 
+           xtype="interval">
       <DESCRIPTION>Spectral cutout interval</DESCRIPTION>
       <VALUES>
         <MIN value="3.52631986e-07"/>
@@ -1116,13 +1116,13 @@ informative user interfaces.
       </VALUES>
     </PARAM>
     <PARAM arraysize="*" datatype="char" name="FORMAT" 
-      ucd="meta.code.mime" utype="ssa:Access.Format" value="">
+           ucd="meta.code.mime" utype="ssa:Access.Format" value="">
       <DESCRIPTION>MIME type of the output format</DESCRIPTION>
       <VALUES>
         <OPTION name="VOTable, binary encoding" 
-          value="application/x-votable+xml"/>
+                value="application/x-votable+xml"/>
         <OPTION name="VOTable, tabledata encoding" 
-          value="application/x-votable+xml;serialization=tabledata"/>
+                value="application/x-votable+xml;serialization=tabledata"/>
         <OPTION name="Tab separated values" value="text/plain"/>
         <OPTION name="Comma separated values" value="text/csv"/>
         <OPTION name="FITS binary table" value="application/fits"/>
@@ -1130,12 +1130,11 @@ informative user interfaces.
     </PARAM>
   </GROUP>
   <PARAM arraysize="*" datatype="char" name="accessURL" 
-    ucd="meta.ref.url" 
-    value="http://dc.zah.uni-heidelberg.de/feros/q/sdl/dlget"/>
+         ucd="meta.ref.url" 
+         value="http://dc.zah.uni-heidelberg.de/feros/q/sdl/dlget"/>
   <PARAM arraysize="*" datatype="char" name="standardID" 
-    value="ivo://ivoa.net/std/SODA#sync-1.0"/>
+         value="ivo://ivoa.net/std/SODA#sync-1.0"/>
 </RESOURCE>
-
 \end{verbatim}
 }
 
