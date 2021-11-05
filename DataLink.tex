@@ -242,7 +242,7 @@ interface, allowing scenarios like ``give me all voxels around positions
 X in wavelength range Y of all spectral cubes from services Z\_1, Z\_2,
 and Z\_9''.
 
-Access data services may  be custom services with peculiar functionalities 
+Access data services may be custom services with peculiar functionalities 
 or IVOA standard services. The IVOA access data service standard is
 SODA \citep{2017ivoa.spec.0517B}.
 SODA services should  be described in the same
@@ -426,7 +426,6 @@ Services may include other MIME type parameters in the response.
 
 \subsubsection{DataLink recognition outside the context
                of DAL discovery services responses}
-
 
 When providing a column with URLs, for example outside DAL service
 responses or when service descriptors  are not defined, if all the
@@ -891,7 +890,7 @@ invoking the service.
 
 In case the contentType is ``text/html'' the client SHOULD send the result 
 of the service query to a web browser.  This is appropriate for both HTML
- documents or web interactive interface. 
+documents or web interactive interface. 
  
 A service descriptor may contain more than a single exampleURL.
 In exampleURL PARAMs, operators can give valid service calls as GET-able
@@ -949,14 +948,12 @@ is described by the following resource:
             value="application/x-votable+xml;content=datalink" />
      <PARAM name="exampleURL" datatype="char" arraysize="*" 
             value="http://example.com/mylinks?ID=%22NGC%206946%22" />       
-
      <GROUP name="inputParams">
        <PARAM name="ID" datatype="char" arraysize="*"
               value="" ref="primaryID"/>
      </GROUP>
    </RESOURCE>
 \end{verbatim}
-
 
 Clients that want to find services to operate on the results would look
 for resources with \attval{type}{meta} and \attval{utype}{adhoc:service}.
@@ -971,7 +968,7 @@ the result table). The URL to call the service would be:
 \end{verbatim}
 
 Note that here exampleURL states for a URL of the service actually retrieving
- \blinks\ response for the provided ID value. 
+\blinks\ response for the provided ID value. 
  
 Although this version of DataLink only has one parameter (ID), using a
 GROUP and providing the service parameter name allows this recipe to be
