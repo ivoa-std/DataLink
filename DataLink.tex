@@ -242,9 +242,11 @@ interface, allowing scenarios like ``give me all voxels around positions
 X in wavelength range Y of all spectral cubes from services Z\_1, Z\_2,
 and Z\_9''.
 
-Access data services may  be custom services with peculiar functionalities 
-or IVOA standard services. The IVOA access data service standard is SODA \citep{2017ivoa.spec.0517B}. SODA services should  be described in the same
- way than custom access data services.
+Access data services may be custom services with peculiar functionalities 
+or IVOA standard services. The IVOA access data service standard is
+SODA \citep{2017ivoa.spec.0517B}.
+SODA services should  be described in the same
+way as custom access data services.
 
 \subsubsection{Recursive DataLink}
 
@@ -422,16 +424,16 @@ unless the caller has explicitly requested a specific value
 via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 Services may include other MIME type parameters in the response.
 
-\subsubsection{DataLink recognition outside the context of DAL discovery services responses}
-
+\subsubsection{DataLink recognition outside the context
+               of DAL discovery services responses}
 
 When providing a column with URLs, for example outside DAL service
 responses or when service descriptors  are not defined, if all the
-URLs are to a DataLink \blinks endpoint, then the preferred approach
+URLs are to a DataLink {\blinks} endpoint, then the preferred approach
 is to add a LINK element with the content type defined above. 
 
-If some values are to a \blinks endpoint and others to
-different content types (e.g. single file download), then the VOTable
+If some values are to a {\blinks} endpoint and others to
+different content types (e.g.\ single file download), then the VOTable
 would need a second column to convey the content type.
 ObsCore utypes for access\_url and access\_format SHOULD 
 be added to the appropriate corresponding columns in the table  for
@@ -525,11 +527,11 @@ The ID column contains the input identifier value.
 The access\_url column may contain a URL to download a single resource.
 This URL can be a link to a dynamic resource (e.g.\ preview generation).
 
-Beside dereferencable URL, it is allowed to use URI-fragments to link
+Beside dereferencable URLs, it is allowed to use URI-fragments to link
 the intial resource to a specific part of the retrievable resource, with
 its specific semantics and description. Examples of this are section
 in an html page or paths in an archive file or extensions in a MEF.
-The interpretation of the fragment will depend from the content type
+The interpretation of the fragment will depend on the content type
 of the retrievable resource.  No other additional parameters or client
 handling are allowed.
 
@@ -682,8 +684,8 @@ values are:
 \verb|true| : current user is authorized
 
 If the value is \verb|false| and the caller tries to use the link anyway, it may be 
-challenged for credentials (e.g. HTTP 401 response with WWW-Authenticate header) or 
-denied (e.g. HTTP 403 ``permission denied'').
+challenged for credentials (e.g.\ HTTP 401 response with WWW-Authenticate header) or 
+denied (e.g.\ HTTP 403 ``permission denied'').
 
 If the value is \verb|true|, the caller should proceed with the same authentication
 and should expect to succeed.
@@ -888,9 +890,15 @@ invoking the service.
 
 In case the contentType is ``text/html'' the client SHOULD send the result 
 of the service query to a web browser.  This is appropriate for both HTML
- documents or web interactive interface. 
+documents or web interactive interface. 
  
-A service descriptor may contain more than a single exampleURL. In exampleURL PARAMs, operators can give valid service calls as GET-able URLs in the PARAMs' value attributes. They are intended as an aid for debugging, in particular to aid users and developers in making sure a service is still operating as expected. The PARAM's description should give an indication of what the call will result in. End-user clients might indicate exampleURLs to the user after service failures.
+A service descriptor may contain more than a single exampleURL.
+In exampleURL PARAMs, operators can give valid service calls as GET-able
+URLs in the PARAMs' value attributes. They are intended as an aid for
+debugging, in particular to aid users and developers in making sure a
+service is still operating as expected. The PARAM's description should
+give an indication of what the call will result in. End-user clients
+might indicate exampleURLs to the user after service failures.
 
 A GROUP with \attval{name}{inputParams} contains PARAM elements describing
 how to invoke the service. For services where the parameter values
@@ -939,15 +947,13 @@ is described by the following resource:
      <PARAM name="contentType" datatype="char" arraysize="*" 
             value="application/x-votable+xml;content=datalink" />
      <PARAM name="exampleURL" datatype="char" arraysize="*" 
-            value="http://example.com/mylinks?ID=%22NGC%206946%22" />       
-
+            value="http://example.com/mylinks?ID=NGC%206946" />       
      <GROUP name="inputParams">
        <PARAM name="ID" datatype="char" arraysize="*"
               value="" ref="primaryID"/>
      </GROUP>
    </RESOURCE>
 \end{verbatim}
-
 
 Clients that want to find services to operate on the results would look
 for resources with \attval{type}{meta} and \attval{utype}{adhoc:service}.
@@ -961,8 +967,9 @@ the result table). The URL to call the service would be:
    http://example.com/datalink/mylinks?ID=<obs_publisher_did value>
 \end{verbatim}
 
-Note that here exampleURL states for a URL of the service actually retrieving
- \blinks\ response for the provided ID value. 
+The exampleURL value in the example above provides an example
+of a URL that use of this service descriptor could produce;
+it should resolve to produce an actual result.
  
 Although this version of DataLink only has one parameter (ID), using a
 GROUP and providing the service parameter name allows this recipe to be
@@ -1084,14 +1091,14 @@ informative user interfaces.
     utype="adhoc:service">
   <GROUP name="inputParams">
     <PARAM arraysize="*" datatype="char" name="ID" 
-      ucd="meta.id;meta.main" 
-      value="ivo://org.gavo.dc/~?feros/data/f08751.fits">
-      <DESCRIPTION>The pubisher DID of the dataset of 
+           ucd="meta.id;meta.main" 
+           value="ivo://org.gavo.dc/~?feros/data/f08751.fits">
+      <DESCRIPTION>The publisher DID of the dataset of 
         interest</DESCRIPTION>
     </PARAM>
     <PARAM arraysize="*" datatype="char" name="FLUXCALIB" 
-      ucd="phot.calib" utype="ssa:Char.FluxAxis.Calibration" 
-      value="">
+           ucd="phot.calib" utype="ssa:Char.FluxAxis.Calibration" 
+           value="">
       <DESCRIPTION>Recalibrate the spectrum.  Right now, 
         the only recalibration supported is max(flux)=1 
         ('RELATIVE').</DESCRIPTION>
@@ -1101,8 +1108,8 @@ informative user interfaces.
       </VALUES>
     </PARAM>
     <PARAM arraysize="2" datatype="double" name="BAND" 
-      ucd="em.wl" unit="m" value="" 
-      xtype="interval">
+           ucd="em.wl" unit="m" value="" 
+           xtype="interval">
       <DESCRIPTION>Spectral cutout interval</DESCRIPTION>
       <VALUES>
         <MIN value="3.52631986e-07"/>
@@ -1110,13 +1117,13 @@ informative user interfaces.
       </VALUES>
     </PARAM>
     <PARAM arraysize="*" datatype="char" name="FORMAT" 
-      ucd="meta.code.mime" utype="ssa:Access.Format" value="">
+           ucd="meta.code.mime" utype="ssa:Access.Format" value="">
       <DESCRIPTION>MIME type of the output format</DESCRIPTION>
       <VALUES>
         <OPTION name="VOTable, binary encoding" 
-          value="application/x-votable+xml"/>
+                value="application/x-votable+xml"/>
         <OPTION name="VOTable, tabledata encoding" 
-          value="application/x-votable+xml;serialization=tabledata"/>
+                value="application/x-votable+xml;serialization=tabledata"/>
         <OPTION name="Tab separated values" value="text/plain"/>
         <OPTION name="Comma separated values" value="text/csv"/>
         <OPTION name="FITS binary table" value="application/fits"/>
@@ -1124,12 +1131,11 @@ informative user interfaces.
     </PARAM>
   </GROUP>
   <PARAM arraysize="*" datatype="char" name="accessURL" 
-    ucd="meta.ref.url" 
-    value="http://dc.zah.uni-heidelberg.de/feros/q/sdl/dlget"/>
+         ucd="meta.ref.url" 
+         value="http://dc.zah.uni-heidelberg.de/feros/q/sdl/dlget"/>
   <PARAM arraysize="*" datatype="char" name="standardID" 
-    value="ivo://ivoa.net/std/SODA#sync-1.0"/>
+         value="ivo://ivoa.net/std/SODA#sync-1.0"/>
 </RESOURCE>
-
 \end{verbatim}
 }
 
@@ -1238,15 +1244,6 @@ the descriptors is likely to be unreliable (e.g.\ if providers use HTTP
 redirects to make old URLs work when service deployment changes).
 
 
-
-\begin{verbatim} 
-<FIELD name="bla" datatype="char" arraysize="*" utype="Access.reference" ucd="meta.url" > 
-  <LINK content-type="application/x-votable+xml;content=datalink" title="DataLink" /> 
-  <DESCRIPTION> bla bla bla </DESCRIPTION> 
-</FIELD>
-\end{verbatim}
-
-
 \section{Changes}
 
 \subsection{DataLink-1.1}
@@ -1258,6 +1255,7 @@ the product-type vocabulary
 is necessary to use the link
 \item clarified use of multiple ID values and possible OVERFLOW
 \item clarified use of utype for self-describing service descriptors
+\item clarified use of semantics
 \item generalize by adding use cases for links to content other than data files 
 \item added using LINK to convey when datalink request URL is in a table column
 \item service descriptors can include a contentType param to describe service
