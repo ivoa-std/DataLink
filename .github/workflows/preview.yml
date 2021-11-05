@@ -23,11 +23,13 @@ jobs:
     - name: Setup dependencies
       run: |
         sudo apt update
-        sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc latexmk cm-super
+        sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc latexmk cm-super inkscape
         sudo snap install pdftk
     
     - name: Build the document
-      run: make ${{ env.doc_name }}-draft.pdf
+      run: |
+        inkscape --version
+        make role_diagram.pdf ${{ env.doc_name }}-draft.pdf
     
     - name: Check the output
       run: |
