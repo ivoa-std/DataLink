@@ -928,7 +928,8 @@ and units attributes and a child DESCRIPTION element. In addition, the PARAM ele
 for additional child elements (such as MIN, MAX, or OPTIONS) to convey sensible constraints 
 on possible values. In general, services maybe have parameters of this type that are optional
 or required and this distinction is not currently described. Clients should assume that these
-user-specified parameters are optional and services should respond with an informative error
+user-specified parameters are optional, but that specifiying at least one of them is necessary 
+to have the service do something useful. Services should respond with an informative error
 message if the input is not adequate to perform the operations(s).
 
 \subsection{Example: Service Descriptor for the \blinks\ Capability}
