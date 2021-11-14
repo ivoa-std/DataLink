@@ -398,6 +398,11 @@ either a VOResource record or a VOSI capabilities element:
 </capability>
 \end{verbatim}
 
+\subsection{VOSI}
+
+Since DataLink services are not usually registered, the VOSI-capabilities endpoint
+is not required; the VOSI-availability endpoint is optional.
+
 \section{\blinks\ Response}
 
 All responses from the \blinks\ endpoint follow the rules for DALI-sync
@@ -808,27 +813,24 @@ figure out how to invoke them. This is done by including an additional
 metadata resource in the response document to describe each type of
 service that can be used.
 
-The same mechanism can also be used in any VOTable document, such
+Here we describe how to construct a resource that describes a service
+and add it to a VOTable document. This ``service descritor'' mechanism can also 
+be used in any VOTable document, such
 as a data discovery response from a TAP query or one of the simple
 DAL query protocols, to enable clients to find and use the \blinks\
-capability itself.
-
-Here we describe how to construct a resource that describes a service
-and add it to a VOTable document. The mechanism is general and can be
-used wherever a VOTable document is created.
-
+service directly.
 
 \subsection{Service Resources}
 \label{sec:serviceResources}
 
 In a data discovery response, one RESOURCE element (usually the first)
 will have an attribute \attval{type}{results} and tabular data; this resource
-contains the query result.
-
-To describe an associated service, the VOTable would also
-contain one or more resources with attribute \attval{type}{meta} and
+contains the query result. To describe an associated service, the VOTable documement
+would also contain one or more resources with attribute \attval{type}{meta} and
 \attval{utype}{adhoc:service}  (or \attval{utype}{adhoc:this} in case of
-a Self-Describing service --- see \ref{sec:selfDescribing}).
+a self-describing service --- see \ref{sec:selfDescribing}). A resource of this 
+type has no tabular data, but may include a rich set of metadata. The utype attribute 
+makes it easy for clients to find the RESOURCE elements that describe services.
 
 A short name attribute, and a more verbose DESCRIPTION  subelement,
 MAY be added to the service descriptor RESOURCE to  provide the user
@@ -836,34 +838,31 @@ with information about the service's purpose or  semantics. This SHOULD
 be done if the semantics are not obvious,  and especially in the case
 of multiple sibling service  descriptors, or non-standard services.
 
-A resource of this type has no tabular data,
-but may include a rich set of metadata. The utype attribute makes it
-easy for clients to find the RESOURCE elements that describe services.
-
-In case a response contains several ``descriptor'' RESOURCEs
-and several ``results'' RESOURCEs these RESOURCEs MAY be nested in
+In cases where a response document contains several ``service descriptor'' RESOURCEs
+and several ``results'' RESOURCEs, these RESOURCEs MAY be nested in
 order to better display correct association.
 
-A service resource contains PARAM elements to describe the service and
-a GROUP element with additional PARAM elements to describe the input
-parameters.
+\subsection{Descriptive PARAMs}
+
+A service resource contains PARAM elements to describe the service.
 The standard PARAM elements for a {\em service\/} resource
 are described in Table \ref{tab:serviceParams}.
+
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|l|}
 \sptablerule
-{\bf name}  &  {\bf value}  & {\bf required}  \\
+{\bf name}          &  {\bf value}                          & {\bf required}  \\
 \sptablerule
-accessURL           & URL to invoke the capability   &  yes  \\
-standardID          & URI for the capability         &  no   \\
-resourceIdentifier  & IVOA registry identifier       &  no   \\
-contentType	    & Media type of the service response & no \\
-exampleURL     & example of described service  URL & no \\
+accessURL           & URL to invoke the capability          &  yes  \\
+standardID          & URI for the capability                &  no   \\
+resourceIdentifier  & IVOA registry identifier              &  no   \\
+contentType	        & Media type of the service response    & no \\
+exampleURL          & example invocation of the service     & no \\
 \sptablerule
 \end{tabular}
 \end{center}
-\caption{Service Resource Parameters}
+\caption{Parameters Describing the Service}
 \label{tab:serviceParams}
 \end{table}
 
@@ -888,26 +887,49 @@ may be used. Since the accessURL may contain parameters, clients must
 parse the URL to decide how to append additional parameters when
 invoking the service.
 
-In case the contentType is ``text/html'' the client SHOULD send the result 
+In case the contentType is ``text/html'', the client SHOULD send the result 
 of the service query to a web browser.  This is appropriate for both HTML
 documents or web interactive interface. 
  
-A service descriptor may contain more than a single exampleURL.
+A service descriptor may contain multiple exampleURL PARAMs.
 In exampleURL PARAMs, operators can give valid service calls as GET-able
-URLs in the PARAMs' value attributes. They are intended as an aid for
+URLs in the PARAMs' value attribute. They are intended as an aid for
 debugging, in particular to aid users and developers in making sure a
-service is still operating as expected. The PARAM's description should
+service is still operating as expected. The PARAM description should
 give an indication of what the call will result in. End-user clients
-might indicate exampleURLs to the user after service failures.
+might indicate exampleURLs to the user after unexpected service failures.
 
-A GROUP with \attval{name}{inputParams} contains PARAM elements describing
-how to invoke the service. For services where the parameter values
-come from columns in the results resource, we use the ref attribute of
-the PARAM to indicate the FIELD (column) with the values. Other PARAM
-elements (without a ref attribute) are also allowed; these would describe
-additional service parameters, the type of value that must be specified,
-the meaning (UCD) of the value they apply to, etc.
+\subsection{Input PARAMs}
 
+A service descriptor must contain a GROUP element with \attval{name}{inputParams} 
+to describe user-specified input parameters of the service. There are three types of 
+input params: params with a fixed value, params where the values come from the 
+``results'', and params where the value is variable and chosen/specified by the user.
+
+For params with a fixed value (e.g. \attval{fly}{true}), the client {\bf must}
+treat it as a required parameter and include it in the service invocation; this allows
+a service implementor to include constant params explicitly (and describe them via a 
+DESCRIPTION element) rather than just include them in the ``accessURL'' without the
+possibility to explain them.
+
+For services where the parameter value(s) come from the ``results'' resource, the value 
+attribute is empty (\attval{value}{}) and the PARAM includes a ref attribute to indicate 
+the FIELD (column) that contains the values. For example, a TAP query result may contain 
+identifiers that can be used to invoke the {links} service; the FIELD with the identifiers 
+must have an XML ID attribute (e.g. \attval{ID}{abc}) and the input PARAM would include 
+the attribute \attval{ref}{abc}). When this mechanism is used, the client {\bf must}
+treat it as a required parameter and the parameter and value {\bf must} be included in 
+the service invocation.
+
+For user-specified input PARAMs the value attribute is normally empty (\attval{value}{}) 
+and the user supplies the value(s). The PARAM specifies the type of value required via 
+the datatype, arraysize, and xtype attributes; this may be augmented further by the ucd 
+and units attributes and a child DESCRIPTION element. In addition, the PARAM element allows 
+for additional child elements (such as MIN, MAX, or OPTIONS) to convey sensible constraints 
+on possible values. In general, services maybe have parameters of this type that are optional
+or required and this distinction is not currently described. Clients should assume that these
+user-specified parameters are optional and services should respond with an informative error
+message if the input is not adequate to perform the operations(s).
 
 \subsection{Example: Service Descriptor for the \blinks\ Capability}
 
