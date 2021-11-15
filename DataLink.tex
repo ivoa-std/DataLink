@@ -814,7 +814,7 @@ metadata resource in the response document to describe each type of
 service that can be used.
 
 Here we describe how to construct a resource that describes a service
-and add it to a VOTable document. This ``service descritor'' mechanism can also 
+and add it to a VOTable document. This ``service descriptor'' mechanism can also 
 be used in any VOTable document, such
 as a data discovery response from a TAP query or one of the simple
 DAL query protocols, to enable clients to find and use the \blinks\
@@ -889,7 +889,7 @@ invoking the service.
 
 In case the contentType is ``text/html'', the client SHOULD send the result 
 of the service query to a web browser.  This is appropriate for both HTML
-documents or web interactive interface. 
+documents and web interactive interfaces. 
  
 A service descriptor may contain multiple exampleURL PARAMs.
 In exampleURL PARAMs, operators can give valid service calls as GET-able
@@ -926,9 +926,9 @@ and the user supplies the value(s). The PARAM specifies the type of value requir
 the datatype, arraysize, and xtype attributes; this may be augmented further by the ucd 
 and units attributes and a child DESCRIPTION element. In addition, the PARAM element allows 
 for additional child elements (such as MIN, MAX, or OPTIONS) to convey sensible constraints 
-on possible values. In general, services maybe have parameters of this type that are optional
+on possible values. In general, services may have parameters of this type that are optional
 or required and this distinction is not currently described. Clients should assume that these
-user-specified parameters are optional, but that specifiying at least one of them is necessary 
+user-specified parameters are optional, but that specifying at least one of them is necessary 
 to have the service do something useful. Services should respond with an informative error
 message if the input is not adequate to perform the operations(s).
 
