@@ -814,11 +814,12 @@ metadata resource in the response document to describe each type of
 service that can be used.
 
 Here we describe how to construct a resource that describes a service
-and add it to a VOTable document. This ``service descriptor'' mechanism can also 
+and add it to a VOTable document. This ``service descriptor'' mechanism can  
 be used in any VOTable document, such
 as a data discovery response from a TAP query or one of the simple
-DAL query protocols, to enable clients to find and use the \blinks\
-service directly.
+DAL query protocols. These linked services may be the \blinks\ endpoint described 
+above, other IVOA services, custom services, or other kinds of internet resources
+like web pages (e.g. interactive applications, DOI landing pages, documentation).
 
 \subsection{Service Resources}
 \label{sec:serviceResources}
@@ -921,13 +922,14 @@ the attribute \attval{ref}{abc}). When this mechanism is used, the client {\bf m
 treat it as a required parameter and the parameter and value {\bf must} be included in 
 the service invocation.
 
-For user-specified input PARAMs the value attribute is normally empty (\attval{value}{}) 
+For user-specified input PARAMs the value attribute is empty (\attval{value}{}) 
 and the user supplies the value(s). The PARAM specifies the type of value required via 
 the datatype, arraysize, and xtype attributes; this may be augmented further by the ucd 
 and units attributes and a child DESCRIPTION element. In addition, the PARAM element allows 
 for additional child elements (such as MIN, MAX, or OPTIONS) to convey sensible constraints 
 on possible values. In general, services may have parameters of this type that are optional
-or required and this distinction is not currently described. Clients should assume that these
+or required and this distinction is not currently described; services should use a child 
+DESCRIPTION element to document requirements. Clients should assume that these
 user-specified parameters are optional, but that specifying at least one of them is necessary 
 to have the service do something useful. Services should respond with an informative error
 message if the input is not adequate to perform the operations(s).
