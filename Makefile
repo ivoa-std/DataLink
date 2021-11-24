@@ -1,4 +1,5 @@
 # ivoatex Makefile.  The ivoatex/README for the targets available.
+AUTHOR_EMAIL = pdowler.cadc@gmail.com
 
 # short name of your document (edit $DOCNAME.tex; would be like RegTAP)
 DOCNAME = DataLink
