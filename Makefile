@@ -1,5 +1,4 @@
 # ivoatex Makefile.  The ivoatex/README for the targets available.
-AUTHOR_EMAIL = pdowler.cadc@gmail.com
 
 # short name of your document (edit $DOCNAME.tex; would be like RegTAP)
 DOCNAME = DataLink
@@ -15,11 +14,11 @@ DOCTYPE = WD
 
 # An e-mail address of the person doing the submission to the document
 # repository (can be empty until a make upload is being made)
-AUTHOR_EMAIL=
+AUTHOR_EMAIL = pdowler.cadc@gmail.com
 
 # Source files for the TeX document (but the main file must always
 # be called $(DOCNAME).tex
-SOURCES = $(DOCNAME).tex
+SOURCES = $(DOCNAME).tex role_diagram.pdf
 
 # List of image files to be included in submitted package (anything that
 # can be rendered directly by common web browsers)
