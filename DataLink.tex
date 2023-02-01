@@ -423,7 +423,7 @@ DataLink URL and a parameterised VOTable MIME type:
    application/x-votable+xml;content=datalink
 \end{verbatim}
 to denote that the response from that URL is a DataLink response.
-This is also the MIME type for the \blinks\ response
+This is also the preferred MIME type for the \blinks\ response
 (see \ref{sec:successfulRequests})
 unless the caller has explicitly requested a specific value
 via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
@@ -504,7 +504,7 @@ represents one link and must have exactly one of:
 \end{itemize}
 
 To facilitate consumption of large datalink results in streaming mode, all links 
-for a single ID value MUST be served in consecutive rows in the output.
+for a single ID value {\bf must} be served in consecutive rows in the output.
 
 If an error occurs while processing an ID value, there should be at least
 one row for that ID value and an error\_message. For example, if an input
@@ -707,9 +707,10 @@ or in the default format for the service. The content of the response
 with some additional details below.
 
 Unless the incoming request included a RESPONSEFORMAT parameter requesting
-a different format, the content-type header of the response MUST be
-``application/x-votable+xml'' with the
-``content'' parameter set to ``datalink'',
+a different format, the content-type header of the response MAY be any value
+allowed by the VOTable specification, which at the time of this writing includes
+``application/x-votable+xml'' and ``text/xml''. The former value is preferred
+and SHOULD be augmented with the ``content'' parameter set to ``datalink'',
 with the canonical form given in \ref{sec:mime}
 strongly recommended. Contrary to
 all other uses of the string given in \ref{sec:mime},
@@ -735,19 +736,22 @@ and supported by the implementation.
 The name and UCD attributes for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
-The DALI specification states that a standardID INFO element with
-name ``standardID'' and the actual standardID string as a value SHOULD
-be provided.  It is recommended to include such an element to help users
-and applications to identify VOTables as results of DataLink services
-this way:
+The DALI specification states that VOTable output should include an
+INFO element with \attval{name}{standardID} and the standardID string as a value.
 \begin{verbatim}
 <RESOURCE type="results">
   ... 
   <INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.0"/> 
   ... 
+  <TABLE>
+  ...
+  </TABLE>
+  ...
 </RESOURCE>
 \end{verbatim}
-
+As of this version, the {links} response {\bf must} include this INFO element
+so that a table of links is easily identified by users and applications when
+initially received from the service and if saved for later use.
 
 \subsubsection{Other Output Formats}
 
@@ -945,12 +949,12 @@ In order for the service resource to refer to this FIELD,
 the FIELD element describing this column of the table
 {\bf must} include an XML ID attribute
 that uniquely identifies the FIELD (column).
-For example, a response following the ObsCore-1.0 data model
+For example, a response following the ObsCore-1.1 data model
 would use the following:
 \begin{verbatim}
    <FIELD name="obs_publisher_did" ID="primaryID"
           utype="obscore:Curation.PublisherDID"
-          ucd="meta.ref.url;meta.curation"
+          ucd="meta.ref.ivoid"
           datatype="char" arraysize="256*" />
 \end{verbatim}
 where the ID value {\em primaryID\/} is arbitrary.
