@@ -365,7 +365,7 @@ Note this is applicable to endpoints following any version 1.*
 of the DataLink standard, to avoid backward compatibility problems.
 
 This specification does not constrain the capability type used in such
-declarations.  The access URL of the \blinks~endpoint must be given in a
+declarations.  The access URL of the \blinks\ endpoint must be given in a
 \xmlel{vs:ParamHTTP}-typed interface element.
 
 Hence, a single datalink capability could be declared as follows within
@@ -707,8 +707,8 @@ or in the default format for the service. The content of the response
 with some additional details below.
 
 Unless the incoming request included a RESPONSEFORMAT parameter requesting
-a different format, the content-type header of the response MAY be any value
-allowed by the VOTable specification, which at the time of this writing includes
+a different format, the content-type header of the response {\bf must} be one of the 
+values allowed by the VOTable specification, which at the time of this writing includes
 ``application/x-votable+xml'' and ``text/xml''. The former value is preferred
 and SHOULD be augmented with the ``content'' parameter set to ``datalink'',
 with the canonical form given in \ref{sec:mime}
@@ -749,9 +749,9 @@ INFO element with \attval{name}{standardID} and the standardID string as a value
   ...
 </RESOURCE>
 \end{verbatim}
-As of this version, the {links} response {\bf must} include this INFO element
-so that a table of links is easily identified by users and applications when
-initially received from the service and if saved for later use.
+From version 1.1 of this standard, the \blinks\ response {\bf must} include this 
+INFO element so that a table of links is easily identified by users and applications 
+when initially received from the service and if saved for later use.
 
 \subsubsection{Other Output Formats}
 
