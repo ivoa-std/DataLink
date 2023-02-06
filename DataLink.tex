@@ -25,11 +25,11 @@
 \newcommand{\blinks}{\{links\}}
 \newcommand{\attval}[2]{#1={\allowbreak}{"}#2{"}}
 
-\newcommand{\rfcmust}{\textbf{must }}
-\newcommand{\rfcshould}{\textbf{should }}
-\newcommand{\rfcmay}{\textbf{may }}
-\newcommand{\rfcrecommended}{\textbf{recommended }}
-\newcommand{\rfcoptional}{\textbf{optional }}
+\newcommand{\rfcmust}{\textbf{must}}
+\newcommand{\rfcshould}{\textbf{should}}
+\newcommand{\rfcmay}{\textbf{may}}
+\newcommand{\rfcrecommended}{\textbf{recommended}}
+\newcommand{\rfcoptional}{\textbf{optional}}
 
 \begin{document}
 
@@ -57,7 +57,7 @@ for their ideas, critical reviews, and contributions to this document.
 
 \section*{Conformance-related definitions}
 
-The words ``\rfcmust'', ``\rfcshould'', ``\rfcmay'', ``\rfcrecommended'', and
+The words ``\rfcmust\'', ``\rfcshould\'', ``\rfcmay\'', ``\rfcrecommended\'', and
 ``\rfcoptional'' (in upper or lower case) used in this document are to be
 interpreted as described in IETF standard RFC2119 \citep{std:RFC2119}.
 
@@ -308,20 +308,20 @@ below are mandatory.
 The ID parameter is used by the client to specify one or more
 identifiers. The service will return at least one link for each of the
 specified values. The ID values are found in data discovery services
-and \rfcmay be readable URIs or opaque strings. Submitting ID values in batches
+and \rfcmay\ be readable URIs or opaque strings. Submitting ID values in batches
 may be more efficient if the client is planning to submit many such values;
 clients can control the size of the output by limiting the number of ID values 
 they submit in each request.
 
-Services \rfcmay place a limit on the number of ID values they will process in one 
+Services \rfcmay\ place a limit on the number of ID values they will process in one 
 request. If the client submits more ID values than a service is prepared to
-process, the service \rfcshould process ID values up to the limit and
-\rfcmust include an overflow indicator in the output to denote that
+process, the service \rfcshould\ process ID values up to the limit and
+\rfcmust\ include an overflow indicator in the output to denote that
 the result is truncated as described in DALI.
-The service \rfcmust \textbf{not} truncate the output within the set of rows
+The service \rfcmust\ \textbf{not} truncate the output within the set of rows
 (links) for a single ID value.
 
-If the client submits no ID values, the service \rfcmust respond with a
+If the client submits no ID values, the service \rfcmust\ respond with a
 normal response (e.g.\ an empty results table for VOTable output).
 The service may include service descriptors
 (see \ref{sec:serviceDescriptors})
@@ -336,7 +336,7 @@ The RESPONSEFORMAT parameter is described in DALI;
 support for RESPONSEFORMAT is mandatory.
 
 The only output format required by this specification is VOTable with
-TABLEDATA serialization; services \rfcmust support this format. Clients
+TABLEDATA serialization; services \rfcmust\ support this format. Clients
 that want to get the standard (VOTable) output format should simply
 ignore this parameter.
 
@@ -349,7 +349,7 @@ off MIME type parameters and understand the following:
 \end{itemize}
 All of these result in the standard output format.
 
-Service implementers \rfcmay support additional output formats but \rfcmust follow
+Service implementers \rfcmay\ support additional output formats but \rfcmust\ follow
 the DALI specification if they chose any formats described there.
 
 
@@ -370,7 +370,7 @@ Note this is applicable to endpoints following any version 1.*
 of the DataLink standard, to avoid backward compatibility problems.
 
 This specification does not constrain the capability type used in such
-declarations.  The access URL of the \blinks\ endpoint \rfcmust be given in a
+declarations.  The access URL of the \blinks\ endpoint \rfcmust\ be given in a
 \xmlel{vs:ParamHTTP}-typed interface element.
 
 Hence, a single datalink capability could be declared as follows within
@@ -498,9 +498,9 @@ link\_authorized & caller is authorized to use the link
 \label{fig:linkFields}
 \end{table}
 
-Fields \rfcmust be present and values provided
+Fields \rfcmust\ be present and values provided
 (or null) as described in Table \ref{fig:linkFields}. Each row in the table
-represents one link and \rfcmust have exactly one of:
+represents one link and \rfcmust\ have exactly one of:
 \begin{itemize}
   \item an access\_url
   \item a service\_def
@@ -508,9 +508,9 @@ represents one link and \rfcmust have exactly one of:
 \end{itemize}
 
 To facilitate consumption of large datalink results in streaming mode, all links 
-for a single ID value \rfcmust be served in consecutive rows in the output.
+for a single ID value \rfcmust\ be served in consecutive rows in the output.
 
-If an error occurs while processing an ID value, there \rfcshould be at least
+If an error occurs while processing an ID value, there \rfcshould\ be at least
 one row for that ID value and an error\_message. For example, if an input
 ID value is not recognised or found, one row with an error\_message
 to that effect is sufficient.
@@ -519,7 +519,7 @@ but others cannot due to some temporary failure (e.g.\ service outage),
 then one could have one or more rows with the same ID and different
 error\_message(s).
 
-Services \rfcmay include additional columns; this can be used to include
+Services \rfcmay\ include additional columns; this can be used to include
 values that can be referenced from service descriptor input parameters
 (see \ref{sec:serviceResources}).
 
@@ -567,13 +567,13 @@ an ID to the descriptor.
 
 The error\_message column is used when no access\_url or service\_def can be generated for
 an input identifier. If an error\_message is included in the output, the
-only other columns with values \rfcshould be the ID column and the semantics
-column; all others \rfcmust be null.
+only other columns with values \rfcshould\ be the ID column and the semantics
+column; all others \rfcmust\ be null.
 
 
 \subsubsection{description}
 
-The description column \rfcshould contain a human-readable description of
+The description column \rfcshould\ contain a human-readable description of
 the link; it is intended for display by interactive applications and very
 important to help user distinguish links with same semantics (see below).
 
@@ -591,7 +591,7 @@ The value is always interpreted as a URI; relative URIs
 \citep{std:RFC3986} are completed using the base URI of the
 core DataLink vocabulary,
 \url{http://www.ivoa.net/rdf/datalink/core}.  Terms from this
-vocabulary \rfcmust always be written as relative URIs.  This means that for
+vocabulary \rfcmust\ always be written as relative URIs.  This means that for
 concepts from the core vocabulary, the value in the semantics column
 always starts with a hash.
 
@@ -606,11 +606,11 @@ this term is used to describe links available for the retrieval of the
 file(s) making up what ID references.
 
 Since NULL values are not permitted in the semantics column, when only
-an error\_message is supplied its value \rfcshould be the most appropriate
+an error\_message is supplied its value \rfcshould\ be the most appropriate
 for the link the service was trying to generate.
 
 For concepts outside the core DataLink vocabulary, the full concept URI
-\rfcmust be given.  It \rfcshould resolve to a human-readable document
+\rfcmust\ be given.  It \rfcshould\ resolve to a human-readable document
 describing what the concept means and what clients are expected to do
 with links annotated with it.
 
@@ -635,16 +635,16 @@ $$(
 The content\_type column tells the client the general file format
 (mime-type) they will receive if they use the link
 (access\_url or invoking a service).
-For recursive DataLink links, the content\_type value \rfcshould
+For recursive DataLink links, the content\_type value \rfcshould\
 be as specified in section \ref{sec:mime}.
-This field \rfcmay be null (blank) if the value is unknown.
+This field \rfcmay\ be null (blank) if the value is unknown.
 
 \subsubsection{content\_length}
 
 The content\_length column tells the client the size of the download
-if they use the link, in bytes. For VOTable, the FIELD \rfcmust be
+if they use the link, in bytes. For VOTable, the FIELD \rfcmust\ be
 \attval{datatype}{long} with \attval{unit}{byte}.
-The value \rfcmay be null (blank)
+The value \rfcmay\ be null (blank)
 if unknown and will typically be null for links to services.
 
 \subsubsection{content\_qualifier}
@@ -654,7 +654,7 @@ the client the nature of the thing or service they will receive or access
 if they use the link. 
 
 If the access\_url references a data product, the content\_qualifier
-field \rfcshould define its product type.  In that case, the considerations
+field \rfcshould\ define its product type.  In that case, the considerations
 for the semantics column (Sect.~\ref{sect:semantics}) apply, except that
 the basic vocabulary is \url{http://www.ivoa.net/rdf/product-type}, and
 the interpretation as an RDF triple would be $$(
@@ -678,12 +678,12 @@ to use the link. Valid values are:
 
 \verb|true| : authentication is required
 
-This field \rfcmay be null (blank) if the value is unknown.
+This field \rfcmay\ be null (blank) if the value is unknown.
 
 \subsubsection{link\_authorized}
 
 The link\_authorized column tells the client whether the currently authenticated 
-identity is authorized to use the link. For VOTable, the FIELD \rfcmust be
+identity is authorized to use the link. For VOTable, the FIELD \rfcmust\ be
 \attval{datatype}{boolean}. This is generally a prediction to save 
 clients from trying to use a link and getting a permission denied response. Valid 
 values are:
@@ -699,24 +699,24 @@ denied (e.g.\ HTTP 403 ``permission denied'').
 If the value is \verb|true|, the caller should proceed with the same authentication
 and should expect to succeed.
 
-This field \rfcmay be null (blank) if the value is unknown.
+This field \rfcmay\ be null (blank) if the value is unknown.
 
 \subsection{Successful Requests}
 \label{sec:successfulRequests}
 
-Successfully executed requests \rfcshould result in a response with HTTP
+Successfully executed requests \rfcshould\ result in a response with HTTP
 status code 200 (OK) and a response in the format requested by the client
 or in the default format for the service. The content of the response
 (for tabular formats) is described above,
 with some additional details below.
 
 Unless the incoming request included a RESPONSEFORMAT parameter requesting
-a different format, the content-type header of the response \rfcmust be one of the 
+a different format, the content-type header of the response \rfcmust\ be one of the 
 values allowed by the VOTable specification, which at the time of this writing includes
 ``application/x-votable+xml'' and ``text/xml''. The former value is preferred
 and SHOULD be augmented with the ``content'' parameter set to ``datalink'',
 with the canonical form given in \ref{sec:mime}
-strongly \rfcrecommended. Contrary to
+strongly \rfcrecommended\. Contrary to
 all other uses of the string given in \ref{sec:mime},
 clients wishing to evaluate
 the content type of the response must, however, perform a full parse
@@ -732,8 +732,8 @@ content-type follows the DALI rules.
 
 \subsubsection{VOTable output}
 
-The table of links \rfcmust be returned in a RESOURCE with
-\attval{type}{results}. The table \rfcmust be in TABLEDATA serialization
+The table of links \rfcmust\ be returned in a RESOURCE with
+\attval{type}{results}. The table \rfcmust\ be in TABLEDATA serialization
 unless another serialization is specifically requested
 (see \ref{sec:responseformat})
 and supported by the implementation.
@@ -753,7 +753,7 @@ INFO element with \attval{name}{standardID} and the standardID string as a value
   ...
 </RESOURCE>
 \end{verbatim}
-From version 1.1 of this standard, the \blinks\ response \rfcmust include this 
+From version 1.1 of this standard, the \blinks\ response \rfcmust\ include this 
 INFO element so that a table of links is easily identified by users and applications 
 when initially received from the service and if saved for later use.
 
@@ -772,13 +772,13 @@ to service failure (where no links can be generated) and to the usage
 error where no ID parameter is specified. Services should return the
 document format requested by the client (see \ref{sec:responseformat}).
 For the standard
-output format (VOTable) the error document \rfcmust also be VOTable.
+output format (VOTable) the error document \rfcmust\ also be VOTable.
 
 For errors that occur while generating individual links, each
 identifier may result in a link with only an error\_message
 as described above.
 In either case (error document or per-link error\_message),
-the error message \rfcmust start with one of the strings in
+the error message \rfcmust\ start with one of the strings in
 Table \ref{tab:errors}, in order of specificity.
 \begin{table}[ht]
 \begin{center}
@@ -798,7 +798,7 @@ DefaultFault   & Default failure (not covered above) \\
 \label{tab:errors}
 \end{table}
 
-In all cases, the service \rfcmay append additional useful information to the
+In all cases, the service \rfcmay\ append additional useful information to the
 error strings above.
 If there is additional text, it must be separated
 from the error string with a colon (:) character, for example:
@@ -886,7 +886,7 @@ used to find documentation, contact info, etc. Although they need not be,
 free or custom services could be registered in an IVOA registry and thus
 have a resourceIdentifier to enable lookup of the record.
 
-For standard services, the value of the accessURL PARAM \rfcmust be the
+For standard services, the value of the accessURL PARAM \rfcmust\ be the
 accessURL for the capability specified by the standardID. The accessURL
 is not generally usable as-is; the client must include extra parameters
 as described below. If a standardID indicates a capability that supports
@@ -901,22 +901,22 @@ In case the contentType is ``text/html'', the client SHOULD send the result
 of the service query to a web browser.  This is appropriate for both HTML
 documents and web interactive interfaces. 
  
-A service descriptor \rfcmay contain multiple exampleURL PARAMs.
+A service descriptor \rfcmay\ contain multiple exampleURL PARAMs.
 In exampleURL PARAMs, operators can give valid service calls as GET-able
 URLs in the PARAMs' value attribute. They are intended as an aid for
 debugging, in particular to aid users and developers in making sure a
-service is still operating as expected. The PARAM's description \rfcshould
+service is still operating as expected. The PARAM's description \rfcshould\
 give an indication of what the call will result in. End-user clients
 might indicate exampleURLs to the user after unexpected service failures.
 
 \subsection{Input PARAMs}
 
-A service descriptor \rfcmust contain a GROUP element with \attval{name}{inputParams} 
+A service descriptor \rfcmust\ contain a GROUP element with \attval{name}{inputParams} 
 to describe user-specified input parameters of the service. There are three types of 
 input params: params with a fixed value, params where the values come from the 
 ``results'', and params where the value is variable and chosen/specified by the user.
 
-For params with a fixed value (e.g. \attval{fly}{true}), the client \rfcmust
+For params with a fixed value (e.g. \attval{fly}{true}), the client \rfcmust\
 treat it as a required parameter and include it in the service invocation; this allows
 a service implementor to include constant params explicitly (and describe them via a 
 DESCRIPTION element) rather than just include them in the ``accessURL'' without the
@@ -926,9 +926,9 @@ For services where the parameter value(s) come from the ``results'' resource, th
 attribute is empty (\attval{value}{}) and the PARAM includes a ref attribute to indicate 
 the FIELD (column) that contains the values. For example, a TAP query result may contain 
 identifiers that can be used to invoke the {links} service; the FIELD with the identifiers 
-\rfcmust have an XML ID attribute (e.g. \attval{ID}{abc}) and the input PARAM would include 
-the attribute \attval{ref}{abc}). When this mechanism is used, the client \rfcmust
-treat it as a required parameter and the parameter and value \rfcmust be included in 
+\rfcmust\ have an XML ID attribute (e.g. \attval{ID}{abc}) and the input PARAM would include 
+the attribute \attval{ref}{abc}). When this mechanism is used, the client \rfcmust\
+treat it as a required parameter and the parameter and value \rfcmust\ be included in 
 the service invocation.
 
 For user-specified input PARAMs the value attribute is empty (\attval{value}{}) 
@@ -938,10 +938,10 @@ and units attributes and a child DESCRIPTION element. To allow for expressive, u
 interfaces, operators SHOULD indicate useful ranges of parameters in MIN and MAX children 
 or, for enumerated parameters, indicate the valid values in OPTIONS. In general, services 
 may have parameters of this type that are optional or required and this distinction is 
-not currently described; services \rfcshould use a child DESCRIPTION element to document any 
+not currently described; services \rfcshould\ use a child DESCRIPTION element to document any 
 requirements. Clients should assume that these user-specified parameters are optional, but 
 that specifying some of them may be necessary to have the service do something useful. 
-Services \rfcshould respond with an informative error message if the input is not adequate to 
+Services \rfcshould\ respond with an informative error message if the input is not adequate to 
 perform the operations(s).
 
 \subsection{Example: Service Descriptor for the \blinks\ Capability}
@@ -951,7 +951,7 @@ columns contains identifier values that can be used with the ID parameter
 (see \ref{sec:resourceId}).
 In order for the service resource to refer to this FIELD,
 the FIELD element describing this column of the table
-\rfcmust include an XML ID attribute
+\rfcmust\ include an XML ID attribute
 that uniquely identifies the FIELD (column).
 For example, a response following the ObsCore-1.1 data model
 would use the following:
@@ -1004,7 +1004,7 @@ the result table). The URL to call the service would be:
 
 The exampleURL value in the example above provides an example
 of a URL that use of this service descriptor could produce;
-it \rfcshould resolve to produce an actual result.
+it \rfcshould\ resolve to produce an actual result.
  
 Although this version of DataLink only has one parameter (ID), using a
 GROUP and providing the service parameter name allows this recipe to be
@@ -1188,7 +1188,7 @@ of this parameter (it is related to photometric or flux calibration).
 
 The BAND parameter allows the user to specify a spectral interval to
 extract from the spectrum and follows SODA's regulations.  Its VALUES
-child declares the range of wavelengths in the dataset; services \rfcshould
+child declares the range of wavelengths in the dataset; services \rfcshould\
 always try to give information on the sensible ranges of input
 parameters, and clients should strive to make them easily accessible to
 users, if possible in the users' preferred units.  Given that at this
