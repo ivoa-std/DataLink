@@ -273,7 +273,7 @@ services. For some catalogs ``associated data'' are available. These
 data include images from which sources have been extracted, or imaging the
 object in  case of extended objects, as well as additional observations
 such as Spectra or Time Series of the source and even spectral cubes
-and Time Series of images for extended or varying objects. The {\blinks}
+and Time Series of images for extended or varying objects. The \blinks\
 response obtained for the source id can allow to easily retrieve all
 these associated data in one shot.
 
@@ -284,21 +284,21 @@ tracing  the history of data. This information can be retrieved through
 ProvTAP \citep{iwd:provtap} or ProvSAP \citep{iwd:provsap}  DAL services.
 The Entity instances represent  the state of the data items between
 various steps of the data processing flow. ``Entities'' can be hooked
-to the more complete data they represent using the {\blinks} endpoint.
+to the more complete data they represent using the \blinks\ endpoint.
 
-\section{The \blinks~endpoint}
+\section{The \blinks\ endpoint}
 
 \label{sec:linksEndpoint}
 
-Most commonly, DataLink link lists are retrieved from \blinks~endpoints.
+Most commonly, DataLink link lists are retrieved from a \blinks\ endpoints.
 These are DALI-sync endpoints with implementor-defined names.
 As specified by DALI-sync, the parameters for a request are submitted
 using an HTTP GET (query string) or POST action.  Any service may offer
 zero or more datalink endpoints.
 
-\subsection{Parameters on \blinks~endpoints}
+\subsection{Parameters on \blinks\ endpoints}
 
-On \blinks~endpoints, the ID and RESPONSEFORMAT parameters as defined
+On \blinks\ endpoints, the ID and RESPONSEFORMAT parameters as defined
 below are mandatory.
 
 
@@ -353,15 +353,15 @@ Service implementers \rfcmay\ support additional output formats but \rfcmust\ fo
 the DALI specification if they chose any formats described there.
 
 
-\subsection{Registering \blinks~endpoints}
+\subsection{Registering \blinks\ endpoints}
 
 Since normal datalink operations do not involve the Registry, this
-specification poses no requirements to register \blinks~endpoints.
+specification poses no requirements to register \blinks\ endpoints.
 Datalink clients also generally have no reason to inspect VOSI
 capabilities endpoints, and hence there are no requirements on
-mentioning \blinks~endpoints in any VOSI capability documents.
+mentioning \blinks\ endpoints in any VOSI capability documents.
 
-Operators still wishing to declare \blinks~endpoints can do this by
+Operators still wishing to declare \blinks\ endpoints can do this by
 giving a capability with a standardID of
 \begin{verbatim}
    ivo://ivoa.net/std/DataLink#links-1.0
@@ -438,10 +438,10 @@ via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 
 When providing a column with URLs, for example outside DAL service
 responses or when service descriptors  are not defined, if all the
-URLs are to a DataLink {\blinks} endpoint, then the preferred approach
+URLs are to a DataLink \blinks\ endpoint, then the preferred approach
 is to add a LINK element with the content type defined above. 
 
-If some values are to a {\blinks} endpoint and others to
+If some values are to a \blinks\ endpoint and others to
 different content types (e.g.\ single file download), then the VOTable
 would need a second column to convey the content type.
 ObsCore utypes for access\_url and access\_format SHOULD 
@@ -1284,6 +1284,8 @@ redirects to make old URLs work when service deployment changes).
 \subsection{DataLink-1.1}
 
 \begin{itemize}
+\item relax content-type usage to allow any valid VOTable MIME type
+\item INFO element with standardID mandatory in \blinks\ response
 \item added optional content\_qualifier to describe link target content with terms from 
 the product-type vocabulary
 \item added optional link\_auth and link\_authorized to signal whether authentication
