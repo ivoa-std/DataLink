@@ -17,21 +17,20 @@ with missing dependencies.
 
 <archdiag xmlns="http://ivoa.net/archdiag">
 	<!-- Registry: x=55, y=150..450 -->
-	<rec name="VODataService" x="55" y="350"/>
-	<rec name="StandardsRegExt" x="55" y="375"/>
+  <rec name="VOResource" x="64.5" y="155" w="71"/>
 
 	<!-- Apps: all over the place -->
-	<rec name="VOTable" x="270" y="325"/>
+  <rec name="VOTable" x="270" y="325" w="50"/>
 
 	<!-- DAL: x=655, y=155..435 -->
-	<rec name="DALI" x="310" y="290"/>
+  <rec name="DALI" x="310" y="290" w="33"/>
 
-	<thisrec name="DataLink" x="610" y="400"/>
+  <thisrec name="DataLink" x="628" y="405" w="53"/>
 
 	<!-- Data Models: x=430..580, y=250..400 -->
 
 	<!-- GWS: all over the place -->
-	<rec name="VOSI" x="540" y="435"/>
+  <rec name="VOSI" x="568" y="435" w="34"/>
 
 	<!-- Semantics: x=160..250 y=250..400 -->
 
