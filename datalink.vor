@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<ri:Resource 
-    xmlns:vstd="http://www.ivoa.net/xml/StandardsRegExt/v1.0" 
-    xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0" 
+<ri:Resource
+    xmlns:vstd="http://www.ivoa.net/xml/StandardsRegExt/v1.0"
+    xmlns:ri="http://www.ivoa.net/xml/RegistryInterface/v1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    status="active" 
-    xsi:type="vstd:Standard" 
-    updated="2015-02-24T10:30:00Z" created="2015-02-24T11:30:00Z">
+    status="active"
+    xsi:type="vstd:Standard"
+    updated="2023-02-09T13:20:00Z" created="2015-02-24T11:30:00Z">
   <title>IVOA Datalink</title>
   <identifier>ivo://ivoa.net/std/DataLink</identifier>
   <curation>
@@ -24,6 +24,7 @@
       <name>Demleitner, Markus</name>
     </creator>
     <date role="updated">2014-09-30T12:00:00</date>
+    <date role="updated">2022-02-09T13:20:00</date>
     <contact>
       <name>Data Access Layer Working Group</name>
       <email>dal@ivoa.net</email>
@@ -52,8 +53,15 @@
   <endorsedVersion status="rec" use="preferred">1.0</endorsedVersion>
   <key>
     <name>links-1.0</name>
-    <description>An endpoint delivering data links in the format specificed
-      by the Datalink 1.0 specification.</description>
-    </name>
+    <description>An endpoint delivering data links in the format specified
+      by the Datalink 1.0 specification.
+    </description>
   </key>
+  <key>
+    <name>links-1.1</name>
+    <description>An endpoint delivering data links in the format specified
+      by the Datalink 1.1 specification.
+    </description>
+  </key>
+
 </ri:Resource>
