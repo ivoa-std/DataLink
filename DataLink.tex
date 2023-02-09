@@ -486,6 +486,10 @@ content\_length & size of the download the link returns
 content\_qualifier & nature of the content the link returns
                 & no & no & \\
 \hline
+local\_semantics &   An identifier that allows clients to associate rows from
+  different datalink documents on the same service with each other.
+                & no & no & meta.id.assoc \\
+\hline
 link\_auth       & use of the link requires authentication
                  & no & no & meta.code \\
 \hline
@@ -666,6 +670,19 @@ interpretation will be different, and the default vocabulary will be
 inappropriate.  Full concept URIs will have to be used in this case, and
 their translations to RDF triples is not covered by this version of
 DataLink.
+
+\subsubsection{local\_semantics}
+
+The local\_semantics column allows to identify corresponding rows for 
+different IDs in the same DataLink service where the combination of semantics, 
+content\_type and content\_qualifier is not sufficient to identify them. 
+It contains a service specific vocabulary. An example is a service delivering 
+spectral cubes derived from the same observation, with both continuum cubes 
+and line cubes. The combination of "semantics=\#derived", 
+"content\_type=application/fits" and "content\_qualifier=cube" 
+is insufficient to identify the various continuum or line cubes. 
+The local\_semantics column allows to provide this needed information.   
+
 
 \subsubsection{link\_auth}
 
@@ -933,10 +950,13 @@ the service invocation.
 
 For user-specified input PARAMs the value attribute is empty (\attval{value}{}) 
 and the user supplies the value(s). The PARAM specifies the type of value required via 
-the datatype, arraysize, and xtype attributes; this may be augmented further by the ucd 
-and units attributes and a child DESCRIPTION element. To allow for expressive, usable user
+the datatype, arraysize, and xtype attributes; this may be augmented further 
+by the ucd, units and utypes\footnote{An example of utype usage for service 
+parameters is described in section 3.4 of the SODA specification} attributes and a child DESCRIPTION element. To allow for expressive, usable user
 interfaces, operators SHOULD indicate useful ranges of parameters in MIN and MAX children 
-or, for enumerated parameters, indicate the valid values in OPTIONS. In general, services 
+or, for enumerated parameters, indicate the valid values in OPTIONS in case 
+these values cannot be inferred from relevant metadata retrieved 
+before the service descriptor discovery. In general, services 
 may have parameters of this type that are optional or required and this distinction is 
 not currently described; services \rfcshould\ use a child DESCRIPTION element to document any 
 requirements. Clients should assume that these user-specified parameters are optional, but 
