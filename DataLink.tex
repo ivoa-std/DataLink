@@ -290,7 +290,7 @@ to the more complete data they represent using the \blinks\ endpoint.
 
 \label{sec:linksEndpoint}
 
-Most commonly, DataLink link lists are retrieved from a \blinks\ endpoints.
+Most commonly, DataLink link lists are retrieved from \blinks\ endpoints.
 These are DALI-sync endpoints with implementor-defined names.
 As specified by DALI-sync, the parameters for a request are submitted
 using an HTTP GET (query string) or POST action.  Any service may offer
@@ -472,7 +472,7 @@ error\_message  & error if an access\_url cannot be created
                 & yes &          & meta.code.error \\
 \hline
 description     & human-readable text describing this link
-                & yes & yes & meta.note \\
+                & yes & no & meta.note \\
 \hline
 semantics       & Term from a controlled vocabulary describing the link
                 & yes & yes & meta.code \\
@@ -485,6 +485,10 @@ content\_length & size of the download the link returns
 \hline
 content\_qualifier & nature of the content the link returns
                 & no & no & \\
+\hline
+local\_semantics &   An identifier that allows clients to associate rows from
+  different datalink documents on the same service with each other.
+                & no & no & meta.id.assoc \\
 \hline
 link\_auth       & use of the link requires authentication
                  & no & no & meta.code \\
@@ -667,6 +671,19 @@ inappropriate.  Full concept URIs will have to be used in this case, and
 their translations to RDF triples is not covered by this version of
 DataLink.
 
+\subsubsection{local\_semantics}
+
+The local\_semantics column allows to identify corresponding rows for 
+different IDs in the same DataLink service where the combination of semantics, 
+content\_type and content\_qualifier is not sufficient to identify them. 
+It contains a service specific vocabulary. An example is a service delivering 
+spectral cubes derived from the same observation, with both continuum cubes 
+and line cubes. The combination of "semantics=\#derived", 
+"content\_type=application/fits" and "content\_qualifier=cube" 
+is insufficient to identify the various continuum or line cubes. 
+The local\_semantics column allows to provide this needed information.   
+
+
 \subsubsection{link\_auth}
 
 The link\_auth column tells the client whether or not authentication is required
@@ -768,8 +785,8 @@ output in other formats.
 \subsection{Errors}
 
 The error handling specified for DALI-sync resources applies
-to service failure (where no links can be generated) and to the usage
-error where no ID parameter is specified. Services should return the
+to service failure (where no links can be generated).
+Services should return the
 document format requested by the client (see \ref{sec:responseformat}).
 For the standard
 output format (VOTable) the error document \rfcmust\ also be VOTable.
