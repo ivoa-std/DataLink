@@ -53,13 +53,13 @@
   <endorsedVersion status="rec" use="preferred">1.0</endorsedVersion>
   <key>
     <name>links-1.0</name>
-    <description>An endpoint delivering data links in the format specificed
+    <description>An endpoint delivering data links in the format specified
       by the Datalink 1.0 specification.
     </description>
   </key>
   <key>
     <name>links-1.1</name>
-    <description>An endpoint delivering data links in the format specificed
+    <description>An endpoint delivering data links in the format specified
       by the Datalink 1.1 specification.
     </description>
   </key>
