@@ -783,15 +783,15 @@ Table \ref{tab:errors}, in order of specificity.
 \begin{table}[ht]
 \begin{center}
 \begin{tabular}{|l|l|}
-\sptablerule
-{\bf Error} & {\bf Meaning} \\
-\sptablerule
-NotFoundFault  & Unknown ID value    \\
+\hline
+\vrule height 12pt depth 7pt width 0pt{\bf Error} & {\bf Meaning} \\
+\hline
+\vrule height 12pt width 0pt  NotFoundFault  & Unknown ID value    \\
 UsageFault     & Invalid input (e.g.\ invalid ID value) \\
 TransientFault & Service is not currently able to function \\
 FatalFault     & Service cannot perform requested action \\
 DefaultFault   & Default failure (not covered above) \\
-\sptablerule
+\hline
 \end{tabular}
 \end{center}
 \caption{Error Messages}
@@ -861,15 +861,15 @@ are described in Table \ref{tab:serviceParams}.
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|l|l|}
-\sptablerule
-{\bf name}          &  {\bf value}                          & {\bf required}  \\
-\sptablerule
-accessURL           & URL to invoke the capability          &  yes  \\
+\hline
+\vrule height 12pt depth 7pt width 0pt {\bf name}          &  {\bf value}                          & {\bf required}  \\
+\hline
+\vrule height 12pt width 0pt accessURL           & URL to invoke the capability          &  yes  \\
 standardID          & URI for the capability                &  no   \\
 resourceIdentifier  & IVOA registry identifier              &  no   \\
 contentType	        & Media type of the service response    & no \\
 exampleURL          & example invocation of the service     & no \\
-\sptablerule
+\hline
 \end{tabular}
 \end{center}
 \caption{Parameters Describing the Service}
