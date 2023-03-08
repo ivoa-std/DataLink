@@ -572,8 +572,14 @@ an ID to the descriptor.
 
 The error\_message column is used when no access\_url or service\_def can be generated for
 an input identifier. If an error\_message is included in the output, the
-only other columns with values \rfcshould\ be the ID column and the semantics
-column; all others \rfcmust\ be null.
+ID and semantics values \rfcmust\ be provided as usual. From version 1.1 of this standard,
+services \rfcmay\  provide values in other fields or leave them null (as was required in 1.0).
+
+For example, if an ID value is unrecognized by the service, it would normally provide the 
+minimum output: the input value for the ID, \verb|#this| for semantics, and an error 
+message. If a service did recognise the input ID and would normally create a download link, 
+but generating the access\_url failed, the service could include the usual content\_type, 
+content\_length, and description along with the ID, semantics, and error\_message.
 
 
 \subsubsection{description}
@@ -1306,6 +1312,7 @@ redirects to make old URLs work when service deployment changes).
 \subsection{DataLink-1.1}
 
 \begin{itemize}
+\item allow optional columns to contain values when the row (link) has an error\_message
 \item added optional local\_semantics to identify corresponding rows 
 	for different IDs in the same service
 \item relax content-type usage to allow any valid VOTable MIME type
