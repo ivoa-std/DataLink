@@ -1237,18 +1237,30 @@ to be operationally insignificant.
 \label{sec:selfDescribing}
 
 A service may include a service descriptor that describes itself with
-its normal output. In that case the utype ``adhoc:this'' indicates the
-self-describing
-nature of the service descriptor. This convention would make finding
-the self-description
-unambiguous in cases where the output also contained other service
-descriptors.
-   This usage is comparable to prototype work on S3
+its normal output. 
+In that case the utype ``adhoc:this'' indicates the self-describing
+nature of the service descriptor.
+This convention makes finding the self-description unambiguous in
+cases where the output also contains other service descriptors.
+
+This usage is comparable to prototype work on S3
 (see \citet{note:s3})
 and when combined with calling a service with no input parameters
-(e.g.\ as allowed in \ref{sec:resourceId})
+(e.g., as allowed in \ref{sec:resourceId}),
+and/or with the DALI \texttt{MAXREC=0} convention,
 will make it easy for clients to obtain a
 description of both standard and custom features.
+
+For backward compatibility with DataLink 1.0 and SIA 2.0, client software
+conforming to the present recommendation should also treat elements of
+the form \texttt{<RESOURCE type="meta" utype="adhoc:service" name="this"/>}
+as self-descriptions, equivalent to 
+\texttt{<RESOURCE type="meta" utype="adhoc:this" name=""/>}.
+A conforming client should treat the provision of more than one
+self-description \texttt{<RESOURCE>} element as an error, except that if a
+service provides exactly one of each of the present (DataLink 1.1 and
+beyond) and DataLink 1.0 styles, the client may silently ignore the
+DataLink 1.0 style instance.
 
 The output of a \blinks\ capability with no input ID would include the
 self-describing service descriptor and an empty results table:
