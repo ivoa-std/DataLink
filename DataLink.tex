@@ -267,6 +267,7 @@ DataLink). This service link would be described with both a service type
 
 
 \subsubsection{Datasets linked to an astronomical source}
+\label{sec:useSource}
 
 There are  a lot of catalogs of astronomical sources made available
 using VO services such as ConeSearch \citep{2008ivoa.specQ0222P} or TAP
@@ -279,6 +280,7 @@ response obtained for the source id can allow to easily retrieve all
 these associated data in one shot.
 
 \subsubsection{Metadata and data related to provenance entities}
+\label{sec:useProvenance}
 
 The IVOA Provenance datamodel \citep{pr:provdm} represents metadata
 tracing  the history of the data. This information can be stored and retrieved
@@ -406,6 +408,7 @@ either a VOResource record or a VOSI capabilities element:
 \end{verbatim}
 
 \subsection{VOSI}
+\label{sec:vosi}
 
 Since DataLink services are not usually registered, the VOSI-capabilities endpoint
 is not required; the VOSI-availability endpoint is \rfcoptional.
@@ -437,6 +440,7 @@ via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 
 \subsubsection{DataLink recognition outside the context
                of DAL discovery services responses}
+\label{sec:columnsUrl}
 
 When providing a column with URLs, for example outside DAL service
 responses or when service descriptors  are not defined, if all the
@@ -570,6 +574,7 @@ an ID to the descriptor.
 
 
 \subsubsection{error\_message}
+\label{sec:errorMessage}
 
 The error\_message column is used when no access\_url or service\_def can be generated for
 an input identifier. If an error\_message is included in the output, the
@@ -660,6 +665,7 @@ The value \rfcmay\ be null (blank)
 if unknown and will typically be null for links to services.
 
 \subsubsection{content\_qualifier}
+\label{sec:contentQualifier}
 
 The content\_qualifier column is \rfcoptional. If it is present, it tells
 the client the nature of the thing or service they will receive or access
@@ -680,6 +686,7 @@ their translations to RDF triples is not covered by this version of
 DataLink.
 
 \subsubsection{local\_semantics}
+\label{sec:localSemantics}
 
 The local\_semantics column allows to identify corresponding rows for 
 different IDs in the same DataLink service where the combination of semantics, 
@@ -693,6 +700,7 @@ The local\_semantics column allows to provide this needed information.
 
 
 \subsubsection{link\_auth}
+\label{sec:linkAuth}
 
 The link\_auth column tells the client whether or not authentication is required
 to use the link. Valid values are:
@@ -706,6 +714,7 @@ to use the link. Valid values are:
 This field \rfcmay\ be null (blank) if the value is unknown.
 
 \subsubsection{link\_authorized}
+\label{sec:linkAuthorized}
 
 The link\_authorized column tells the client whether the currently authenticated
 identity is authorized to use the link. For VOTable, the FIELD \rfcmust\ be
@@ -756,6 +765,7 @@ content-type follows the DALI rules.
 
 
 \subsubsection{VOTable output}
+\label{sec:output}
 
 The table of links \rfcmust\ be returned in a RESOURCE with
 \attval{type}{results}. The table \rfcmust\ be in TABLEDATA serialization
@@ -878,6 +888,7 @@ and several ``results'' RESOURCEs, these RESOURCEs MAY be nested in
 order to better display correct association.
 
 \subsection{Descriptive PARAMs}
+\label{sec:descParams}
 
 A service resource contains PARAM elements to describe the service.
 The standard PARAM elements for a {\em service\/} resource
@@ -1325,25 +1336,35 @@ redirects to make old URLs work when service deployment changes).
 \subsection{DataLink-1.1}
 
 \begin{itemize}
-\item allow optional columns to contain values when the row (link) has an error\_message
+\item allow optional columns to contain values when the row (link) has an error\_message 
+(see Section \ref{sec:errorMessage})
 \item added optional local\_semantics to identify corresponding rows 
-	for different IDs in the same service
-\item relax content-type usage to allow any valid VOTable MIME type
-\item INFO element with standardID mandatory in \blinks\ response
+	for different IDs in the same service (see Section \ref{sec:localSemantics})
+\item relax content-type usage to allow any valid VOTable MIME type (see Section 
+  \ref{sec:successfulRequests})
+\item INFO element with standardID mandatory in \blinks\ response (see Section 
+  \ref{sec:output})
 \item added optional content\_qualifier to describe link target content with terms from
-the product-type vocabulary
+the product-type vocabulary (see Section \ref{sec:contentQualifier})
 \item added optional link\_auth and link\_authorized to signal whether authentication
-is necessary to use the link
-\item clarified use of multiple ID values and possible OVERFLOW
-\item clarified use of utype for self-describing service descriptors
-\item clarified use of semantics
+is necessary to use the link (see Sections \ref{sec:linkAuth} and 
+\ref{sec:linkAuthorized})
+\item clarified use of multiple ID values and possible OVERFLOW (see Section 
+  \ref{sec:resourceId})
+\item clarified use of utype for self-describing service descriptors(see Section 
+  \ref{sec:selfDescribing})
+\item clarified use of semantics (see Section \ref{sect:semantics})
 \item generalize by adding use cases for links to content other than data files
+  (see Sections \ref{sec:useSource} and \ref{sec:useProvenance})
 \item added using LINK to convey when datalink request URL is in a table column
+  (see Section \ref{sec:columnsUrl})
 \item service descriptors can include a contentType param to describe service
-output and should include a name and description
+output and should include a name and description (see Sections \ref{sec:serviceResources} 
+and \ref{sec:descParams})
 \item service descriptors can include exampleURL param(s) with working example
-and description
-\item VOSI-availability and VOSI-capabilities endpoints are now optional
+and description (see Section \ref{sec:descParams})
+\item VOSI-availability and VOSI-capabilities endpoints are now optional (see 
+  Section \ref{sec:vosi})
 \end{itemize}
 
 \subsection{DataLink-1.0}
