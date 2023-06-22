@@ -693,8 +693,8 @@ different IDs in the same DataLink service where the combination of semantics,
 content\_type and content\_qualifier is not sufficient to identify them. 
 It contains a service specific vocabulary. An example is a service delivering 
 spectral cubes derived from the same observation, with both continuum cubes 
-and line cubes. The combination of "semantics=\#derived", 
-"content\_type=application/fits" and "content\_qualifier=cube" 
+and line cubes. The combination of ``semantics=\#derived'', 
+``content\_type=application/fits'' and ``content\_qualifier=cube'' 
 is insufficient to identify the various continuum or line cubes. 
 The local\_semantics column allows to provide this needed information.   
 
@@ -1265,9 +1265,9 @@ description of both standard and custom features.
 
 For backward compatibility with DataLink 1.0 and SIA 2.0, client software
 conforming to the present recommendation should also treat elements of
-the form \texttt{<RESOURCE type="meta" utype="adhoc:service" name="this"/>}
+the form \verb|<RESOURCE type="meta" utype="adhoc:service" name="this"/>|
 as self-descriptions, equivalent to 
-\texttt{<RESOURCE type="meta" utype="adhoc:this" name=""/>}.
+\verb|<RESOURCE type="meta" utype="adhoc:this" name=""/>|.
 A conforming client should treat the provision of more than one
 self-description \texttt{<RESOURCE>} element as an error, except that if a
 service provides exactly one of each of the present (DataLink 1.1 and
