@@ -578,7 +578,10 @@ an ID to the descriptor.
 
 The error\_message column is used when no access\_url or service\_def can be generated for
 an input identifier. If an error\_message is included in the output, the
-ID and semantics values \rfcmust\ be provided as usual. From version 1.1 of this standard,
+ID and semantics values \rfcmust\ be provided as usual; in particular,
+the value in the semantics column should reflect the semantics of the
+link that could not be produced.
+From version 1.1 of this standard,
 services \rfcmay\  provide values in other fields or leave them null (as was required in 1.0).
 
 For example, if an ID value is unrecognized by the service, it would normally provide the
