@@ -368,7 +368,7 @@ mentioning \blinks\ endpoints in any VOSI capability documents.
 Operators still wishing to declare \blinks\ endpoints can do this by
 giving a capability with a standardID of
 \begin{verbatim}
-   ivo://ivoa.net/std/DataLink#links-1.0
+   ivo://ivoa.net/std/DataLink#links-1.1
 \end{verbatim}
 Note that this (minor-versioned) URI is applicable to endpoints following any version 1.*
 of the DataLink standard.
@@ -381,9 +381,9 @@ Hence, a single datalink capability could be declared as follows within
 either a VOResource record or a VOSI capabilities element:
 
 \begin{verbatim}
-<capability standardID="ivo://ivoa.net/std/DataLink#links-1.0"
+<capability standardID="ivo://ivoa.net/std/DataLink#links-1.1"
     xmlns:vs="http://www.ivoa.net/xml/VODataService/v1.1">
-    <interface xsi:type="vs:ParamHTTP" role="std" version="1.0">
+    <interface xsi:type="vs:ParamHTTP" role="std" version="1.1">
       <accessURL use="base">
         http://example.com/datalink/mylinks
       </accessURL>
@@ -779,7 +779,7 @@ INFO element with \attval{name}{standardID} and the standardID string as a value
 \begin{verbatim}
 <RESOURCE type="results">
   ...
-  <INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.0"/>
+  <INFO name="standardID" value="ivo://ivoa.net/std/DataLink#links-1.1"/>
   ...
   <TABLE>
   ...
@@ -1015,7 +1015,7 @@ is described by the following resource:
        discovered datasets as well as to catalogues of extracted sources
      </DESCRIPTION>
      <PARAM name="standardID" datatype="char" arraysize="*"
-            value="ivo://ivoa.net/std/DataLink#links-1.0" />
+            value="ivo://ivoa.net/std/DataLink#links-1.1" />
      <PARAM name="accessURL" datatype="char" arraysize="*"
             value="http://example.com/mylinks" />
      <PARAM name="contentType" datatype="char" arraysize="*"
