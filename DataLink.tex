@@ -571,14 +571,13 @@ The ID column contains the input identifier value.
 \subsubsection{access\_url}
 
 The access\_url column contains a URL to download a single resource.
-This URL can be a link to a dynamic resource (e.g.\ preview generation).
+This URL can be a static link or a link to a dynamic resource (e.g.\ preview generation).
 
-Beside dereferencable URLs, access URLs may have fragment parts, which could,
+Access URLs may have fragment parts, which could,
 for instance, refer to id-ed elements within XML documents or extensions 
 within FITS files. As in URIs in general, the interpretation of a fragment 
-identifier depends on the media type. Apart from that no other client handling 
-is expected. On the other side it can be a link to a dynamic resource 
-(e.g. preview generation).
+identifier depends on the media type. Apart from that no other client handling
+is expected.  
 
 \subsubsection{service\_def}
 
