@@ -29,18 +29,7 @@ jobs:
         test -f DataLink.pdf
         test -f DataLink.bbl
         
-    - name: Build the implementation note
-      run: make --makefile=MakefileImp biblio forcetex
-      
-    - name: Check the output
-      run: test -f DataLinkImp.pdf
-        
     - uses: actions/upload-artifact@v1
       with:
         name: DataLink.pdf Preview
         path: DataLink.pdf
-        
-    - uses: actions/upload-artifact@v1
-      with:
-        name: DataLinkImp.pdf Preview
-        path: DataLinkImp.pdf
