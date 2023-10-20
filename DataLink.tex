@@ -437,7 +437,6 @@ This is also the preferred MIME type for the \blinks\ response
 unless the caller has explicitly requested a specific value
 via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 
-In various other IVOA service responses the \blinks\ endpoint URL recognition is not explicitely normalizedi by service specification. In these usecases it's worth reading the DataLink recognition implementation note\footnote{at the time of writing: http://github.com/ivoa/DataLinkRecImplNote}. 
 
 
 \subsection{List of Links}
@@ -530,7 +529,8 @@ The ID column contains the input identifier value.
 \subsubsection{access\_url}
 
 The access\_url column contains a URL to download a single resource.
-This URL can be a static link or a link to a dynamic resource (e.g.\ preview generation).
+This URL can be a static link or a link to a dynamic resource (e.g.\ preview 
+generation).
 
 Access URLs may have fragment parts, which could,
 for instance, refer to id-ed elements within XML documents or extensions 
@@ -671,20 +671,20 @@ DataLink.
 \subsubsection{local\_semantics}
 \label{sec:localSemantics}
 
-The local\_semantics column allows for identification of corresponding rows for
-different IDs in the same DataLink service where the combination of semantics,
-content\_type and content\_qualifier is not sufficient to identify them.
-It contains a service specific vocabulary. It aids clients in presenting to the
-user the same sort of link as they go from one dataset to another within a service.
-For instance, suppose a service serves both continuum and line cubes. 
-Using local\_semantics, users can configure their clients such that, as they change
-to a new data set, they always see the line cube even when the semantics, 
-content\_qualifier and content\_type columns agree for both types of data. 
-The vocabulary can be a simple list of terms defined for the service
-(eg : local\_semantics="line-cube") or can be described in an ad hoc external resource
-accessible via an URI 
+The local\_semantics column allows for identification of corresponding 
+rows for different IDs in the same DataLink service where the 
+combination of semantics, content\_type and content\_qualifier is not 
+sufficient to identify them. It contains a service specific vocabulary.
+It aids clients in presenting to the user the same sort of link as they 
+go from one dataset to another within a service. For instance, suppose 
+a service serves both continuum and line cubes. Using local\_semantics, 
+users can configure their clients such that, as they change to a new 
+data set, they always see the line cube even when the semantics, 
+content\_qualifier and content\_type columns agree for both types of 
+data. The vocabulary can be a simple list of terms defined for the 
+service (eg : local\_semantics="line-cube") or can be described in an 
+ad hoc external resource accessible via an URI 
 (eg : local\_semantics="http://our-service-adhoc-vocab/terms\#continuum-cube").
-
 
 \subsubsection{link\_auth}
 \label{sec:linkAuth}
@@ -762,8 +762,9 @@ and supported by the implementation.
 The name and UCD attributes for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
-The DALI specification states that VOTable output main "results" RESOURCE should include an
-INFO element with \attval{name}{standardID} and the standardID string as a value.
+The DALI specification states that VOTable output main ``results'' 
+RESOURCE  should include an INFO element with \attval{name}{standardID} 
+and the standardID string as a value.
 \begin{verbatim}
 <RESOURCE type="results">
   ...
@@ -775,8 +776,9 @@ INFO element with \attval{name}{standardID} and the standardID string as a value
   ...
 </RESOURCE>
 \end{verbatim}
-From version 1.1 of this standard, the \blinks\ response main "results" RESOURCE \rfcmust\ include this
-INFO element so that a table of links is easily identified by users and applications
+From version 1.1 of this standard, the \blinks\ response main 
+``results'' RESOURCE \rfcmust\ include this INFO element so that a 
+table of links is easily identified by users and applications 
 when initially received from the service and if saved for later use.
 
 \subsubsection{Other Output Formats}
@@ -972,7 +974,7 @@ Services \rfcshould\ respond with an informative error message if the input is n
 perform the operations(s).
 
 \subsection{Service self-description}
-\label{sec:selfDescribingExample}
+\label{sec:selfDescribing}
 A service may include a service descriptor that describes itself with
 its normal output.
 In that case the utype ``adhoc:this'' indicates the self-describing
