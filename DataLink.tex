@@ -437,48 +437,7 @@ This is also the preferred MIME type for the \blinks\ response
 unless the caller has explicitly requested a specific value
 via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 
-\subsubsection{DataLink recognition outside the context
-               of ObsCore responses}
-\label{sec:columnsUrl}
-
-In order to provide access URL to \blinks\ endpoints outside the ObsCore-style
-service responses context  there are several options. 
-\begin{itemize}
-	\item A DataLink service descriptor (\ref{sec:serviceDescriptors}) could be added to the main 
-table as long as the content of one of the table FIELDs may be used as the ID parameter
-in the \blinks\ endpoint. An exemple is given in subsection \ref{sec:servDescBlinks} 
-\item In case the \blinks\ endpoint URL is given in the main table for each row, a LINK element SHOULD be added 
-to the FIELD containing this URL. The content-type of the LINK will be set to : 
-\begin{verbatim}
-   application/x-votable+xml;content=datalink
-\end{verbatim}
- In the  example below the content of the "Datalink" FIELD is used
-as an URL to the \blinks\ endpoint for each row.
- \begin{verbatim}
- <FIELD name="DataLink" datatype="char" arraysize="*" ucd="meta.ref.url"  >
-    <LINK content-type="application/x-votable+xml;content=datalink"  />
-  </FIELD>  
-\end{verbatim}
-
-\item In case the main table contains an URL  not systematically pointing to \blinks\ 
-endpoint, but may also point to  responses with other content types
-(e.g.\ for single file download), the ObsCore utype "Access.reference" SHOULD be 
-added to the FIELD and an additional FIELD with ObsCore utype "Access.format" SHOULD 
-contain the "application/x-votable+xml;content=datalink" value when appropriate. 
-A ref to the ID of the FIELD containing the URL SHOULD be added to avoid ambiguities.  
-
-In the  example below, the Image-Link contains the URL pointing to a \blinks\ response or
-the dataset istself depending on the value of the Image-Format FIELD. 
- \begin{verbatim}
- <FIELD ID="ILink" name="Image-Link" datatype="char" arraysize="*" 
- ucd="meta.ref.url" utype="AccessReference" />
- <FIELD name="Image-Format" datatype="char" arraysize="*"
-  ucd="meta.code.mime" utype="AccessFormat" ref="ILink" />
-\end{verbatim}
-
-
-\end{itemize}
-
+In various other IVOA service responses the \blinks\ endpoint URL recognition is not explicitely normalizedi by service specification. In these usecases it's worth reading the DataLink recognition implementation note\footnote{at the time of writing: http://github.com/ivoa/DataLinkRecImplNote}. 
 
 
 \subsection{List of Links}
@@ -1306,7 +1265,7 @@ to be operationally insignificant.
 
 
 \subsection{Example: Self-Describing Service}
-\label{sec:selfDescribingExample}
+\label{sec:selfDescribing}
 
 The following service descriptor self-describes an ad hoc (non standard) 
 service to apply a power law model on XMM-Newton spectra.
