@@ -437,7 +437,11 @@ This is also the preferred MIME type for the \blinks\ response
 unless the caller has explicitly requested a specific value
 via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 
-In various other IVOA service responses the \blinks\ endpoint URL recognition is not explicitely normalizedi by service specification. In these usecases it's worth reading the DataLink recognition implementation note\footnote{at the time of writing: http://github.com/ivoa/DataLinkRecImplNote}. 
+In various other IVOA service responses the \blinks\ endpoint URL 
+recognition is not explicitely normalized by service specification. In
+these usecases it's worth reading the DataLink recognition 
+implementation note\footnote{at the time of writing: 
+http://github.com/ivoa/DataLinkRecImplNote}. 
 
 
 \subsection{List of Links}
@@ -762,7 +766,7 @@ and supported by the implementation.
 The name and UCD attributes for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
-The DALI specification states that VOTable output main "results" RESOURCE should include an
+The DALI specification states that VOTable output main ``results'' RESOURCE should include an
 INFO element with \attval{name}{standardID} and the standardID string as a value.
 \begin{verbatim}
 <RESOURCE type="results">
@@ -775,7 +779,7 @@ INFO element with \attval{name}{standardID} and the standardID string as a value
   ...
 </RESOURCE>
 \end{verbatim}
-From version 1.1 of this standard, the \blinks\ response main "results" RESOURCE \rfcmust\ include this
+From version 1.1 of this standard, the \blinks\ response main ``results'' RESOURCE \rfcmust\ include this
 INFO element so that a table of links is easily identified by users and applications
 when initially received from the service and if saved for later use.
 
