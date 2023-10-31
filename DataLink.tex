@@ -288,7 +288,8 @@ in several ways including  in DAL services.
 The Entity instances represent  the state of the data items between
 various steps of the data processing flow. ``Entities'' can be hooked
 to the more complete data they represent using the \blinks\ endpoint.
-Reversely full provenance records can be linked to standard discovery service rows using the same endpoint.
+Reversely full provenance records can be linked to standard discovery 
+service rows using the same endpoint.
 
 \section{The \blinks\ endpoint}
 
@@ -436,21 +437,12 @@ This is also the preferred MIME type for the \blinks\ response
 unless the caller has explicitly requested a specific value
 via the RESPONSEFORMAT parameter (see \ref{sec:responseformat}).
 
-\subsubsection{DataLink recognition outside the context
-               of DAL discovery services responses}
-\label{sec:columnsUrl}
+In various other IVOA service responses the \blinks\ endpoint URL 
+recognition is not explicitly normalized by service specification. In
+these cases it's worth reading the DataLink recognition 
+implementation note\footnote{at the time of writing: 
+http://github.com/ivoa/DataLinkRecImplNote}. 
 
-When providing a column with URLs, for example outside DAL service
-responses or when service descriptors  are not defined, if all the
-URLs are to a DataLink \blinks\ endpoint, then the preferred approach
-is to add a LINK element with the content type defined above.
-
-If some values are to a \blinks\ endpoint and others to
-different content types (e.g.\ single file download), then the VOTable
-would need a second column to convey the content type.
-ObsCore utypes for access\_url and access\_format SHOULD
-be added to the appropriate corresponding columns in the table  for
-better recognition.
 
 \subsection{List of Links}
 \label{sec:listOfLinks}
@@ -542,15 +534,13 @@ The ID column contains the input identifier value.
 \subsubsection{access\_url}
 
 The access\_url column contains a URL to download a single resource.
-This URL can be a link to a dynamic resource (e.g.\ preview generation).
+This URL can be a static link or a link to a dynamic resource (e.g.\ preview generation).
 
-Beside dereferencable URLs, it is allowed to use URI-fragments to link
-the intial resource to a specific part of the retrievable resource, with
-its specific semantics and description. Examples of this are section
-in an html page or paths in an archive file or extensions in a MEF.
-The interpretation of the fragment will depend on the content type
-of the retrievable resource.  No other additional parameters or client
-handling are allowed.
+Access URLs may have fragment parts, which could,
+for instance, refer to id-ed elements within XML documents or extensions 
+within FITS files. As in URIs in general, the interpretation of a fragment 
+identifier depends on the media type. Apart from that no other client handling
+is expected.  
 
 \subsubsection{service\_def}
 
@@ -688,12 +678,16 @@ DataLink.
 The local\_semantics column allows for identification of corresponding rows for
 different IDs in the same DataLink service where the combination of semantics,
 content\_type and content\_qualifier is not sufficient to identify them.
-It contains a service specific vocabulary. An example is a service delivering
-spectral cubes derived from the same observation, with both continuum cubes
-and line cubes. The combination of ``semantics=\#derived'',
-``content\_type=application/fits'' and ``content\_qualifier=cube''
-is insufficient to identify the various continuum or line cubes.
-The local\_semantics column allows this needed information to be provided.
+It contains a service specific vocabulary. It aids clients in presenting to the
+user the same sort of link as they go from one dataset to another within a service.
+For instance, suppose a service serves both continuum and line cubes. 
+Using local\_semantics, users can configure their clients such that, as they change
+to a new data set, they always see the line cube even when the semantics, 
+content\_qualifier and content\_type columns agree for both types of data. 
+The vocabulary can be a simple list of terms defined for the service
+(eg : local\_semantics="line-cube") or can be described in an ad hoc external resource
+accessible via an URI 
+(eg : local\_semantics="http://our-service-adhoc-vocab/terms\#continuum-cube").
 
 
 \subsubsection{link\_auth}
@@ -772,7 +766,7 @@ and supported by the implementation.
 The name and UCD attributes for FIELD elements in the VOTable
 (and the units in one case) are specified above (see \ref{sec:listOfLinks}).
 
-The DALI specification states that VOTable output should include an
+The DALI specification states that VOTable output main ``results'' RESOURCE should include an
 INFO element with \attval{name}{standardID} and the standardID string as a value.
 \begin{verbatim}
 <RESOURCE type="results">
@@ -785,7 +779,7 @@ INFO element with \attval{name}{standardID} and the standardID string as a value
   ...
 </RESOURCE>
 \end{verbatim}
-From version 1.1 of this standard, the \blinks\ response \rfcmust\ include this
+From version 1.1 of this standard, the \blinks\ response main ``results'' RESOURCE \rfcmust\ include this
 INFO element so that a table of links is easily identified by users and applications
 when initially received from the service and if saved for later use.
 
@@ -981,7 +975,39 @@ that specifying some of them may be necessary to have the service do something u
 Services \rfcshould\ respond with an informative error message if the input is not adequate to
 perform the operations(s).
 
+\subsection{Service self-description}
+\label{sec:selfDescribing}
+A service may include a service descriptor that describes itself with
+its normal output.
+In that case the utype ``adhoc:this'' indicates the self-describing
+nature of the service descriptor.
+This convention makes finding the self-description unambiguous in
+cases where the output also contains other service descriptors.
+This usage is comparable to prototype work on S3
+(see \citet{note:s3})
+and when combined with calling a service with no input parameters
+(e.g., as allowed in \ref{sec:resourceId}),
+and/or with the DALI \texttt{MAXREC=0} convention,
+will make it easy for clients to obtain a
+description of both standard and custom features.
+
+For backward compatibility with DataLink 1.0 and SIA 2.0, client software
+conforming to the present recommendation should also treat elements of
+the form \verb|<RESOURCE type="meta" utype="adhoc:service" name="this"/>|
+as self-descriptions, equivalent to
+\verb|<RESOURCE type="meta" utype="adhoc:this" name=""/>|.
+A conforming client should treat the provision of more than one
+self-description \texttt{<RESOURCE>} element as an error, except that if a
+service provides exactly one of each of the present (DataLink 1.1 and
+beyond) and DataLink 1.0 styles, the client may silently ignore the
+DataLink 1.0 style instance.
+
+The output of a \blinks\ endpoint with no input ID would include the
+self-describing service descriptor and an empty results table.
+
+
 \subsection{Example: Service Descriptor for the \blinks\ Capability}
+\label{sec:servDescBlinks}
 
 The \blinks\ capability can be used with a result table when one of the
 columns contains identifier values that can be used with the ID parameter
@@ -1243,36 +1269,12 @@ to be operationally insignificant.
 
 
 \subsection{Example: Self-Describing Service}
-\label{sec:selfDescribing}
 
-A service may include a service descriptor that describes itself with
-its normal output.
-In that case the utype ``adhoc:this'' indicates the self-describing
-nature of the service descriptor.
-This convention makes finding the self-description unambiguous in
-cases where the output also contains other service descriptors.
+The following service descriptor self-describes an ad hoc (non standard) 
+service to apply a power law model on XMM-Newton spectra.
+  It gives enough metadata to enable informative user interfaces to this
+ service appropriate for the specific spectrum identified by the specified oid.
 
-This usage is comparable to prototype work on S3
-(see \citet{note:s3})
-and when combined with calling a service with no input parameters
-(e.g., as allowed in \ref{sec:resourceId}),
-and/or with the DALI \texttt{MAXREC=0} convention,
-will make it easy for clients to obtain a
-description of both standard and custom features.
-
-For backward compatibility with DataLink 1.0 and SIA 2.0, client software
-conforming to the present recommendation should also treat elements of
-the form \verb|<RESOURCE type="meta" utype="adhoc:service" name="this"/>|
-as self-descriptions, equivalent to
-\verb|<RESOURCE type="meta" utype="adhoc:this" name=""/>|.
-A conforming client should treat the provision of more than one
-self-description \texttt{<RESOURCE>} element as an error, except that if a
-service provides exactly one of each of the present (DataLink 1.1 and
-beyond) and DataLink 1.0 styles, the client may silently ignore the
-DataLink 1.0 style instance.
-
-The output of a \blinks\ capability with no input ID would include the
-self-describing service descriptor and an empty results table:
 \begin{verbatim}
 <RESOURCE type="meta" utype="adhoc:this" ID="PwL"
           name="Power Law fitting">
@@ -1353,8 +1355,6 @@ is necessary to use the link (see Sections \ref{sec:linkAuth} and
 \item clarified use of semantics (see Section \ref{sect:semantics})
 \item generalize by adding use cases for links to content other than data files
   (see Sections \ref{sec:useSource} and \ref{sec:useProvenance})
-\item added using LINK to convey when datalink request URL is in a table column
-  (see Section \ref{sec:columnsUrl})
 \item service descriptors can include a contentType param to describe service
 output and should include a name and description (see Sections \ref{sec:serviceResources}
 and \ref{sec:descParams})
