@@ -7,10 +7,10 @@ DOCNAME = DataLink
 DOCVERSION = 1.1
 
 # Publication date, ISO format; update manually for "releases"
-DOCDATE = 2023-11-08
+DOCDATE = 2023-12-15
 
 # What is it you're writing: NOTE, WD, PR, REC, PEN, or EN
-DOCTYPE = PR
+DOCTYPE = REC
 
 # An e-mail address of the person doing the submission to the document
 # repository (can be empty until a make upload is being made)
