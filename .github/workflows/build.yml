@@ -43,3 +43,8 @@ jobs:
       with:
         name: PDF Preview
         path: ${{ env.doc_name }}.pdf
+
+      uses: actions/upload-artifact@v1
+      with:
+        name: PDF Preview
+        path: ${{ env.doc_name }}.pdf
