@@ -1,3 +1,9 @@
+# This file generated from a template file maintained in the ivoatex repository.
+# To create and install it into a project repository, do:
+#    make github-preview
+#    git commit
+#    git push
+#
 name: Update PDF Preview
 
 env:
@@ -22,15 +28,12 @@ jobs:
     
     - name: Setup dependencies
       run: |
-        sudo add-apt-repository ppa:inkscape.dev/stable
         sudo apt update
-        sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc latexmk cm-super inkscape
+        sudo apt install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended xsltproc latexmk cm-super
         sudo snap install pdftk
     
     - name: Build the document
-      run: |
-        inkscape --version
-        make role_diagram.pdf ${{ env.doc_name }}-draft.pdf
+      run: make ${{ env.doc_name }}-draft.pdf
     
     - name: Check the output
       run: |
