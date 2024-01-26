@@ -7,7 +7,7 @@
 name: Update PDF Preview
 
 env:
-  doc_name: DataLinkImp
+  doc_name: DataLink
 
 on:
   push:
