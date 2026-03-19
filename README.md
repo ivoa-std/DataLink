@@ -7,14 +7,12 @@ DataLink is an IVOA standard which defines mechanisms for connecting data items 
 ## Status
 
 The last stable version is
-**[REC-1.0](https://www.ivoa.net/documents/DataLink/20150617/index.html)**.
-
-The next version will be 1.1. A **[Proposed Recommendation](https://www.ivoa.net/documents/DataLink/20230413/index.html)** is already available. It is not yet finalized and so, should not be considered yet as stable for operational implementation, however reference implementations are encouraged.
+**[REC-1.1](https://www.ivoa.net/documents/DataLink/20231215/)**.
 
 
 # History
 
-DataLink 1.0 is an IVOA Recommendation, published at
+DataLink 1.1 is an IVOA Recommendation, published at
 http://www.ivoa.net/documents/DataLink/.
 
 The initial commits into this repository were a transcription of
